@@ -11,6 +11,20 @@
 > `6f74a75` (§1), the gaps that check found (§1.1), the branch and rank, and
 > the spec and ticket updates the change owes (D8, §6).
 
+> **Status — 2026-10-08.** D1–D8 are implemented on `memory-dev`, in
+> `cgitsync5.0.0` (MAJOR: an older reader cannot load a schema-1 `.gts`).
+> An independent orchestrator quoted it at 77/100 and found three defects,
+> fixed in a follow-up commit: `memory reboot` could not read the pre-schema
+> State it is the remedy for; the newer-schema refusal could be masked by
+> another field error; a backslash `relative_path` and a half-written failed
+> stamp. Still open: §5 genesis on the developer memory (it pushes, so it
+> waits for the owner), §7 CaWaQS, the CI job's first run, and the merge to
+> `main`. Deviations: `gts_integrity.py` holds the hash functions as methods
+> of one `GtsIntegrity` class (the class-first rule); G4 needed no change
+> (registry-written snapshots carry no `schema_version`); line baselines
+> raised for `memory_facts.py`, `memory/integrity.py` and
+> `document_loader.py`, awaiting the owner.
+
 | | |
 |---|---|
 | Scope | `.gts` State identity: repository leaf hash → GitTree Merkle root → State hash |
@@ -174,8 +188,12 @@ repository. `commit_sha` keeps its wire name; it holds the Git object ID.
 - **Ordering key:** `relative_path`, compared as UTF-8 bytes.
   `relative_path` MUST be unique within a State; a duplicate is a
   validation error, never a tie broken by `name`.
-- **N = 0** is a validation error (a tree always contains its root
-  repository).
+- **N = 0:** `H_GITTREE` = SHA-256 of the empty string (RFC 6962's
+  `MTH({})`), allowed only while the tree is not `READY`; a `READY` State
+  with no repository is a validation error. *Amended by the owner,
+  2026-10-08:* the default workspace writes a hashed, never-ready State with
+  no repository (`settings.write_empty_snapshot`), so "a tree always
+  contains its root repository" did not hold.
 - **N = 1:** `H_GITTREE = H_REPO_0`.
 - **N > 1:** RFC 6962 §2.1 split — `k` = largest power of two `< N`;
   `H = H_NODE(MTH(leaves[0:k]), MTH(leaves[k:N]))`. No leaf is ever
