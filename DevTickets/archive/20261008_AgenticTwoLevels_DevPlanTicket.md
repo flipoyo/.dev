@@ -4,6 +4,14 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-08, archived on the owner's word.** The two-level
+> spec tree landed in `cgitsync4.4.3`: every agentic rule is a shared
+> pattern in `.agent/.distant/` with at most one local fill-in in
+> `.agent/.local/`, `DevTickets/` moved to `.dev`, `.versioning` was folded
+> into `.dev` and `.auto` dropped. The status note below is the last word
+> on what the worker left to the owner; this archive does not restate
+> whether each of those GitHub steps was done.
+
 > **From the owner's short ticket**
 > [reorg-distant-local](../archive/.closedUserTicket/20261008_reorg-distant-local.md)
 > (2026-10-08): rationalise the agentic control, which is spread over too

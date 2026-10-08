@@ -185,7 +185,7 @@ snapshot's content hash. **They must not be in flight at the same time
 without one knowing about the other.** Recommendation: memory first, as
 ranked today, and M1 reads StateIdentity before it touches `.gts`.
 StateIdentity is archived; the hash work in flight is now
-[GtsHashRepoPrecision](memory-dev_1-2_GtsHashRepoPrecision_DevPlanTicket.md),
+[GtsHashRepoPrecision](../archive/20261008_GtsHashRepoPrecision_DevPlanTicket.md),
 and M1 reads that instead.
 
 ## 5. What this architecture refuses to do

@@ -4,6 +4,20 @@
 
 *Branch: memory-dev*
 
+> **Implemented — 2026-10-08, archived on the owner's word.** D1–D8 landed
+> in `cgitsync5.0.0` (MAJOR: an older reader cannot load a schema-1 `.gts`),
+> then a review-fix commit (`memory reboot` reads a pre-schema State; the
+> newer-schema refusal can no longer be masked) and `cfa572d`: every new
+> State also writes `hash_canonicalisation = 4`, so a build before 5.0.0,
+> after `checkout main` swapped to it, refuses the State by name instead of
+> calling it corrupt — the owner hit exactly that on 2026-10-08. The owner ran
+> the genesis (`memory reboot` on `memory-dev`) and merged `memory-dev` into
+> `main`. Not done here: §7's CaWaQS check on two machines, the
+> self-history record, and a version bump after `cfa572d` (that commit
+> carries no `bump-build`). The merge of a rebooted memory that genesis
+> exposed is
+> [UnrelatedHistoryMerge](../openTickets/main_1-3_UnrelatedHistoryMerge_DevPlanTicket.md).
+
 > Opened from the owner's short ticket `gtsHashRepoPrecision.md` (closed
 > 2026-10-08 as `archive/.closedUserTicket/20261008_gtsHashRepoPrecision.md`).
 > The specification in §3 and the decisions in §2 are the owner's, carried

@@ -1,0 +1,2 @@
+merge is a very complex task on git and even more on ComplexGitSync, especially for memory that has a .private.local status that may disrupt --all --resolve for merge. 
+Write a DevPlanTicket for reinforcing the ergonomy of merge and avoid that merge --all --resolve force a git merge of memory under the --private flag and the request for a 7th tuto on merge alone. It is perfect after tuto6 on memory alone, that will explain memory merge

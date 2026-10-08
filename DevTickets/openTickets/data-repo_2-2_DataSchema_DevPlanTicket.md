@@ -156,7 +156,7 @@ directory. Adding fields changes what it hashes. Recommendation: decide
 this *with* the memory workstream rather than independently, and say in
 the code which ticket settled it. StateIdentity, which this first pointed
 at, is archived; the reference is now
-[GtsHashRepoPrecision](memory-dev_1-2_GtsHashRepoPrecision_DevPlanTicket.md)
+[GtsHashRepoPrecision](../archive/20261008_GtsHashRepoPrecision_DevPlanTicket.md)
 (§6): a field added to `repo_state` enters the repository's leaf hash. Before
 the first release that changes `integrity_schema = 1`; after it, it is
 `integrity_schema = 2` with schema 1 still verifiable.
