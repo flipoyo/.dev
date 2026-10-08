@@ -1,0 +1,1 @@
+for now the ticket preserve the memory of a branch while merging. add the option cgitsync memory merge b1 into b2 [--ours (b1)| --theirs (b2)]. Would it make sense to interprete a cgitsync merge --private b1 into b2 as a cgitsync memory merge b1 into b2 --theirs for .memory only
