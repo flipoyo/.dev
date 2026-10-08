@@ -4,6 +4,8 @@
 
 *Branch: memory-dev*
 
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `memory-dev_2-2` → `memory-dev_2-11`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
+
 > **Where this comes from.** The owner's short ticket
 > `working-transition-state.md` (closed 2026-09-19 as
 > `archive/.closedUserTicket/20260919_working-transition-state.md`) asked

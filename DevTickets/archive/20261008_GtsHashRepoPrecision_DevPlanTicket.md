@@ -16,7 +16,7 @@
 > self-history record, and a version bump after `cfa572d` (that commit
 > carries no `bump-build`). The merge of a rebooted memory that genesis
 > exposed is
-> [UnrelatedHistoryMerge](../openTickets/main_1-3_UnrelatedHistoryMerge_DevPlanTicket.md).
+> [UnrelatedHistoryMerge](../openTickets/main_1-1_UnrelatedHistoryMerge_DevPlanTicket.md).
 
 > Opened from the owner's short ticket `gtsHashRepoPrecision.md` (closed
 > 2026-10-08 as `archive/.closedUserTicket/20261008_gtsHashRepoPrecision.md`).

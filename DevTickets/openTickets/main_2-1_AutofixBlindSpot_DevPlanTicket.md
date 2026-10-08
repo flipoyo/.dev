@@ -4,6 +4,8 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `main_2-4` → `main_2-1`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
+
 > **Correction — 2026-10-02, owner's decision.** WP2 as first written asked `autofix` to rewrite a commit message with `git commit --amend`, and to amend a pushed commit and force-push it given `force=True`. That was a wrong reading of what `autofix` is for: it eases the merge procedure, it does not rewrite commits. The `tmpAutoFix` branch built exactly that WP2 and is being closed for it (CorrTicket TmpBranchClosure). ComplexGitSync now rewrites nothing (`AdditionalSpecs.md`, *The hard prohibitions*), so WP2 and the acceptance criteria below are rewritten: `autofix` reports a bad message and proposes ways to extract it intact, and nothing more. The read-only detection already written on `tmpAutoFix` is what this ticket takes back.
 
 > **Ticket review — 2026-09-30, from the owner's short ticket `archive/.closedUserTicket/20260930_ReorderPriority-mem-multiUser.md`.** Demoted `main_1-1` → `main_2-4`: the owner's words, *"AutoFixBlindSpot is not prioritary before MemoryArchitecture, UserInstallPath, StateLocking or AsofRetrieval."* Its content is unchanged.

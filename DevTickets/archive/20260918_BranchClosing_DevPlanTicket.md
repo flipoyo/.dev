@@ -49,7 +49,7 @@ execution path (`git_runner.py` primitives already added this session,
 **Why it exists.** `memory-dev` is the concrete case: its two active
 design tickets moved to `main` on 2026-09-18 because the memory system
 they designed now exists in code, and only
-[Omniscience](memory-dev_2-1_Omniscience_DevPlanTicket.md) still has open
+[Omniscience](memory-dev_2-10_Omniscience_DevPlanTicket.md) still has open
 work scoped to that branch. Nothing today marks a branch as "done" short
 of a person remembering which ones are safe to ignore in `git branch -a`,
 or deleting it outright and losing the history of how the work happened.

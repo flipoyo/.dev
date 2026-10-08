@@ -107,7 +107,7 @@ A standalone install can be DEV and a nested one USER.
 ## 3. Why this makes the multi-person case easier
 
 The open design in [MemoryArchitecture](../archive/20260930_MemoryArchitecture_DevPlanTicket.md)
-§2.3 and [Omniscience](memory-dev_2-1_Omniscience_DevPlanTicket.md) is
+§2.3 and [Omniscience](memory-dev_2-10_Omniscience_DevPlanTicket.md) is
 *several people's memories of one project meeting in one journal*. The rule
 removes half of it:
 

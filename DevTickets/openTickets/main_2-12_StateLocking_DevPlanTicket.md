@@ -4,6 +4,8 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `main_2-5` → `main_2-12`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; still the end of the priority-2 pile, as the owner decided on 2026-10-01.
+
 > **Ticket review — 2026-10-01, owner's decision.** Moved `main_2-1` → `main_2-5`, the end of the priority-2 pile; the other tickets were deliberately not renumbered, so rank 2-1 stays empty until the next review. The owner's reading: very specific, and of interest once there is a proper `cgitsync` install and an agentic deployment that runs commands on its own. The body below was **rewritten against the code as of 2026-10-01**: the `.working/` area was never created (it is still `.cgitsync/`), the ledger is no longer one file, and States are named by their content, so several races the first version described no longer exist. The review notes above are kept as written.
 
 > **Ticket review — 2026-09-30, from the owner's short ticket `archive/.closedUserTicket/20260930_ReorderPriority-mem-multiUser.md`.** Renumbered `main_2-3` → `main_2-1`: ranked above AsOfRetrieval and AutofixBlindSpot per the owner's order. The owner's multi-developer case ([UserDevProfile](../archive/20260930_UserDevProfile_DevPlanTicket.md) §3) makes a sync running while someone works more likely, which is the workload §1 said would prompt this.

@@ -4,6 +4,8 @@
 
 *Branch: memory-dev*
 
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `memory-dev_2-1` → `memory-dev_2-10`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
+
 > **Ticket review — 2026-09-30, MemoryArchitecture closed.** [MemoryArchitecture](../archive/20260930_MemoryArchitecture_DevPlanTicket.md) was archived on the owner's word before M6 landed, and M6 moved here: this ticket is now the only place the shared journal and the multi-developer question are tracked. The architecture it fits into is `AdditionalSpecs.md`'s *Memory architecture* section.
 
 > **Ticket review — 2026-09-30, from the owner's short ticket `archive/.closedUserTicket/20260930_ReorderPriority-mem-multiUser.md`.** Scope narrowed, rank unchanged. The owner's rule — a USER tree holds no private repository and its memory is never synced; only a DEV tree's is ([UserDevProfile](../archive/20260930_UserDevProfile_DevPlanTicket.md)) — means the "several people" this journal serves are **developers only**. Users never contribute to it. Whether two developers on one project branch keep sharing one `.memory` branch, or each get their own for this journal to merge, is UserDevProfile's D3, handed to this ticket.
@@ -13,7 +15,7 @@
 > but confirmed last in reading order across the whole backlog, on the
 > owner's request to reorganise it as: finalize the agentic, then what's
 > important before data-repo, then
-> [data-repo](data-repo_2-1_DataArchitecture_DevPlanTicket.md), then
+> [data-repo](data-repo_2-3_DataArchitecture_DevPlanTicket.md), then
 > Omniscience. It stays behind data-repo because that workstream is
 > further along (seven analysed tickets against an owner-approved
 > architecture) and because Omniscience's own §1.1 already ties its first

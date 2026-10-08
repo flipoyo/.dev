@@ -4,7 +4,9 @@
 
 *Branch: data-repo*
 
-> **Milestone M1** of [DataArchitecture](data-repo_2-1_DataArchitecture_DevPlanTicket.md).
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-2` → `data-repo_2-4`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
+
+> **Milestone M1** of [DataArchitecture](data-repo_2-3_DataArchitecture_DevPlanTicket.md).
 > Analysed from §2 and §9/P1 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
 
@@ -33,7 +35,7 @@ refuse. §3 the `.gts` half, which is the one that must not be got wrong.
 
 **What you need to do with it.** Answer §4's D1 with the owner before
 writing the key name into anything. Read
-[DataArchitecture](data-repo_2-1_DataArchitecture_DevPlanTicket.md) §4 D5
+[DataArchitecture](data-repo_2-3_DataArchitecture_DevPlanTicket.md) §4 D5
 first — the memory workstream is changing `.gts` too.
 
 ```mermaid

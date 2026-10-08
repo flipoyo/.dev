@@ -4,6 +4,8 @@
 
 *Branch: data-repo*
 
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-1` → `data-repo_2-3`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
+
 > **Ticket review — 2026-09-22.** The seven `data-repo` tickets renumbered
 > from `2-3..2-9` to `2-1..2-7` — compacting a pre-existing gap, order
 > unchanged — on the owner's request to reorganise the whole backlog as:
@@ -12,7 +14,7 @@
 > analysed work (priority 2, stand-by) that nothing outside this
 > workstream is waiting on yet, ranked as a block behind the `main`-branch
 > items promoted ahead of it and ahead of
-> [Omniscience](memory-dev_2-1_Omniscience_DevPlanTicket.md).
+> [Omniscience](memory-dev_2-10_Omniscience_DevPlanTicket.md).
 
 > **The umbrella ticket of the data workstream.** Analysed from the owner's
 > short ticket
@@ -112,7 +114,7 @@ say which version of itself it is.** The memory system records the
 toolchain of every entry it writes — cgitsync, git, pixi, and dvc or
 git-lfs where they were used — so `DataBackend` grows a `version()` that
 answers cheaply and says `none` when the tool is not installed.
-[DataBackendContract](data-repo_2-3_DataBackendContract_DevPlanTicket.md) D6
+[DataBackendContract](data-repo_2-5_DataBackendContract_DevPlanTicket.md) D6
 owns the mechanism;
 [OneRegister](../archive/20260916_OneRegister_DevPlanTicket.md) §3.1 owns what is
 recorded.
@@ -123,12 +125,12 @@ They land in this order. Each is a ticket of its own on `data-repo`.
 
 | # | Ticket | What lands | Needs |
 |---|---|---|---|
-| **M1** | [DataSchema](data-repo_2-2_DataSchema_DevPlanTicket.md) | `data_backend` and `data_paths` in `.cgs`, the normalised `DataSpec`, and `.gts` carrying the capability so a snapshot restores without a `.cgs` | — |
-| **M2** | [DataBackendContract](data-repo_2-3_DataBackendContract_DevPlanTicket.md) | `DataManager`, the `DataBackend` protocol, `DvcBackend`, the fake backend the tests use, and the optional `dvc` Pixi feature | M1 |
-| **M3** | [DataAuthoring](data-repo_2-4_DataAuthoring_DevPlanTicket.md) | Backend-aware `add`, `rm`, `commit`, `status`, `view-tree` | M2 |
-| **M4** | [DataMaterialisation](data-repo_2-5_DataMaterialisation_DevPlanTicket.md) | `clone`/`bootstrap`/`initialise`, `pull`, offline `checkout`, `merge`, `launch-release`, and the destructive-command preflight | M2 |
-| **M5** | [DataPublication](data-repo_2-6_DataPublication_DevPlanTicket.md) | `push`, `tag`, `freeze`, `freeze-release`: data published before the Git refs that advertise it | M3, M4 |
-| **M6** | [DataAcceptance](data-repo_2-7_DataAcceptance_DevPlanTicket.md) | One real local-only DVC integration test over the whole round trip, plus the user documentation | M5 |
+| **M1** | [DataSchema](data-repo_2-4_DataSchema_DevPlanTicket.md) | `data_backend` and `data_paths` in `.cgs`, the normalised `DataSpec`, and `.gts` carrying the capability so a snapshot restores without a `.cgs` | — |
+| **M2** | [DataBackendContract](data-repo_2-5_DataBackendContract_DevPlanTicket.md) | `DataManager`, the `DataBackend` protocol, `DvcBackend`, the fake backend the tests use, and the optional `dvc` Pixi feature | M1 |
+| **M3** | [DataAuthoring](data-repo_2-6_DataAuthoring_DevPlanTicket.md) | Backend-aware `add`, `rm`, `commit`, `status`, `view-tree` | M2 |
+| **M4** | [DataMaterialisation](data-repo_2-7_DataMaterialisation_DevPlanTicket.md) | `clone`/`bootstrap`/`initialise`, `pull`, offline `checkout`, `merge`, `launch-release`, and the destructive-command preflight | M2 |
+| **M5** | [DataPublication](data-repo_2-8_DataPublication_DevPlanTicket.md) | `push`, `tag`, `freeze`, `freeze-release`: data published before the Git refs that advertise it | M3, M4 |
+| **M6** | [DataAcceptance](data-repo_2-9_DataAcceptance_DevPlanTicket.md) | One real local-only DVC integration test over the whole round trip, plus the user documentation | M5 |
 
 M3 and M4 both depend on M2 and not on each other, so they can be taken in
 either order or in parallel. Nothing else in this list can move.

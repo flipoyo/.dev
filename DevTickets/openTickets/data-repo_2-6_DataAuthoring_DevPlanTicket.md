@@ -4,9 +4,11 @@
 
 *Branch: data-repo*
 
-> **Milestone M3** of [DataArchitecture](data-repo_2-1_DataArchitecture_DevPlanTicket.md).
-> Needs [DataBackendContract](data-repo_2-3_DataBackendContract_DevPlanTicket.md);
-> independent of [DataMaterialisation](data-repo_2-5_DataMaterialisation_DevPlanTicket.md).
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-4` → `data-repo_2-6`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
+
+> **Milestone M3** of [DataArchitecture](data-repo_2-3_DataArchitecture_DevPlanTicket.md).
+> Needs [DataBackendContract](data-repo_2-5_DataBackendContract_DevPlanTicket.md);
+> independent of [DataMaterialisation](data-repo_2-7_DataMaterialisation_DevPlanTicket.md).
 > Analysed from §4 and §9/P3 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
 

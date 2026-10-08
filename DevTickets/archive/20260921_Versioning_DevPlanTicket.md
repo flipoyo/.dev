@@ -266,7 +266,7 @@ local clock said, monotonic-checked but not externally witnessed
 covers the second). See
 [UniversalClock](../archive/20260920_UniversalClock_DevPlanTicket.md) §4.3
 for where that distinction is argued, and
-[Omniscience](memory-dev_2-1_Omniscience_DevPlanTicket.md) §1.2 for where
+[Omniscience](memory-dev_2-10_Omniscience_DevPlanTicket.md) §1.2 for where
 the external-witness half of it landed. A release row inherits whatever
 that settles, and should not claim more in the meantime.
 

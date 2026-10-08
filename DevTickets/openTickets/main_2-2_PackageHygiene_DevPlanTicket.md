@@ -4,6 +4,8 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `main_2-6` → `main_2-2`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
+
 > **From TmpBranchClosure**, the CorrTicket closing the `tmp` branches. It
 > takes back the part of `tmpPyPi` that conforms to the core rules. The
 > rest of that branch (`pipx`, PyPI publishing) is not taken back.

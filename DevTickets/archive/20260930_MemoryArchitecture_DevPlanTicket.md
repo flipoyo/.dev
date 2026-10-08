@@ -14,7 +14,7 @@
 > [DiscoverRoundTrip](20260928_DiscoverRoundTrip_DevPlanTicket.md) and
 > [CitationRot](../openTickets/main_2-3_TicketTreeMove_DevPlanTicket.md) to priority 1. This
 > ticket, [UserInstallPath](../openTickets/tmpPyPi_1-1_pending-UserInstallPath_DevPlanTicket.md) and
-> [StateLocking](../openTickets/main_2-5_StateLocking_DevPlanTicket.md) are real,
+> [StateLocking](../openTickets/main_2-12_StateLocking_DevPlanTicket.md) are real,
 > analysed work — priority 2's own definition — but none is a prerequisite
 > for `data-repo` starting, and each says so in its own words: this one is
 > "now the architecture reference the landed code implements," not open
@@ -35,8 +35,8 @@
 > `memory reboot`), so this document is now the architecture reference the
 > landed code implements, not an open memory-dev design. It keeps its rank
 > ahead of [UserInstallPath](../openTickets/tmpPyPi_1-1_pending-UserInstallPath_DevPlanTicket.md) and
-> [StateLocking](../openTickets/main_2-5_StateLocking_DevPlanTicket.md) because both still
-> cite it. [Omniscience](../openTickets/memory-dev_2-1_Omniscience_DevPlanTicket.md) is
+> [StateLocking](../openTickets/main_2-12_StateLocking_DevPlanTicket.md) because both still
+> cite it. [Omniscience](../openTickets/memory-dev_2-10_Omniscience_DevPlanTicket.md) is
 > the one piece of this design still active and stays on `memory-dev`.
 
 > **Closed — 2026-09-30, on the owner's word.** Archived before M6 lands,
@@ -45,7 +45,7 @@
 > reference role — "the one document a reader opens to find out what the
 > memory system is" — moved to `AdditionalSpecs.md`'s *Memory architecture*
 > section, beside *Memory vocabulary*. M6 and the multi-developer question
-> moved to [Omniscience](../openTickets/memory-dev_2-1_Omniscience_DevPlanTicket.md), which
+> moved to [Omniscience](../openTickets/memory-dev_2-10_Omniscience_DevPlanTicket.md), which
 > already carried them. The one piece of new work D1's answer creates is
 > [LocalRunLogs](20261001_LocalRunLogs_DevPlanTicket.md). The last
 > ambiguous uses of *register* for the ledger were renamed in the same change.
@@ -59,7 +59,7 @@
 > register* is renamed *the hash-chained ledger* everywhere it meant the
 > ledger (the specs, the `memory/` docstrings, the `verify` help text, the user guide, the API guide and two tests; the first pass missed the line-wrapped and bare uses and an independent review found them), and §3 and §6
 > below carry the status of each decision and each acceptance item. **It
-> stays open**, as §6 says it must: M6 ([Omniscience](../openTickets/memory-dev_2-1_Omniscience_DevPlanTicket.md))
+> stays open**, as §6 says it must: M6 ([Omniscience](../openTickets/memory-dev_2-10_Omniscience_DevPlanTicket.md))
 > has not landed, and two decisions below (D1 and D4) landed
 > in code differently from what this ticket recommended and need the
 > owner's word, not an agent's.
@@ -249,7 +249,7 @@ tree on the same day; both memories are valid; neither is a prefix of the
 other. A hash chain gives tamper-evidence, not a merge rule, and this
 architecture has said from the start that it does not merge chains.
 
-[Omniscience](../openTickets/memory-dev_2-1_Omniscience_DevPlanTicket.md) is the
+[Omniscience](../openTickets/memory-dev_2-10_Omniscience_DevPlanTicket.md) is the
 architecture. The shape, in one line: a repository mounted like every other
 private/writable one, holding one content-addressed file per record, whose
 chain is **Git's own commit history** — so `cgitsync` and a person with
@@ -442,7 +442,7 @@ Two sub-questions remain open, and M3 needs them:
   per command and the answer reused, and a data backend is asked only when
   the command actually touched a repository that uses it. A Git-only
   workspace never pays to record that it has no DVC. The data workstream's
-  [DataBackendContract](../openTickets/data-repo_2-3_DataBackendContract_DevPlanTicket.md)
+  [DataBackendContract](../openTickets/data-repo_2-5_DataBackendContract_DevPlanTicket.md)
   owns the discovery itself.
 
 With those two settled, D6 is closed.
@@ -476,7 +476,7 @@ one lands.
 | **M9** | MemoryOnboarding — **landed 2026-09-17** | The steps a person runs once per project — create the repository, mount it, push it, merge it — are commands rather than instructions |
 | **M10** | MemoryExplore — **landed 2026-09-18** | A memory a person can read: what was published, by branch, and the ledger's own order made legible |
 | **M11** | MemoryReboot — **landed 2026-09-18** | Starting a memory's history over, on purpose, without losing the chapter before it |
-| **M12** | WorkingTransitionState — **landed 2026-09-17**, name deferred | `.memory`'s worktree is clean except while `memory push` is folding — so `merge`/`checkout`/`tag`/`freeze-release` reconcile it like any other private/local repository, with nothing excluded. The frontier landed; the owner's name for it did not — `.cgitsync` keeps its name and [WorkingAreaRename](../openTickets/memory-dev_2-2_WorkingAreaRename_DevPlanTicket.md) holds that question |
+| **M12** | WorkingTransitionState — **landed 2026-09-17**, name deferred | `.memory`'s worktree is clean except while `memory push` is folding — so `merge`/`checkout`/`tag`/`freeze-release` reconcile it like any other private/local repository, with nothing excluded. The frontier landed; the owner's name for it did not — `.cgitsync` keeps its name and [WorkingAreaRename](../openTickets/memory-dev_2-11_WorkingAreaRename_DevPlanTicket.md) holds that question |
 | **M13** | [TreeEnvironment](20260920_TreeEnvironment_DevPlanTicket.md) — **implemented** | A memory says what machine it ran on, not only what tree it saw: an Environment record beside each State, naming the platform, the interpreter and the tools a restore needs |
 
 The order is a dependency chain, not a preference. M2 before M3 because a
@@ -488,7 +488,7 @@ before it grows a protocol.
 M6 is no longer next in the chain: with one shared `.memory` repository its
 original subject — an index of where each memory lives — is answered by the
 branch list. What remains is the multi-user problem, and
-[Omniscience](../openTickets/memory-dev_2-1_Omniscience_DevPlanTicket.md) now carries a
+[Omniscience](../openTickets/memory-dev_2-10_Omniscience_DevPlanTicket.md) now carries a
 design for it: a register whose chain is Git's own commit history, so a
 person can append with `git commit` and nobody can shorten it without every
 clone disagreeing on the next fetch. It stays stand-by until its D1 is
@@ -606,7 +606,7 @@ this project in `.localSpec/AdditionalSpecs.md`.
   it.
 
   **This refusal still stands, and the shared journal does not violate
-  it.** [Omniscience](../openTickets/memory-dev_2-1_Omniscience_DevPlanTicket.md)
+  it.** [Omniscience](../openTickets/memory-dev_2-10_Omniscience_DevPlanTicket.md)
   §0.1 proposes that the distant journal be a *DAG* rather than a chain:
   records name their predecessors, a fork is two records with one parent,
   and closing it is a third record naming both. Nothing is merged — both
@@ -638,7 +638,7 @@ is.
 |---|---|---|
 | §1's four definitions in `AdditionalSpecs.md`, none contradicted in `src/` | **Met** | *Memory vocabulary* section; the one word that meant three things (*register*) now means only the legacy `.lgr`, and every docstring that said *hash-chained register* for the ledger now says *ledger* |
 | §3's decisions answered by the owner, reasoning kept | **Met** | D2, D3 and D6 answered earlier; D5 met in code; D1 and D4 answered by the owner on 2026-09-30 (above) |
-| The milestone tickets exist and name this file | **Met** | M1–M5, M7–M13 are archived with their work; M6 is [Omniscience](../openTickets/memory-dev_2-1_Omniscience_DevPlanTicket.md), open on `memory-dev` |
+| The milestone tickets exist and name this file | **Met** | M1–M5, M7–M13 are archived with their work; M6 is [Omniscience](../openTickets/memory-dev_2-10_Omniscience_DevPlanTicket.md), open on `memory-dev` |
 | Each states what it does not do | **Not re-audited** | Every archived milestone carries its own scope section; this pass did not reread all twelve |
 | Last milestone landed | **No — moved** | M6 is stand-by; on the owner's word it is tracked by Omniscience alone and this ticket closes |
 

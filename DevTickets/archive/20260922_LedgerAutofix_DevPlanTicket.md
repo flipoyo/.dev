@@ -99,7 +99,7 @@ finished and pushed. Locking and this ticket are complementary, not
 overlapping: StateLocking stops a fork from happening on one machine;
 this ticket fixes one that already happened across two.
 
-**[Omniscience](memory-dev_2-1_Omniscience_DevPlanTicket.md)**
+**[Omniscience](memory-dev_2-10_Omniscience_DevPlanTicket.md)**
 §4, "two people appending at once", looks like the same question and
 answers it completely differently: *"the two records are two different
 files. Git's own merge handles it — no strategy, no driver, no merge rule

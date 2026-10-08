@@ -8,7 +8,7 @@
 > branch is closed (`closed/tmpPyPi`, same tip as before), and this plan is not
 > implemented. Its `pipx` route breaks the Pixi-only rule, which also covers how
 > users install (`digest.md`). Its conforming parts went to
-> [PackageHygiene](../openTickets/main_2-6_PackageHygiene_DevPlanTicket.md); the install route is the
+> [PackageHygiene](../openTickets/main_2-2_PackageHygiene_DevPlanTicket.md); the install route is the
 > owner's open question in the short ticket `pixi-global-install.md`. This ticket
 > is kept as the record of what was planned, not as work to do.
 
@@ -58,7 +58,7 @@
 >   clean-environment acceptance check in §5 should adopt a memory and get
 >   a working tree, not only print `--help` — that is the path a user on a
 >   new machine actually takes, and it is the one thing this ticket and
->   [Omniscience](memory-dev_2-1_Omniscience_DevPlanTicket.md) both
+>   [Omniscience](memory-dev_2-10_Omniscience_DevPlanTicket.md) both
 >   depend on.
 
 > **Release review — 2026-09-11. Priority 1-5.** Promoted from 2-6 for a tested installation outside the source checkout and a repeatable public release. Support only validated platforms; broader coverage is deferred.

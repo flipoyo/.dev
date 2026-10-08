@@ -4,6 +4,8 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `main_1-3` → `main_1-1`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; ahead of MergeErgonomics, which reuses its helper and comes after it.
+
 > From two owner requests of 2026-10-08, made in conversation and filed as
 > [unrelated-memory-merge](../archive/.closedUserTicket/20261008_unrelated-memory-merge.md)
 > and [memory-merge](../archive/.closedUserTicket/20261008_memory-merge.md):
@@ -175,10 +177,16 @@ is a method of `MemoryCommands`, beside `memory_reboot`.
 | **WP2** | `cli/expert.py`, `cli/help_text.py` | `memory merge <branch> [--into TARGET] --ours\|--theirs` (exactly one required), help, output |
 | **WP3** | `operations/merge.py`, `operations/restart.py` | `.memory` routed to WP1 with `--ours`, keeping the target (§3.2, D3); `unrelated` status for every other repository (§3.3) |
 | **WP4** | tests | Unit: the plan says `unrelated`, not `conflicts`, when `merge_base` is `None`; both trees of WP1's commit. Integration: the owner's §1 sequence replayed — `merge --all` merges `.localSpec`/`.claude`/`.dev`, keeps the target memory byte for byte, makes the source memory reachable, and `branch delete` of the source then reports `.memory` safe; `memory merge --theirs` continues the source chain on the target and `verify` is `VERIFIED`; `memory merge --ours` leaves the target's files unchanged; neither flag, or both → refused; an unrelated non-memory repository refuses the tree by name; `memory adopt` (P5) unchanged |
-| **WP5** | `docs/Text/user_guide.tex`, `docs/Text/api_python.tex` | The new command and client method (checklist step 7); one paragraph on why a memory is never merged file by file |
+| **WP5** | `docs/Text/user_guide.tex`, `docs/Text/api_python.tex`, `tutorials/06_memory.md` | The new command and client method (checklist step 7); one paragraph on why a memory is never merged file by file; Tutorial 6 §3 and §5.1 stop saying the memory merges file by file (`tutorials/06_memory.md:286-303`, `:450-466`) — this ticket makes them false |
 
 The eight checklist steps apply (`cgitsync-dev.md`). A new command is at
 least a `minor`.
+
+**Not here:** the two `--resolve` paths (`merge_tree_one_at_a_time` and
+`--all-conflicts`), their loop on an unrelated repository and their
+automatic regeneration, and Tutorial 7 on merge. They are
+[MergeErgonomics](main_1-2_MergeErgonomics_DevPlanTicket.md), which
+reuses this ticket's helper and comes after it.
 
 ## 5. Decisions (settled by the owner, 2026-10-08)
 
