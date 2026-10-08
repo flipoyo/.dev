@@ -4,6 +4,21 @@
 
 *Branch: main*
 
+> **Update — 2026-10-08, after UnrelatedHistoryMerge landed.** Part of this
+> ticket is already done, and the rest changes shape:
+> - **F6 is done**: Tutorial 6 §3, §5.1 and Step 5 no longer describe a
+>   file-by-file memory merge. WP5 here only adds the links to Tutorial 7.
+> - **F1 is done in the code**: `merge_tree_one_at_a_time` now keeps the
+>   memory (`MemoryMergeOperation.keep_in_tree`) and skips an up-to-date one,
+>   because leaving it on `git merge` would have been a regression of the new
+>   statuses. Still open under F1: a test that `--resolve` and
+>   `--all-conflicts` never open a merge tool on `.memory`.
+> - **F2 is not done**: an `unrelated` repository still stops `--resolve`
+>   with no path, and `merge_resolve_all` still loops on it. WP1 here is now
+>   that stop only; the helper is `MemoryMergeOperation.tree_status`
+>   (`operations/memory_merge.py`), not a function in `merge.py`.
+> - F3, F4, F5 and F7 are untouched.
+
 > From the owner's short ticket
 > [tuto7-merge](../archive/.closedUserTicket/20261008_tuto7-merge.md)
 > (2026-10-08): merge is a very complex task on Git and more so on

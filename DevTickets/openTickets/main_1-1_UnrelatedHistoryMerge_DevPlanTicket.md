@@ -4,6 +4,42 @@
 
 *Branch: main*
 
+> **Status — 2026-10-08, worker.** WP0–WP5 are implemented; WP0 is committed
+> locally and the rest is committed together with the release (5.1.x). Nothing
+> is pushed. Lint, `check-ceilings`, `check-oo`,
+> `check-spectree` and the suite (2127 passed) pass, and `cgitsync status`
+> shows `errors=0`. Where the code differs from the plan:
+> - The shared decision is `MemoryMergeOperation.tree_status` and
+>   `keep_in_tree` in the new `operations/memory_merge.py` (Ring 2), not in
+>   `MergeOperation`, so `merge`, `merge --into` and `pull --private` call
+>   one place and `operations/merge.py` stays under the 500-line ceiling
+>   (494 counted lines; the file itself is longer, because the ceiling counts
+>   code lines). The git work
+>   (plan, commit, move the branch) is there too; `MemoryCommands.memory_merge`
+>   only adds the workspace parts (fold, branch names, push).
+> - `memory_commands.py` ends at 1989 lines, so §3.4's allowance for a
+>   single-class module over 2000 lines was **not needed here**. WP0 landed
+>   anyway, as the owner decided, with tests for both cases.
+> - New statuses are `kept`, `up-to-date` (the memory) and `unrelated`
+>   (any other repository). `merge --resolve` also gets `kept`/`up-to-date`
+>   (it would otherwise have started Git-merging a memory) and stops at
+>   `unrelated` exactly as it stopped when that was reported as a conflict;
+>   what that stop does next is still MergeErgonomics.
+> - A push the remote would reject after the local merge is reported as
+>   "merged here, but pushing … was refused", with nothing forced.
+> - Tutorial 6 §3, §5.1, Step 5, the summary table and the user guide and API
+>   docs are corrected (WP5). Line baselines were raised for the modules this
+>   extends (`cli/expert.py`, `cli/help_text.py`, `git_runner.py`,
+>   `operations/__init__.py`, `merge.py`, `restart.py`, `client.py`,
+>   `memory_commands.py`, `tree_commands.py`) and are **awaiting the owner's
+>   approval**.
+> - An independent orchestrator quoted it at 92/100, found no data-loss bug and
+>   two low-severity edge cases, both fixed with tests: a memory on a detached
+>   HEAD that already holds the source answers `up-to-date`, and `pull
+>   --private` judges a non-memory repository by the very ref it merges
+>   (`origin/<base>`). It recorded the self-history entry and chose `minor`
+>   (new command `memory merge`).
+
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `main_1-3` → `main_1-1`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; ahead of MergeErgonomics, which reuses its helper and comes after it.
 
 > From two owner requests of 2026-10-08, made in conversation and filed as
