@@ -4,6 +4,18 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-08, archived on the owner's word.** WP0–WP5 landed
+> in `cgitsync5.1.1` (MINOR for the new command `memory merge`, then a PATCH
+> for two follow-up fixes found by the orchestrator, who scored the work
+> 92/100): `memory merge BRANCH [--into TARGET] --ours|--theirs`; `merge`,
+> `merge --into` and `pull --private` keep the memory's target side whole and
+> record the source as history; a repository with no common commit is refused
+> by name without `--resolve`. The status note below says where the code
+> differs from this plan. Left to the owner: approval of the line-count
+> baseline raises for the modules this extended, which only the owner may
+> approve. Left to other tickets: `merge --resolve`'s loop on an unrelated
+> repository (MergeErgonomics).
+
 > **Status — 2026-10-08, worker.** WP0–WP5 are implemented; WP0 is committed
 > locally and the rest is committed together with the release (5.1.x). Nothing
 > is pushed. Lint, `check-ceilings`, `check-oo`,
@@ -43,8 +55,8 @@
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `main_1-3` → `main_1-1`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; ahead of MergeErgonomics, which reuses its helper and comes after it.
 
 > From two owner requests of 2026-10-08, made in conversation and filed as
-> [unrelated-memory-merge](../archive/.closedUserTicket/20261008_unrelated-memory-merge.md)
-> and [memory-merge](../archive/.closedUserTicket/20261008_memory-merge.md):
+> [unrelated-memory-merge](.closedUserTicket/20261008_unrelated-memory-merge.md)
+> and [memory-merge](.closedUserTicket/20261008_memory-merge.md):
 > `merge --private`/`--all` treats `.memory` like any other repository and,
 > on two memories with unrelated histories, offers `--resolve`. Add
 > `cgitsync memory merge b1 into b2 [--ours (b1) | --theirs (b2)]`, which
@@ -221,7 +233,7 @@ least a `minor`.
 **Not here:** the two `--resolve` paths (`merge_tree_one_at_a_time` and
 `--all-conflicts`), their loop on an unrelated repository and their
 automatic regeneration, and Tutorial 7 on merge. They are
-[MergeErgonomics](main_1-2_MergeErgonomics_DevPlanTicket.md), which
+[MergeErgonomics](../openTickets/main_1-2_MergeErgonomics_DevPlanTicket.md), which
 reuses this ticket's helper and comes after it.
 
 ## 5. Decisions (settled by the owner, 2026-10-08)

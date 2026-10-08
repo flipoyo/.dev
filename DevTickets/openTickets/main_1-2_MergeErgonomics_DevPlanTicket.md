@@ -30,7 +30,7 @@
 
 | | |
 |---|---|
-| Predecessor | [UnrelatedHistoryMerge](main_1-1_UnrelatedHistoryMerge_DevPlanTicket.md) — it adds `memory merge` and the `unrelated` status, and routes `.memory` out of `merge`, `merge --into` and `pull --private`. This ticket does the same for the two `--resolve` paths it does not touch, and teaches the result |
+| Predecessor | [UnrelatedHistoryMerge](../archive/20261008_UnrelatedHistoryMerge_DevPlanTicket.md) — it adds `memory merge` and the `unrelated` status, and routes `.memory` out of `merge`, `merge --into` and `pull --private`. This ticket does the same for the two `--resolve` paths it does not touch, and teaches the result |
 
 ## Abstract — read this first
 
