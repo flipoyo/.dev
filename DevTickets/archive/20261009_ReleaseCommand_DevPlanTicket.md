@@ -4,6 +4,20 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-09 (`cgitsync-6.0.1`), by a worker and a launched
+> orchestrator, its decisions asked first.** The owner chose every
+> recommendation (D1–D5, D9, D10), lifted the read-only rule on DevSpec for
+> `AgentConduct.md` §2, and approved the line-ceiling raises before the first
+> edit. The orchestrator quoted 78/100 at 6.0.0, with one blocking defect
+> (an in-place load detached the memory), then 94/100 at 6.0.1 after the
+> fixes; two records name this ticket. **Narrower than planned:** `release
+> list` reads this chapter's ledger and the root's tags, not other memory
+> chapters (every new release has a root tag; `load` still finds a State in
+> any chapter); BY is the root tag's tagger, empty for a ledger-only row.
+> **Left to the owner:** committing and pushing DevSpec by hand; DevSpec's
+> `DevSpecs.md` still cites `freeze-release` as a hyphenated-name example,
+> outside this ticket's lift.
+
 > From the owner's short ticket
 > [release-management](../archive/.closedUserTicket/20261009_release-management.md)
 > (2026-10-09): managing a release is complex enough to be a command of its

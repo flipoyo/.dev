@@ -154,9 +154,11 @@ Do all of these as part of the change, not as a follow-up. The shape is
 
    This project's own fill-ins of
    [AgentConduct.md](../../.distant/dev-sync/AgentConduct.md) §1/§2: the
-   project name is `cgitsync`, so a message reads `cgitsync3.1.0` (run
-   `pixi run bump-version`, step 4, first, so the version it reads is
-   current); write the same message for `commit` and `commit --private`.
+   project name is `cgitsync`, so a message reads `cgitsync-6.0.0` (owner,
+   2026-10-09, ReleaseCommand D10; the checker also accepts
+   `ComplexGitSync-6.0.0`). Run `pixi run bump-version`, step 4, first: the
+   version is read from `pixi.toml`, so it must be current. Write the same
+   message for `commit` and `commit --private`.
    `--commit-gitignore` and other messages ComplexGitSync generates for
    itself are not governed by this rule. On why "never push without being
    asked" cannot be delegated to GitHub's own branch protection here
@@ -237,7 +239,7 @@ attribution rules. This project's fill-ins:
 - The integration suite includes: CGSi topology expansion checks, local
   file-remote `clone_cgs` / tag-checkout lifecycle restoration, and a
   CLI-first READY `.gts` git command cycle
-  (`add → commit → push → freeze-release → checkout <tag>`) mirrored in the
+  (`add → commit → push → release freeze → release load`) mirrored in the
   Python API.
 - Install dev extras: `pixi install`. Run the suite: `pixi run test` from
   the repository root.

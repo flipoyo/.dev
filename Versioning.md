@@ -37,7 +37,7 @@ graph LR
     C["change to src/<br/>or to what a script does"] --> B["pixi run bump-build"]
     B --> V["pixi run bump-version<br/>patch at least<br/>YOU ARE HERE"]
     V --> P["rebuild docs PDFs"]
-    P --> M["commit message<br/>cgitsync&lt;new version&gt;"]
+    P --> M["commit message<br/>cgitsync-&lt;new version&gt;"]
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
     class V here;
@@ -166,9 +166,11 @@ the pairing.
 The release register is the Ledger: a release is one ledger entry carrying
 an additive `release` field (`memory/ledger_entry.py` — see
 `AdditionalSpecs.md`, *The hash-chained ledger*, for the field's schema),
-written automatically by `ComplexGitSyncClient.freeze_release()` from the
-currently installed `__version__`/`__build__` and the release tag name the
-caller gave it. Tamper-evidence is then free: the field is inside the same
+written automatically by `ComplexGitSyncClient.freeze_release()`
+(`release freeze`): the tool's own `__version__`/`__build__` (`semver`,
+`artefact:src`), the tag it applied (`git_tag`), the `project`, and the
+project's own version (`project:version`, from the root's `pixi.toml`, when it
+declares one). Tamper-evidence is then free: the field is inside the same
 hash chain as every other field, so a release row cannot be edited
 afterwards without breaking the chain from that point on. A version never
 enters a State's hash — a release row only ever cites a State by id,
@@ -178,3 +180,18 @@ alongside it in the ledger, never inside it.
 (`memory/agent_contract.py`) and, when it names a signed
 `AgentContractRecord`, adds `artefact:agent_contract` to the row, naming that
 record's terms version — absent, not fatal, when nothing has been signed yet.
+
+**The tag, and the release's portable copy** (ReleaseCommand, owner
+2026-10-09). A release is tagged `<project-name>-<version>`, the version read
+from the root's `pixi.toml` as written, or `<project-name>-<n>`, the next
+number, when it declares none; `--force-tag X` gives `<project-name>-X`. The
+`v<semver>` tags of earlier releases stay as they are. The ledger reaches
+another user only through a pushed memory, so the root repository's tag is
+annotated and carries the project name, the version and the State restricted
+to the project's own repositories: `release list` and `release load` read it
+from any workspace, and it never names a private repository.
+
+**This project's own release** is therefore tagged `ComplexGitSync-<semver>`
+with no special case: the `.cgs` names the project `ComplexGitSync`, and
+`bump-version` keeps `pixi.toml` current. Run `release freeze` after
+`bump-version`, so the tag and the commit prefix carry the same version.
