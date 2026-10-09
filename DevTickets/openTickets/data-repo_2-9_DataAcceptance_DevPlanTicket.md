@@ -41,7 +41,7 @@ polished. A round-trip test that cannot fail proves nothing.
 ```mermaid
 graph LR
     A["dataset A<br/>author, publish, freeze R1"] --> B["dataset B<br/>author, publish"]
-    B --> F["fresh workspace<br/>launch-release R1 from .gts alone"]
+    B --> F["fresh workspace<br/>release load R1, nothing local"]
     F --> V["code SHA == R1<br/>forcing SHA == R1<br/>bytes == A<br/>YOU ARE HERE"]
     F --> N["object removed from the remote<br/>-> NOT READY, not success"]
 
@@ -62,10 +62,10 @@ twin: a code repository and a forcing repository declared with
 3. `cgitsync initialise` or `bootstrap` — dataset **A** is materialised.
 4. Modify the forcing dataset through CGS: `add`, then `commit`, then
    `push`.
-5. `cgitsync freeze-release R1` — the `.gts` captures the exact Git SHA and
+5. `cgitsync release freeze "R1" --force-tag R1` — the `.gts` captures the exact Git SHA and
    the backend identity.
 6. Modify the forcing dataset to **B**; `add`, `commit`, `push`.
-7. From a **fresh** workspace, `launch-release R1` using its `.gts` alone.
+7. From a **fresh** workspace, `release load R1 --workspace fresh`, from the root tag alone.
 8. Assert the code SHA is R1's, the forcing SHA is R1's, and the bytes are
    A's.
 

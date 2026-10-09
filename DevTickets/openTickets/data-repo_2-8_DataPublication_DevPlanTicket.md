@@ -20,7 +20,7 @@ had when you started — and a partial release is reported as partial rather
 than frozen as a success.
 
 **What this document is.** The fifth milestone: `push`, `tag`, `freeze`,
-`freeze-release` and `freeze-release-force`.
+`release freeze` (the old `freeze-release`) and `freeze-release-force`.
 
 **Why it exists.** A tag is a promise that the state it names can be
 reconstituted. With data in the tree that promise has a second half nobody
@@ -126,7 +126,7 @@ publishes its objects and then its refs. A flag to skip the data would
 exist only to create broken releases. If a user wants the Git half alone,
 that is `git push`, and they are outside CGS's promises.
 
-### D2. How much history does `freeze-release` cover?
+### D2. How much history does `release freeze` cover?
 
 Recommendation: the frozen reference set, explicitly targeted — not the
 workspace, and not everything. Settle whether `--all-tags`-style publication

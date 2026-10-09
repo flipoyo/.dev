@@ -129,7 +129,7 @@ They land in this order. Each is a ticket of its own on `data-repo`.
 | **M2** | [DataBackendContract](data-repo_2-5_DataBackendContract_DevPlanTicket.md) | `DataManager`, the `DataBackend` protocol, `DvcBackend`, the fake backend the tests use, and the optional `dvc` Pixi feature | M1 |
 | **M3** | [DataAuthoring](data-repo_2-6_DataAuthoring_DevPlanTicket.md) | Backend-aware `add`, `rm`, `commit`, `status`, `view-tree` | M2 |
 | **M4** | [DataMaterialisation](data-repo_2-7_DataMaterialisation_DevPlanTicket.md) | `clone`/`bootstrap`/`initialise`, `pull`, offline `checkout`, `merge`, `launch-release`, and the destructive-command preflight | M2 |
-| **M5** | [DataPublication](data-repo_2-8_DataPublication_DevPlanTicket.md) | `push`, `tag`, `freeze`, `freeze-release`: data published before the Git refs that advertise it | M3, M4 |
+| **M5** | [DataPublication](data-repo_2-8_DataPublication_DevPlanTicket.md) | `push`, `tag`, `freeze`, `release freeze`: data published before the Git refs that advertise it | M3, M4 |
 | **M6** | [DataAcceptance](data-repo_2-9_DataAcceptance_DevPlanTicket.md) | One real local-only DVC integration test over the whole round trip, plus the user documentation | M5 |
 
 M3 and M4 both depend on M2 and not on each other, so they can be taken in
