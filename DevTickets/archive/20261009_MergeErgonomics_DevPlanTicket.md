@@ -20,7 +20,7 @@
 > - F3, F4, F5 and F7 are untouched.
 
 > From the owner's short ticket
-> [tuto7-merge](../archive/.closedUserTicket/20261008_tuto7-merge.md)
+> [tuto7-merge](.closedUserTicket/20261008_tuto7-merge.md)
 > (2026-10-08): merge is a very complex task on Git and more so on
 > ComplexGitSync, especially for the memory, whose private/local status may
 > disrupt `merge --all --resolve`. Reinforce the ergonomics of merge, make
@@ -30,7 +30,7 @@
 
 | | |
 |---|---|
-| Predecessor | [UnrelatedHistoryMerge](../archive/20261008_UnrelatedHistoryMerge_DevPlanTicket.md) — it adds `memory merge` and the `unrelated` status, and routes `.memory` out of `merge`, `merge --into` and `pull --private`. This ticket does the same for the two `--resolve` paths it does not touch, and teaches the result |
+| Predecessor | [UnrelatedHistoryMerge](20261008_UnrelatedHistoryMerge_DevPlanTicket.md) — it adds `memory merge` and the `unrelated` status, and routes `.memory` out of `merge`, `merge --into` and `pull --private`. This ticket does the same for the two `--resolve` paths it does not touch, and teaches the result |
 
 ## Abstract — read this first
 

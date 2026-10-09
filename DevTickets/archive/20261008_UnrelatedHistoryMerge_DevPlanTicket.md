@@ -233,7 +233,7 @@ least a `minor`.
 **Not here:** the two `--resolve` paths (`merge_tree_one_at_a_time` and
 `--all-conflicts`), their loop on an unrelated repository and their
 automatic regeneration, and Tutorial 7 on merge. They are
-[MergeErgonomics](../openTickets/main_1-2_MergeErgonomics_DevPlanTicket.md), which
+[MergeErgonomics](20261009_MergeErgonomics_DevPlanTicket.md), which
 reuses this ticket's helper and comes after it.
 
 ## 5. Decisions (settled by the owner, 2026-10-08)
