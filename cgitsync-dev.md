@@ -179,6 +179,15 @@ made by the same role for the reason AgentConduct.md §4 gives. Drafting,
 ranking, or closing a ticket in `DevTickets/` is orchestration work already
 and does not need a second orchestrator to quote it.
 
+**The sequence is in [CLAUDE.md](../.claude/CLAUDE.md)**, *When the owner
+says `implement <ticket>`*, written as orders because it is always loaded:
+ask the owner's decisions first, work, launch the orchestrator with the
+Agent tool, fix, re-quote, and only then archive. It is not restated here.
+**The gate:** a planning ticket archived on or after 2026-10-09 with no
+orchestrator's record fails `pixi run check-tickets`, and `cgitsync commit`
+refuses to add it (`ticket_gate.py`). The gate cannot prove the two agents
+were really separate; it turns "forgot" into "refused".
+
 ## Whose data this is, and attribution — this project's fill-ins
 
 [AgentDataContract.md](../../.distant/dev-sync/AgentDataContract.md) states

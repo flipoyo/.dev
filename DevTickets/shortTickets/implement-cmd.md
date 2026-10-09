@@ -1,0 +1,6 @@
+The request for the shared AgentConduct.md §4 (WP4) needs filing in flipoyo/DevSpec's shortTickets/. The draft is in a scratchpad that won't outlive this session, so here is the text:
+AgentConduct.md §4 states the pair rule as a description ("implementing a ticket takes at least two agents"). In ComplexGitSync it was read every session and still broken, because the coding harness tells the agent, as an order, not to launch a subagent unless the user explicitly asks, and nothing said that "implement <ticket>" is that request.
+
+Please make §4 require a project that states the rule to state three more things, as orders: that the owner asking to implement a ticket is the explicit request to launch the orchestrator, with which tool, before the work is handed over; that the ticket's decisions for the owner are asked before the first edit, a recommendation never being the answer; and that the worker never bumps the version, writes the record or scores itself.
+
+Suggest too that a project gate it mechanically where it can, as ComplexGitSync now does: a planning ticket archived without an orchestrator's record fails a check and cannot be committed. Say plainly that such a gate cannot prove the two agents were separate.

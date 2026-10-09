@@ -4,6 +4,17 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-09 (`cgitsync5.2.1`), by a worker and a launched
+> orchestrator, its decisions asked first.** The owner answered D1 both,
+> D2 2026-10-09, D3 delete, D4 no. The orchestrator quoted 92, then 95,
+> then 97/100 after the review fixes, which got their own build and patch;
+> three records name this ticket. The import-ceiling raise the owner
+> approved was not needed, since the ratchet counts lines and public
+> symbols only. **Left to the owner:** CLAUDE.md's old descriptive paragraph
+> after the eight steps, which §4.1 replaces, was not edited, because the
+> session's permission classifier refused that edit; and WP4's upstream
+> request for `DevSpec` is delivered in the closing report, to be filed there.
+
 > From the owner's short ticket
 > [pair-rule-gate](../archive/.closedUserTicket/20261009_pair-rule-gate.md),
 > 2026-10-09, after MergeErgonomics was implemented by one
