@@ -50,7 +50,7 @@ pixi install         # create/update the environment (run after touching pixi.to
 pixi run test        # pytest, tests/unit + tests/integration
 pixi run lint        # ruff check .
 pixi run bump-version  # orchestrator: bump SemVer and sync every manifest and doc
-pixi run bump-build    # worker: bump the __build__ counter, then bump-version patch at least
+pixi run bump-build    # worker: bump __build__; then bump-version by the orchestrator (by the worker at patch only for a direct fix, no ticket)
 pixi run check-spectree   # the spec tree: links, mounts, fills-in lines, digest
 pixi run check-ceilings   # module ratchet, and every .agent/ path cited in code
 ```
@@ -179,14 +179,14 @@ made by the same role for the reason AgentConduct.md §4 gives. Drafting,
 ranking, or closing a ticket in `DevTickets/` is orchestration work already
 and does not need a second orchestrator to quote it.
 
-**The sequence is in [CLAUDE.md](../.claude/CLAUDE.md)**, *When the owner
-says `implement <ticket>`*, written as orders because it is always loaded:
-ask the owner's decisions first, work, launch the orchestrator with the
-Agent tool, fix, re-quote, and only then archive. It is not restated here.
-**The gate:** a planning ticket archived on or after 2026-10-09 with no
-orchestrator's record fails `pixi run check-tickets`, and `cgitsync commit`
-refuses to add it (`ticket_gate.py`). The gate cannot prove the two agents
-were really separate; it turns "forgot" into "refused".
+**The orders are in [CLAUDE.md](../.claude/CLAUDE.md)**, *When the owner
+says `implement <ticket>`*: this project's statement of
+[AgentConduct.md](../../.distant/dev-sync/AgentConduct.md) §4.1, naming the
+Agent tool and `AskUserQuestion`. It is not restated here.
+**The gate** is this project's fill-in of AgentConduct.md §4.2: a
+planning ticket archived on or after 2026-10-09 with no orchestrator's
+record fails `pixi run check-tickets`, and `cgitsync commit` refuses to
+add it (`ticket_gate.py`).
 
 ## Whose data this is, and attribution — this project's fill-ins
 

@@ -94,7 +94,7 @@ repository does (`scripts/`, a pixi task) is released the same way, at
 
 | Who | Does | With |
 |---|---|---|
-| **Worker** | Bumps `__build__`, then `bump-version patch` itself when no orchestrator quotes the work | `pixi run bump-build` — writes one file |
+| **Worker** | Bumps `__build__`, then `bump-version patch` itself when no orchestrator quotes the work — a fix the owner asks for directly, never a ticket's implementation | `pixi run bump-build` — writes one file |
 | **Orchestrator** | Decides MAJOR/MINOR/PATCH, runs `bump-version`, tags, writes the release row | `pixi run bump-version {major,minor,patch} [--pre <stage>] [--release]` |
 | **CI** | Verifies: lint, tests, tree reconstitution | Never writes a version; `permissions: contents: read` never changes for this |
 

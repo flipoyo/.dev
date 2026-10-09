@@ -4,6 +4,16 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-09 (`cgitsync5.2.1`, no bump: Markdown only), by
+> a worker and a launched orchestrator, its decisions asked first.** The
+> owner chose every recommendation (D1–D5). The orchestrator quoted 94,
+> then 98/100 after four wording fixes; two records name this ticket.
+> CLAUDE.md's old descriptive paragraph (P8) is replaced. **Left to the
+> owner:** committing and pushing DevSpec by hand, then checking
+> `cgitsync status` for `errors=0`; and, as a follow-up outside this ticket,
+> `scripts/bump_build.py`'s printed hint, which still tells whoever ran it
+> to run `bump-version patch`.
+
 > From the owner's short ticket
 > [implement-cmd](../archive/.closedUserTicket/20261009_implement-cmd.md)
 > (2026-10-09). It is the text PairRuleGate's WP4 drafted and handed over,
