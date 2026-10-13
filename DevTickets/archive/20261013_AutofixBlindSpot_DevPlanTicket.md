@@ -4,6 +4,19 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-13 (`cgitsync-6.3.0`), by a worker and a launched
+> orchestrator, its decisions asked first.** D1 and D2 as recommended: with no
+> failing command in the log, `autofix` reads the tip commit of each writable
+> repository, no new flag, and judges only a commit under the repository's own
+> `user.email`. The owner approved the LOC and import raises and the new module
+> `autofix/repair_commit_message.py`; the orchestrator found one blocking defect
+> (a damage sign that flagged 46 of the last 200 commits), then quoted 93/100.
+> **Dropped, by the owner's decision at archive:** WP1's "bare word equal to a
+> branch name" heuristic and WP2's "say so in the merge diagnosis" clause; see
+> the implementation note above. A new ticket can revive either.
+
+> **Implementation note — 2026-10-13, worker.** Two parts of §3 were narrowed, on the worker's call, not the owner's. (1) WP1's first heuristic, a bare word equal to an existing branch name where a backticked phrase was, is **not built**: it flags ordinary prose such as "merge main". Only the two weaker signs are: two spaces in a row, and a space before punctuation followed by whitespace. The second sign was first written without that last condition and flagged 46 of this project's last 200 commits (any mention of `.cgs`); with it, 6 of 200, and `701a98f` is still caught. (2) WP2's sentence "when the same commit is what makes a merge fail, it says so in the merge diagnosis" is **deferred**: `MergeConflictRepair` does not look at the tip commit, and §4 does not require it. Decided by the owner (answers to D1, D2): the inspection is a fallback with no new flag, and judges only a commit under the repository's own `user.email`.
+
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `main_2-4` → `main_2-1`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
 > **Correction — 2026-10-02, owner's decision.** WP2 as first written asked `autofix` to rewrite a commit message with `git commit --amend`, and to amend a pushed commit and force-push it given `force=True`. That was a wrong reading of what `autofix` is for: it eases the merge procedure, it does not rewrite commits. The `tmpAutoFix` branch built exactly that WP2 and is being closed for it (CorrTicket TmpBranchClosure). ComplexGitSync now rewrites nothing (`AdditionalSpecs.md`, *The hard prohibitions*), so WP2 and the acceptance criteria below are rewritten: `autofix` reports a bad message and proposes ways to extract it intact, and nothing more. The read-only detection already written on `tmpAutoFix` is what this ticket takes back.
