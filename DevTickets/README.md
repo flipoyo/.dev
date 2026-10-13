@@ -60,7 +60,7 @@ not a specification. The public repository holds no tickets at all.
 |---|---|---|
 | `shortTickets/` | Open requests, in the owner's own words. A few lines is a normal size. | The owner |
 | `openTickets/` | Planning tickets: `<branch>_<priority>-<rank>_<Name>_DevPlanTicket.md` | The agent, on the owner's word |
-| `archive/` | Planning tickets whose work has landed, or that were dropped: `YYYYMMDD_<Name>_DevPlanTicket.md`. Also a few one-off repair scripts kept beside the ticket they served. | The agent, in the commit that finishes the work |
+| `archive/` | Planning tickets whose work has landed, or that were dropped (a dropped one opens with `> **Dropped — YYYY-MM-DD, owner's decision.** <why>`, which the pair-rule gate reads, and is stamped with the date it was dropped): `YYYYMMDD_<Name>_DevPlanTicket.md`. Also a few one-off repair scripts kept beside the ticket they served. | The agent, in the commit that finishes the work |
 | `archive/.closedUserTicket/` | Short tickets that have been acted on: `YYYYMMDD_<name>.md` | The agent, when the request is satisfied |
 | `archive/.deepArchive/` | The immutable copy of each archived ticket, as it was the day it was archived | The agent, in the same change that archives it |
 

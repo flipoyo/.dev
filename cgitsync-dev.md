@@ -188,7 +188,9 @@ Agent tool and `AskUserQuestion`. It is not restated here.
 **The gate** is this project's fill-in of AgentConduct.md §4.2: a
 planning ticket archived on or after 2026-10-09 with no orchestrator's
 record fails `pixi run check-tickets`, and `cgitsync commit` refuses to
-add it (`ticket_gate.py`).
+add it (`ticket_gate.py`). A ticket the owner dropped unbuilt opens with
+`> **Dropped — YYYY-MM-DD, owner's decision.**` and needs no record
+(DroppedTicketGate).
 
 ## Whose data this is, and attribution — this project's fill-ins
 
