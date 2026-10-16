@@ -1,0 +1,1 @@
+tutos must follow https protocole because the user doing them do not have any ssh privilege. I keep ComplexGitSync by default in ssh, but user will probably follow https before switching to ssh once convinced this is worth it. Check all the tutos, and make a note in docs
