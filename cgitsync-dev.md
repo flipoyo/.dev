@@ -144,9 +144,10 @@ Do all of these as part of the change, not as a follow-up. The shape is
    tutorial. No command table, no option list, no internals;
    `test_readme_stays_a_short_front_page` holds it under 250 lines. A new
    *use case* gets one row there and a tutorial; a new command does not.
-8. **Deliver the commit message.** Finishing a ticket includes writing the
-   commit message for the repositories the change touched — the project's
-   own and each mounted configuration repository that changed. Deliver it
+8. **Deliver the commit message.** Finishing a ticket includes writing
+   **one** commit message and using it unchanged in every repository the
+   change touched — the project's own and each mounted configuration
+   repository that changed. Deliver it
    as text in the finishing report; whether to commit is the owner's call
    unless the owner asks for it. `cgitsync commit` checks the message itself
    in a tree that has adopted DevSpec (`commit_message.py`) and refuses one
