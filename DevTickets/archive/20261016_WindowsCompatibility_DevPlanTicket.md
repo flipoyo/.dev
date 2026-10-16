@@ -5,7 +5,7 @@
 *Branch: main*
 
 > From the owner's short ticket
-> [windows-compatibility](../archive/.closedUserTicket/20261016_windows-compatibility.md),
+> [windows-compatibility](.closedUserTicket/20261016_windows-compatibility.md),
 > closed in the change that wrote this plan. The user's own words, quoted
 > there: *"les ~ ne fonctionnent pas, il faut mettre les chemins en entier"*
 > and *"pour certaines commandes il faut aussi mettre des \\ sinon le
@@ -147,6 +147,37 @@ rejects `-L -o`. The tutorials never say which shell they assume. There are
 The `golden-vectors` job runs `test_gts_integrity.py` and
 `test_gts_document.py` on `windows-latest`. Nothing else runs there: not a
 CLI command, a clone, or a tutorial replay.
+
+### 2.6 WP1 results — GitHub Actions `windows-latest`, 2026-10-16
+
+Git Bash from Git for Windows 2.56, Python 3.11 from Pixi, on a throwaway
+branch that is deleted. Read once on 6.3.3 (full suite, 33 minutes,
+**40 failed, 2094 passed, 9 skipped**; two modules needing the developer
+`.agent/` tree were excluded), then again after WP2–WP3.
+
+| Suspicion | Result |
+|---|---|
+| §2.1 backslashes in `export CGSHOME=` | **Confirmed**: `export CGSHOME=C:\Users\runneradmin\.cgs\CGSil1-x`. Fixed (WP2). |
+| §2.2 `HOME` ignored | **Confirmed**: `HOME=/c/Users/runneradmin`, `USERPROFILE=C:\Users\runneradmin`; with `HOME=D:\elsewhere\home` the root stayed under `C:\Users`. Git Bash hands native programs `HOME` as `C:\Users\...`, so the `/c/...` form is a safety net. Fixed (WP2, D3). |
+| §2.4 CRLF breaks the untracked twin | **Confirmed**: `core.autocrlf=true` is the Git for Windows default; the root `.gitignore` is CRLF in the worktree and LF in the blob. The two Tutorial 2 replays failed on `checkout feature` and `release load`. Fixed (WP3). |
+| §2.4 `rmtree` on read-only `.git` | **Confirmed**: `PermissionError` on `.git/objects`; `ignore_errors=True` left the `.git` behind. Fixed in `_clone_registry_entry`; `default_memory.py`'s `ignore_errors=True` is **not** changed (below). |
+| §2.4 renames and links | **Not reproduced** by the suite: no failure in the `.git` rename or `os.link` paths. Left as a risk (a file held open by an editor or antivirus). |
+| §2.3 `~` and the shell | Not a tool defect. The tutorials now say bash and give the PowerShell and `cmd` forms (WP4). |
+| `core.longpaths`, case-insensitive names, French locale | **Not tested** (the runner is English and short-pathed). Open risks. |
+
+The tutorial replays otherwise passed (16 of 18 before the fix, all after).
+The rest of the 40 failures are tests, not the tool, and are **left** under
+D4: shell-script stubs (`#!/bin/sh`) that Windows cannot run (17 in
+`test_git_runner.py`), tests that read `docs/` or `.agent/` (absent from a
+public checkout), a test that builds an expectation from `str(Path)`, and
+`examples/cawaqs.cgs`, whose line 17 has a newline inside a string (four
+tests; also failing on Linux).
+
+**Not done, on purpose:** `default_memory.py` still removes a half-made
+memory with `ignore_errors=True`, which on Windows can leave `.git` behind;
+generated files in the memory repository (`memory/store.py`, ledger entries)
+still use the platform's newline, which the suite does not show to matter
+(the golden vectors pass on Windows) but which nothing proves.
 
 ## 3. What only a Windows machine can confirm
 
