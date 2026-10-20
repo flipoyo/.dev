@@ -12,6 +12,19 @@
 > user will probably follow https before switching to ssh once convinced
 > this is worth it. Check all the tutos, and make a note in docs"*.
 
+> **Implemented — 2026-10-20 (`cgitsync-6.4.0`), by a worker and a launched
+> orchestrator, its decisions asked first.** Q1 (c), Q2 (a), Q3 (a), Q4 (c),
+> Q6 (a); the P1 defect fixed by `release load --force-protocol` and `pull
+> <x.gts>` honouring its own flag. The owner approved +1 LOC each for
+> `cli/release_command.py`, `orchestre/release_commands.py` and
+> `orchestre/tree_commands.py`. The orchestrator's first quote found two
+> blocking defects (a stale `cawaqs` test, help text calling the flag
+> CI-only); after the fixes it quoted 93/100 with none left. **Left,
+> recorded:** §6.1 was run live only for Tutorial 1's `bootstrap` with SSH
+> disabled; the client's `_forced_access_protocol` stays set in a
+> long-lived Python session, as `installer.py` already does;
+> `c_getting_started.pdf` alone shows `??` for the cross-chapter reference.
+
 ## Abstract — read this first
 
 **The one-line version.** A new user has no SSH key on GitLab or GitHub, but
@@ -120,7 +133,48 @@ Read on 2026-10-20. Line numbers are as of 6.3.4.
   rewrite every remote even when nothing is ahead, and does it reach the
   private repositories (`--private`)?
 
-## 4. Decisions for the owner — Q5 answered, the others open
+### 3.1 WP1 findings, 2026-10-20 (read from the code at 6.3.4, build 3.87)
+
+WP1 was done by reading the clone paths, not by a live run with SSH
+disabled; the acceptance run of §6.1 is still to be quoted.
+
+- **P1 — a defect, fixed in WP4.** `_forced_access_protocol` is set only by
+  `initialise`, `bootstrap`, `submodules init` and the `.gts` installer. A
+  later clone with no flag used the declared protocol, SSH: `release load
+  --workspace` (it calls `bootstrap` with no protocol, and `release load` had
+  no flag), `release load` in place for a repository the tree lacks
+  (`Installer.clone_recorded`), and `pull <x.gts>` restoring a missing
+  repository, which ignored its own `--force-protocol`. `pull <x.cgs>` and
+  `checkout` clone nothing new.
+- **P2 — no change needed.** Pushing over HTTPS goes through Git's
+  credential helper. `cgitsync` passes nothing, and `run_tool` and `git push`
+  inherit the helper. Not run live.
+- **P3 — yes, already there.** `pull --force-protocol ssh` (not `--force`)
+  rewrites every remote in `RepoScope.ALL`, private repositories included,
+  with `git remote set-url` (`RestartOperation.rewrite_remote_if_forced`),
+  whatever is ahead or behind, then pulls fast-forward only. `push
+  --force-protocol ssh` does the same over its own scope.
+- **Also found:** `submodules init` clones too, and already takes
+  `--force-protocol`; Tutorial 4 now passes it.
+- **§6.1, live, by the orchestrator (2026-10-20, build 3.88).** With Git's
+  SSH disabled (`GIT_SSH_COMMAND=false GIT_TERMINAL_PROMPT=0`), Tutorial 1's
+  `bootstrap CGSil1.cgs --force-protocol https` reached READY with all four
+  remotes on `https://`; the same line without the flag failed at the first
+  `git@gitlab.com` ls-remote. Not run live: `push`, `release load`, and
+  Tutorials 2–7 (they need fork credentials and a release).
+
+## 4. Decisions for the owner — all answered 2026-10-20
+
+**Answers (owner, 2026-10-20, asked with `AskUserQuestion`):** Q1 (c), both
+the user guide and `getting_started.tex`; Q2 (a), the flag on every line;
+Q3 (a), the provider's CLI as Git's credential helper; Q4 (c), docs only;
+Q6 (a), document `pull --force-protocol ssh`, asked after WP1 settled P3.
+**P1 fix:** `release load` takes `--force-protocol`, and `pull <x.gts>`
+honours its own when it restores; asked as a decision of its own. **Ceilings:**
++1 LOC each for `cli/release_command.py`, `orchestre/release_commands.py`
+and `orchestre/tree_commands.py`, approved; no import-count change.
+
+The text below is the plan as written.
 
 The open ones are asked with `AskUserQuestion` before the first edit. A
 recommendation is not the answer.
