@@ -58,7 +58,7 @@
 >   clean-environment acceptance check in §5 should adopt a memory and get
 >   a working tree, not only print `--help` — that is the path a user on a
 >   new machine actually takes, and it is the one thing this ticket and
->   [Omniscience](memory-dev_2-10_Omniscience_DevPlanTicket.md) both
+>   [Omniscience](../openTickets/main_1-1_Omniscience_DevPlanTicket.md) both
 >   depend on.
 
 > **Release review — 2026-09-11. Priority 1-5.** Promoted from 2-6 for a tested installation outside the source checkout and a repeatable public release. Support only validated platforms; broader coverage is deferred.

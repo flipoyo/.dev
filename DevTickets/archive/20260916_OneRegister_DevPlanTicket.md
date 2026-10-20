@@ -157,7 +157,7 @@ Four rules, from
    so a Git-only workspace never pays to record that it has no DVC.
    `dvc --version` starts a Python interpreter and takes about a second;
    asking it on every `cgitsync status` would be felt immediately.
-   [DataBackendContract](data-repo_2-5_DataBackendContract_DevPlanTicket.md)
+   [DataBackendContract](../openTickets/data-repo_2-3_DataBackendContract_DevPlanTicket.md)
    owns the discovery.
 
 **A schema note this milestone must settle anyway.** `ledger_entry.py`'s

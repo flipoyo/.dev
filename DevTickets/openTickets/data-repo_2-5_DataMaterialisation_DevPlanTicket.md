@@ -4,11 +4,13 @@
 
 *Branch: data-repo*
 
+> **Ticket review — 2026-10-20, owner's decision.** Renumbered `data-repo_2-7` → `data-repo_2-5`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
+
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-5` → `data-repo_2-7`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
-> **Milestone M4** of [DataArchitecture](data-repo_2-3_DataArchitecture_DevPlanTicket.md).
-> Needs [DataBackendContract](data-repo_2-5_DataBackendContract_DevPlanTicket.md);
-> independent of [DataAuthoring](data-repo_2-6_DataAuthoring_DevPlanTicket.md).
+> **Milestone M4** of [DataArchitecture](data-repo_2-1_DataArchitecture_DevPlanTicket.md).
+> Needs [DataBackendContract](data-repo_2-3_DataBackendContract_DevPlanTicket.md);
+> independent of [DataAuthoring](data-repo_2-4_DataAuthoring_DevPlanTicket.md).
 > Analysed from §5, §7 and §9/P4 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
 

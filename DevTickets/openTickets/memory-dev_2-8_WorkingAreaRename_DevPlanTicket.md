@@ -4,6 +4,8 @@
 
 *Branch: memory-dev*
 
+> **Ticket review — 2026-10-20, owner's decision.** Renumbered `memory-dev_2-11` → `memory-dev_2-8`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
+
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `memory-dev_2-2` → `memory-dev_2-11`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
 > **Where this comes from.** The owner's short ticket
