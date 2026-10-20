@@ -145,7 +145,7 @@ documentation written. Say so explicitly, so the branch does not merge on
 | **WP-E3** | WP-E1 | `tests/integration/` | §2's two negative tests |
 | **WP-E4** | D2 | `tests/integration/` | A private, writable, DVC-backed repository inside the same scenario, with its permissions asserted |
 | **WP-E5** | D1 | `.github/workflows/ci.yml` | The `dvc` environment job |
-| **WP-E6** | — | `docs/tutorials/`, `README.md`, `docs/Text/user_guide.tex` | §4's guide, one row in README's *What you can do with it* table pointing at it, and a check that the command documentation from M3–M5 is complete |
+| **WP-E6** | — | `docs/tutorials/`, `README.md`, `docs/Text/user_guide.tex` | §4's guide, one row in README's *What you can do with it* table pointing at it, and a check that the command documentation from M3–M5 is complete. The guide's commands work over HTTPS, as every tutorial's do (TutorialsOverHttps) |
 | **WP-E7** | all | `.localSpec/AdditionalSpecs.md`, this ticket and its five siblings | Architecture sections updated; the six milestone tickets archived as they land |
 
 ## 7. Acceptance
