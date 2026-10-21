@@ -4,6 +4,18 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-21 (`cgitsync-6.8.1`), by a worker and a launched
+> orchestrator, its decisions asked first (D1 to D5, the repository address,
+> and the fold bug the worker found, fixed here on the owner's word).** The
+> format is frozen in `AdditionalSpecs.md`, *The Omniscience register*. As
+> built: `global_integrity.py`, `omniscience_record.py`, `global_index.py`
+> (ring 0), `omniscience_repository.py`, `orchestre/omniscience_commands.py`
+> and `omniscience mount` and `omniscience record`; nothing writes to the
+> register yet (OmniscienceAppend). Known and left open: a crash between the
+> fold's append and its delete would append a commit log's rows twice; a
+> project named `_global` is not refused until OmniscienceAppend; no
+> `omniscience` entry was added to the developer install.
+
 > **Split from [Omniscience](main_1-1_Omniscience_DevPlanTicket.md) on
 > 2026-10-20 (owner's short ticket `update-omniscience`), as milestones O1c
 > and O2** (the old O1, the register format, and O2, the mount). It freezes
@@ -113,6 +125,40 @@ publication rows are described in `AdditionalSpecs.md`.
   of an `os_id` records its contributor, and a later one from a contributor
   without push right on that project's branch is refused by
   OmniscienceAppend. (b) A separate claim record, signed.
+
+### Answers, 2026-10-21 (asked before the first edit)
+
+- **D1** (a) the reserved branch `_global`, holding content-addressed
+  checkpoint files. **D2** (a) canonical TOML for the file, hashed over
+  canonical JSON. **D3** (a) a separate read-only repository for the time
+  reference. **D4** (d) **none in this milestone**: the lag fields stay empty
+  and are outside the preimage, so nothing about time is frozen untested.
+  **D5** (a) the first accepted registration claims the name; this milestone
+  records only the `contributor` claim.
+- **D6 — the mount's address.** The repository exists: `omniscience mount`
+  defaults to `github:flipoyo/omniscience` (`--repository` overrides). Tests use
+  a local bare repository. `examples/complexgitsync4dev.cgs` is **not** given an
+  `omniscience` entry: CI would clone a private repository it cannot reach, and
+  `check-spectree` compares that file with the manifest.
+- **D7 — the fold bug.** `memory push`'s fold read each commit log from the
+  wrong directory and deleted the original, so every commit message and every
+  publication row (PushAnchor's witness included) was lost at the first fold.
+  The owner said to fix it in this change, with a regression test
+  (`test_a_fold_keeps_the_commit_log_it_moves_into_the_memory`). Rows already
+  lost are not recovered.
+
+### Reading of the ticket, where it left room
+
+- **`[local]` is dropped**: every field of it is already committed in
+  `operating_space` or `memory_repo`.
+- **Committed and not**: `recorded_at` and `contributor` are outside the
+  preimage, or the same registration made twice would be two files. The
+  publication rows are evidence checked against `published_state.id`, which is
+  committed.
+- **The proof encoding** stays `InclusionProof`'s table. A global proof is built
+  in OmniscienceQuery; this milestone fixes its tags and leaf order.
+- **`omniscience record` reads the committed memory**, not `.cgitsync`: a
+  record must name what a reader can fetch.
 
 ## 4. Where the code goes
 

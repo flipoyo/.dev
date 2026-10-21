@@ -15,7 +15,7 @@
 | | |
 |---|---|
 | Part of | [Omniscience](main_1-1_Omniscience_DevPlanTicket.md) §1, §5, §6, §8 — milestone O3 |
-| Needs | [OmniscienceRegister](main_1-5_OmniscienceRegister_DevPlanTicket.md) |
+| Needs | [OmniscienceRegister](../archive/20261021_OmniscienceRegister_DevPlanTicket.md) |
 | Expected release | minor (a new command) |
 
 ## Abstract — read this first
