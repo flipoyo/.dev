@@ -4,6 +4,14 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-21 (`cgitsync-6.10.0`), by a worker and a launched
+> orchestrator, its decisions asked first (D1 to D3, and a ceiling raise).**
+> Nine subcommands, one per API method; a registered memory is read in a
+> temporary clone that is removed; anyone the provider allows may ask. The
+> eighth tutorial, `tutorials/08_omniscience.md`, was added at the owner's
+> request and is replayed by `test_tuto_omniscience.py`. `Omniscience` itself
+> (1-1) stays open until its closing note checks off its section 10.
+
 > **Split from [Omniscience](main_1-1_Omniscience_DevPlanTicket.md) on
 > 2026-10-20 (owner's short ticket `update-omniscience`), as milestones O4
 > and O5.** It builds the public, read-only `Omniscience` API and ends the
@@ -85,6 +93,16 @@ from a memory without changing it.
 6. **Restore from another machine.** `release load` or `bootstrap` from a
    registered State found through Omniscience, so that a second machine
    continues the same `os_id`'s history.
+7. **The eighth tutorial, `tutorials/08_omniscience.md`** (owner,
+   2026-10-21). It follows the seven that exist: a reader registers a State,
+   finds the project by name from a second workspace, lists its branches and
+   history, gets a State with its proof, reads the `.memory` at its
+   immutable commit, sees what each answer (`verified`, `invalid`,
+   `unavailable`, `unauthorized`, `not_registered`) means, and restores the
+   project on another machine. Every command in it is run by an integration
+   test, as `test_tuto_merge.py` does for tutorial 07. The README's use-case
+   table and tutorial count, and `getting_started.tex`'s, move from seven to
+   eight in the same change.
 
 ## 3. Decisions for the owner
 
@@ -107,8 +125,8 @@ from a memory without changing it.
 | `client.py` | The mirror of the API, per *the CLI mirrors the Python API* |
 
 Docs: the user guide (every subcommand), `api_python.tex` (the API),
-`AdditionalSpecs.md` (*Responsibility boundaries*), and a tutorial section
-if the owner wants one.
+`AdditionalSpecs.md` (*Responsibility boundaries*), and the eighth tutorial
+(§2 item 7), with its test in `tests/integration/`.
 
 ## 5. Acceptance — the workstream's end-to-end (O5)
 
@@ -126,6 +144,9 @@ if the owner wants one.
   its content.
 - A repository deleted after registration: its proof still verifies, and
   `repository_status` reports the observation, not "verified".
+- `tutorials/08_omniscience.md` exists, follows DOCSTYLE, is linked from the
+  README table and `getting_started.tex` (both now say eight), and an
+  integration test runs each of its commands.
 - Every item of Omniscience §10 is checked off in the closing note.
 - `pixi run lint` and `pixi run test` pass, `bump-build` has run, and
   `cgitsync status` shows `errors=0`.
