@@ -4,6 +4,16 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-21 (`cgitsync-6.9.0`), by a worker and a launched
+> orchestrator, its decisions asked first (D1 to D4, and a ceiling raise).**
+> Signing is recommended, not required; a deletion is confirmed only by the
+> owner's signed note; observations run only when typed; a missing repository
+> is a warning, and a permanent failure after at least two findings seven days
+> apart (the worker's numbers, the owner gave none). As built, in
+> `AdditionalSpecs.md`, *Appending to the register*: split over several modules,
+> two statuses added (`CLOSED`, `REF_MISSING`), the `Finding` taxonomy not
+> extended, `omniscience verify` not built.
+
 > **Split from [Omniscience](main_1-1_Omniscience_DevPlanTicket.md) on
 > 2026-10-20 (owner's short ticket `update-omniscience`), as milestone O3.**
 > It builds the private `IntegrityControl`: *"validate/register

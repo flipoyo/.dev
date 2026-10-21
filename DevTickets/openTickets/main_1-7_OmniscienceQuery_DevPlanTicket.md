@@ -13,7 +13,7 @@
 | | |
 |---|---|
 | Part of | [Omniscience](main_1-1_Omniscience_DevPlanTicket.md) §1, §5, §8, §10 — milestones O4, O5 |
-| Needs | [OmniscienceAppend](main_1-6_OmniscienceAppend_DevPlanTicket.md) |
+| Needs | [OmniscienceAppend](../archive/20261021_OmniscienceAppend_DevPlanTicket.md) |
 | Expected release | minor (a public API and commands) |
 
 ## Abstract — read this first

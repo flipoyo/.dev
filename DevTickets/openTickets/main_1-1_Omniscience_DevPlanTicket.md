@@ -399,7 +399,7 @@ interface, so the run stays inside 6.x unless a milestone proves otherwise.
 | done (6.7.1) | [OperatingSpace](../archive/20261021_OperatingSpace_DevPlanTicket.md) | — (owner, 2026-10-21) | The tree as the only reference: one name, `H_GITTREE` from the tree, git operations on a READY tree | minor |
 | done (6.7.2) | [InclusionProofs](../archive/20261021_InclusionProofs_DevPlanTicket.md) | O1b | Private Merkle inclusion proofs over schema 1 | patch |
 | done (6.8.1) | [OmniscienceRegister](../archive/20261021_OmniscienceRegister_DevPlanTicket.md) | O1c + O2 (was O1, O2) | The registration record, the MemoryRepoDescriptor, the mount, the global index and `H_GLOBAL` | minor |
-| `1-6` | [OmniscienceAppend](main_1-6_OmniscienceAppend_DevPlanTicket.md) | O3 (was O3) | `IntegrityControl`: registering, concurrency, accepting hand appends, lifecycle and availability observations | minor |
+| `1-6` | [OmniscienceAppend](../archive/20261021_OmniscienceAppend_DevPlanTicket.md) | O3 (was O3) | `IntegrityControl`: registering, concurrency, accepting hand appends, lifecycle and availability observations | minor |
 | `1-7` | [OmniscienceQuery](main_1-7_OmniscienceQuery_DevPlanTicket.md) | O4 + O5 (was O4, O5) | The public `Omniscience` API and `cgitsync omniscience ...`, and the two-developer, two-project end-to-end test | minor |
 
 ```mermaid
