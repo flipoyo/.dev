@@ -4,11 +4,26 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-21 (`cgitsync-6.6.0`), by a worker and a launched
+> orchestrator, its decisions asked first.** D1 (a) NFC with case kept, D2 (a)
+> warn and refuse registration only, D3 (a) plain SHA-256 hex. The owner
+> reversed the Omniscience refusal of an `OperatingSpace` class and had the
+> pure functions merged into it; no ceiling was raised.
+
 > **Split from [Omniscience](main_1-1_Omniscience_DevPlanTicket.md) on
 > 2026-10-20 (owner's short ticket `update-omniscience`), as milestone O1a.**
 > The owner: *"Add `os_id` as a deterministic primitive derived from the
 > project root's `project_name`"*, and *"do not add an `OperatingSpace`
 > lifecycle class or reimplement the GitTree machinery."*
+
+> **Owner's decisions while building, 2026-10-21.** The Omniscience refusal
+> of an `OperatingSpace` class was reversed, and the owner ordered the pure
+> functions and the class merged. So §2 and §4 read as follows: the
+> functions are static methods of one class, `OperatingSpace`
+> (`operating_space.py`, ring 1), which wraps a loaded `WorkingGitTree`;
+> there is no `WorkingGitTree.os_id` property and no ring-0 module. Its
+> status/show/validate plumbing lives in that class, so no module's ceiling
+> was raised.
 
 | | |
 |---|---|

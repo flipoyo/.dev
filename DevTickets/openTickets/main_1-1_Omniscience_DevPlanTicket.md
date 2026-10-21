@@ -151,9 +151,11 @@ private project repositories or their snapshots. An authorized reader
 locates and reads a registered `.memory` through the ordinary Git transport
 and the provider's own access control.
 
-**The existing `GitTree` is the Operating Space.** No `OperatingSpace` class
-is added and no GitTree machinery is reimplemented. The only new primitive is
-`os_id`, derived from the root's `project_name` (§2).
+**The existing `GitTree` is the Operating Space.** `OperatingSpace`
+(`operating_space.py`, added by OperatingSpaceId on the owner's word of
+2026-10-21) wraps a loaded `WorkingGitTree` and holds no lifecycle: no GitTree
+machinery is reimplemented. Its primitive is `os_id`, derived from the root's
+`project_name` (§2).
 
 **Three roles, one physical code base:**
 
@@ -379,7 +381,7 @@ Omniscience.
 | D8 | What the universal clock is | Open; OmniscienceRegister asks it (NTP recommended) |
 | D9 | The shared-time module's name | **Answered 2026-10-20:** `time_reference.py` |
 | D10 | Does O0 wait for anything | **Answered 2026-10-20:** no; PushAnchor is independent |
-| — | An `OperatingSpace` class | **Refused 2026-10-20:** `GitTree` is the Operating Space |
+| — | An `OperatingSpace` class | Refused 2026-10-20, **reversed 2026-10-21 (owner):** one class wrapping the `GitTree`, no lifecycle, no GitTree machinery |
 | — | `Integrity` split into OWNER and DEVELOPER repositories | **Refused 2026-10-20** |
 | — | A forced 7.0.0 | **Not forced, 2026-10-20:** each milestone's orchestrator decides its level |
 
@@ -393,7 +395,7 @@ interface, so the run stays inside 6.x unless a milestone proves otherwise.
 | Rank | Ticket | Milestone | Delivers | Expected level |
 |---|---|---|---|---|
 | `1-2` | [PushAnchor](../archive/20261021_PushAnchor_DevPlanTicket.md) | O0 (was O0; UniversalClock WP7) | A local, checkable witness of which push carried which State | minor |
-| `1-3` | [OperatingSpaceId](main_1-3_OperatingSpaceId_DevPlanTicket.md) | O1a | `os_id` and the frozen naming contract | minor |
+| `1-3` | [OperatingSpaceId](../archive/20261021_OperatingSpaceId_DevPlanTicket.md) | O1a | `os_id` and the frozen naming contract | minor |
 | `1-4` | [InclusionProofs](main_1-4_InclusionProofs_DevPlanTicket.md) | O1b | Private Merkle inclusion proofs over schema 1 | patch |
 | `1-5` | [OmniscienceRegister](main_1-5_OmniscienceRegister_DevPlanTicket.md) | O1c + O2 (was O1, O2) | The registration record, the MemoryRepoDescriptor, the mount, the global index and `H_GLOBAL` | minor |
 | `1-6` | [OmniscienceAppend](main_1-6_OmniscienceAppend_DevPlanTicket.md) | O3 (was O3) | `IntegrityControl`: registering, concurrency, accepting hand appends, lifecycle and availability observations | minor |
@@ -425,7 +427,7 @@ reopens no archived decision.
   Registration is an explicit, authorized command.
 - Resolving contradictory observations by replacing evidence; they are
   reported.
-- A second hashing implementation, a parallel `OperatingSpace` class, a
+- A second hashing implementation, an `OperatingSpace` lifecycle class, a
   change to an existing hash preimage, or an application-specific
   dependency.
 
@@ -453,7 +455,7 @@ reopens no archived decision.
    are tested, with precise outcomes.
 9. Hand appends stay possible as proposals; only valid, authorized records
    enter the index.
-10. No OWNER/DEV source split, no `OperatingSpace` class, no changed hash
+10. No OWNER/DEV source split, no `OperatingSpace` lifecycle, no changed hash
     preimage, no application-specific dependency.
 11. Closed, inaccessible, unreachable, missing and confirmed-deleted
     repositories give separate, evidenced findings; completeness is flagged

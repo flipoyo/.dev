@@ -13,7 +13,7 @@
 | | |
 |---|---|
 | Part of | [Omniscience](main_1-1_Omniscience_DevPlanTicket.md) §3, §4, §5, §6.3, §8 |
-| Needs | [OperatingSpaceId](main_1-3_OperatingSpaceId_DevPlanTicket.md) (the key), [InclusionProofs](main_1-4_InclusionProofs_DevPlanTicket.md) (the proof form); reads [PushAnchor](../archive/20261021_PushAnchor_DevPlanTicket.md)'s witness when present |
+| Needs | [OperatingSpaceId](../archive/20261021_OperatingSpaceId_DevPlanTicket.md) (the key), [InclusionProofs](main_1-4_InclusionProofs_DevPlanTicket.md) (the proof form); reads [PushAnchor](../archive/20261021_PushAnchor_DevPlanTicket.md)'s witness when present |
 | Expected release | minor (a new format, a new mount, new commands) |
 
 ## Abstract — read this first
