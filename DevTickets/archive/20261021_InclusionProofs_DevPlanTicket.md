@@ -4,6 +4,17 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-21 (`cgitsync-6.7.2`), by a worker and a launched
+> orchestrator, its decisions asked first.** D1 (a) a TOML table of hex
+> strings; D2 (a) the GitTree level only; and, asked because 6.7.1 made the
+> tree the only reference, the pure engine plus
+> `OperatingSpace.inclusion_proof(repo_id)`. As built, §2's names are
+> `InclusionProof.of(leaves, relative_path)` and
+> `proof.verify(leaf_hash, trusted_root, trusted_size)` in a new ring-0
+> `inclusion_proof.py`; `gts_integrity.py` is unchanged. `verify` takes the
+> trusted tree size with the trusted root, because the audit path alone does
+> not fix the size (§5's "a wrong tree size fails" needs it).
+
 > **Split from [Omniscience](main_1-1_Omniscience_DevPlanTicket.md) on
 > 2026-10-20 (owner's short ticket `update-omniscience`), as milestone O1b.**
 > The owner: *"Implement Merkle inclusion proof generation and verification

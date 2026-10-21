@@ -1,0 +1,1 @@
+RFC6962 is obsolete. New RFC 9162: Certificate Transparency Version 2.0. See if any changes needed in ComplexGitSync
