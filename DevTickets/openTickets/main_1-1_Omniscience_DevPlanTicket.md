@@ -242,7 +242,7 @@ H_GLOBAL   = MerkleRoot_v1(ordered, unique global registration leaves)
 - Ordering, duplicates, leaf preimage, domain tags, the empty tree and the
   proof encoding are a **new global schema**. `integrity_schema = 1` is
   never reinterpreted.
-- Inclusion proofs (RFC 6962 style, with the current CGS domain tags) are
+- Inclusion proofs (RFC 9162 style, formerly RFC 6962, with the current CGS domain tags) are
   generated and verified for the existing GitTree decomposition first.
   Schema-1 roots and golden vectors stay byte for byte identical. A proof
   binds the leaf index, the tree size, the ordered siblings, the
