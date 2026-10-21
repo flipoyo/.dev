@@ -4,6 +4,14 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-21 (`cgitsync-6.5.1`), by a worker and a launched
+> orchestrator, its decisions asked first.** D1 (a) fields on the publication
+> row, D2 (a) `cgitsync memory verify --published`, D3 (a) always. The owner
+> approved raising the ceilings of `cli/expert.py`, `cli/help_text.py`,
+> `git_runner.py`, `memory/commit_log.py`, `orchestre/client.py` and
+> `orchestre/memory_commands.py`. `memory verify` without `--published` runs
+> the existing chain check; `--state` is refused without `--published`.
+
 > **Split from [Omniscience](main_1-1_Omniscience_DevPlanTicket.md) on
 > 2026-10-20 (owner's short ticket `update-omniscience`), as milestone O0.**
 > It is UniversalClock's WP7, moved into Omniscience on 2026-09-20 and kept

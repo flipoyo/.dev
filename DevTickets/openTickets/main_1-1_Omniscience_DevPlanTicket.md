@@ -392,7 +392,7 @@ interface, so the run stays inside 6.x unless a milestone proves otherwise.
 
 | Rank | Ticket | Milestone | Delivers | Expected level |
 |---|---|---|---|---|
-| `1-2` | [PushAnchor](main_1-2_PushAnchor_DevPlanTicket.md) | O0 (was O0; UniversalClock WP7) | A local, checkable witness of which push carried which State | minor |
+| `1-2` | [PushAnchor](../archive/20261021_PushAnchor_DevPlanTicket.md) | O0 (was O0; UniversalClock WP7) | A local, checkable witness of which push carried which State | minor |
 | `1-3` | [OperatingSpaceId](main_1-3_OperatingSpaceId_DevPlanTicket.md) | O1a | `os_id` and the frozen naming contract | minor |
 | `1-4` | [InclusionProofs](main_1-4_InclusionProofs_DevPlanTicket.md) | O1b | Private Merkle inclusion proofs over schema 1 | patch |
 | `1-5` | [OmniscienceRegister](main_1-5_OmniscienceRegister_DevPlanTicket.md) | O1c + O2 (was O1, O2) | The registration record, the MemoryRepoDescriptor, the mount, the global index and `H_GLOBAL` | minor |
