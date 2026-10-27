@@ -1,5 +1,0 @@
-The CLI is very reach. It would be wise to reduce it to the minimal. Security comes from there because it reduces the attack surface. Among all class methods many may be unused or depricated. It would be interesting to map class and methods by ring and see which ones are exposed through the CLI. with the objective that the CLI lands mostly at ring interfaces. This is a mapping ticket for further decisions and Security and consistency reinforcement of the project. The Merkle Tree of MerkleRoot must never be accessible by cgitsync nor gx4g. It is the interface never materialised.
-
-From this map CLI cmd may be kept, reinforce, adapted or disclosed.
-
-Reorganise Class around this MerkleTree. ComplexGitSync is the Gate of GitTree. WorkingGitTree is the Operating Space. .cgs is the API of USER. .gts is the API of DEV, OperatingSpace is the API of OPX. @gx4g is the UNIVERSAL API-GATE. cgitsync is therefore the Tree Operator of the infrastructure. Check that the Ring API is OK gx4g outer ring API, .cgs ring3<->4 API, .gts ring 2<->3 API, OperatingSpace ring 1<->2

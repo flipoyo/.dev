@@ -4,6 +4,13 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, sixth pass (short ticket `minimalism`).**
+> Rank unchanged. There are two consequences. A killed command now also leaves
+> the workspace lock behind (StateLocking, 7.3.0). The next writing command
+> already names it as stale and points to `cgitsync unlock`, which D6–D9 count
+> as "named". And D7's `memory reboot` gets a verdict in Minimalism's map
+> before D7 is built. If the map withdraws the command, D7 goes with it.
+
 > **From the owner's short ticket `robustness` (closed 2026-10-27 as
 > [archive/.closedUserTicket/20261027_robustness.md](../archive/.closedUserTicket/20261027_robustness.md)).**
 > The second half of its split, on the owner's decision of 2026-10-27: D6–D9,

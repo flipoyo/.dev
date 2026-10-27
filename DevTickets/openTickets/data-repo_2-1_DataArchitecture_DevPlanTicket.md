@@ -4,6 +4,15 @@
 
 *Branch: data-repo*
 
+> **Ticket review — 2026-10-27, sixth pass (short ticket `minimalism`).**
+> Ranks unchanged, for all seven `data-repo` tickets; this note binds them
+> all. Two constraints come from the owner's short ticket. First, any command
+> the data layer adds or changes needs a row and a verdict in Minimalism's
+> map, and must land at the ring interface the map names. Second, the data
+> layer calls no Git host's API: a DVC remote is a storage backend, not a
+> provider API. A remote that needs a provider (a host's LFS or package
+> registry) is gx4g's (ProviderMigration).
+
 > **Ticket review — 2026-10-20, owner's decision.** Renumbered `data-repo_2-3` → `data-repo_2-1`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
 
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-1` → `data-repo_2-3`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.

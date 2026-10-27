@@ -1,8 +1,24 @@
-# BranchProtection — the provider locks the branch, says who may close and delete, and a dying branch is reported to Omniscience
+# BranchProtection — cgitsync guards a USER tree and reports a dying branch to Omniscience; the provider's lock and roles are gx4g's
 
 *Created: 2026-10-20*
 
 *Branch: main*
+
+> **Ticket review — 2026-10-27, owner's decision (sixth pass, short ticket
+> `minimalism`).** Renumbered `main_1-7` → `main_1-6`, BeforeBeta's step S8,
+> and **split** (owner, through `AskUserQuestion`). The owner's short ticket
+> says every call to a provider's API is gx4g's privilege, *"cgitsync n'est
+> qu'un exécutant"*, and that holds for the reads as well as the writes.
+> M0–M4 (the spike, `ProviderRole`, `require_role`, `branch protect` and
+> `unprotect`, and the other assets) each call `gh`/`glab`/`tea api`, so they
+> leave `cgitsync`. They become the requirement handed to gx4g in §9.
+> `cgitsync` keeps two things: the USER-tree guard that already exists
+> (`require_dev`, DevOnlyClosure), and M5, which reports a dead GitTree-branch
+> to the register without any provider call. That answers BeforeBeta's D3.
+> D1–D6 below are gx4g's to answer; D7–D10 are still this ticket's. §2–§7 are
+> kept as the analysis gx4g starts from. The short ticket `deletion4devOnly`
+> now closes when this ticket is archived: its accident guard landed with
+> DevOnlyClosure, and its lock and its two tiers are §9's requirement.
 
 > **Ticket review — 2026-10-27, owner's decision (fifth pass).** *"I think
 > main_1-7 and 1-8 can be merged."* DeadBranchReport, filed the same day from
@@ -31,26 +47,32 @@
 | | |
 |---|---|
 | Predecessors | [DevOnlyClosure](../archive/20261013_DevOnlyClosure_DevPlanTicket.md): `WorkingGitTree.require_dev`, the USER-tree refusal; the `provider.py` rule "store no credential, implement no provider's API, run the provider's own CLI" |
-| Closes | The short ticket `deletion4devOnly`, once M3 lands (§7) |
+| Closes | The short ticket `deletion4devOnly`, when this ticket is archived with §9 handed to gx4g |
 | Touches | `branch close`, `branch delete`, `status`, `branch list`, `omniscience observe/status/report`; Tutorial 7 §7, Tutorial 8 |
 
 ## Abstract — read this first
 
-**The one-line version.** `cgitsync` never makes a lock of its own. It asks
-the hosting service (the "provider": GitHub, GitLab, Codeberg/Gitea) to
-protect a branch, through the CLI the user has already signed in to (`gh`,
-`glab`, `tea`). It also asks the provider what role the signed-in user has
-on the project, and gates `branch close` on a developer role and
-`branch delete` on a maintainer role. When no provider can answer, the
-DevOnlyClosure profile test stays as the offline fallback. And when a project branch
-dies anyway (vanished, half closed, split, or orphaned by its private
-branches), `cgitsync` records that in the Omniscience register (§8).
+**The one-line version, since the split of 2026-10-27.** `cgitsync` never
+makes a lock of its own, and it no longer asks the provider for one either:
+the provider's branch protection and the user's role on the provider are
+gx4g's, because every provider API call is (§9). `cgitsync` keeps the
+DevOnlyClosure guard: `branch close` and `branch delete` are refused in a USER
+tree. When a project branch dies anyway (vanished, half closed, split, or
+orphaned by its private branches), `cgitsync` records that in the Omniscience
+register (§8, M5), which gx4g reads.
+
+**The plan as first written** (kept for §9): `cgitsync` would ask the
+hosting service (GitHub, GitLab, Codeberg/Gitea) to protect a branch through
+the CLI the user had signed in to, read the user's role, and gate
+`branch close` on a developer role and `branch delete` on a maintainer
+role.
 
 **What this document is.** The plan: what is true today (§1), one answer to
 each of the six open questions (§2), a spike that checks the provider facts
 before any code is written (§3), the decisions (§4), the behaviour (§5),
-where the code goes (§6), the milestones and acceptance (§7), and the
-report of a dead GitTree-branch to Omniscience (§8).
+where the code goes (§6), the milestones and acceptance (§7), the
+report of a dead GitTree-branch to Omniscience (§8), and the requirement
+handed to gx4g (§9).
 
 **Why it exists.** Anything `cgitsync` records, `git push origin --delete`
 ignores. Only the provider refuses a push, so only the provider can hold a
@@ -60,9 +82,21 @@ edit in their own `.cgs`.
 **Who it is for.** The worker who runs the spike and builds the milestones,
 the orchestrator who quotes them, and the owner, for §4.
 
-**What you need to do with it.** Owner: answer §4 (D1 and D2 before the
-spike, the rest after it). Worker: run §3 first. Its findings table replaces
-every *(spike)* mark below before any line goes into `src/`.
+**What you need to do with it.** Worker: build M5 (§8), after asking
+D7–D10. Owner: hand §9 to gx4g. §2–§7 are no longer this ticket's work.
+
+```mermaid
+graph LR
+    U2["branch close / delete"] --> RD["require_dev()<br/>USER tree refused (kept)"]
+    OBS["omniscience observe"] --> BF["BranchFinding (M5)<br/>YOU ARE HERE"]
+    BF --> REG["register, read by gx4g"]
+    GX["gx4g (§9)"] --> PROV2["provider's protection<br/>and roles"]
+
+    classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
+    class BF here;
+```
+
+The plan as first written, now gx4g's (§9):
 
 ```mermaid
 graph LR
@@ -75,9 +109,6 @@ graph LR
     OP --> REM["origin"]
     P["protection_plan()<br/>branch protect"] --> PROV["provider's branch<br/>protection = the lock"]
     PROV -.->|"refuses the push,<br/>with or without cgitsync"| REM
-
-    classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
-    class PROV here;
 ```
 
 ---
@@ -309,14 +340,14 @@ raise, including any import-count rise, ask the owner for it by name.
 
 | M | Delivers | Lands when |
 |---|---|---|
-| M0 | §3 spike, §3.1 table, D3–D6 asked | No `src/` change |
-| M1 | `ProviderRole`, `role_plan`, `parse_role`, unit tests on recorded JSON from §3.1 | Offline tests only |
-| M2 | `require_role` gate on close and delete, with the D2 fallback | The DevOnlyClosure tests still pass |
-| M3 | `branch protect` / `unprotect`, `status` note, docs | Closes `deletion4devOnly` |
-| M4 | D4's other assets, D5, D6, as answered | Optional, its own ticket if large |
-| M5 | §8: `BranchFinding`, the tree-branch pass in `omniscience observe`, the notes in `status` and `branch list`, and `omniscience status/report` | Independent of M0–M4. Once M2 lands, a branch vanished outside `cgitsync` is rarer, but it is still reported |
+| M0 | **Moved to gx4g (§9).** §3 spike, §3.1 table, D3–D6 asked | — |
+| M1 | **Moved to gx4g (§9).** `ProviderRole`, `role_plan`, `parse_role` | — |
+| M2 | **Moved to gx4g (§9).** The role gate. `cgitsync` keeps `require_dev` unchanged | — |
+| M3 | **Moved to gx4g (§9).** Protect and unprotect, the protection note | — |
+| M4 | **Moved to gx4g (§9).** D4's other assets, D5, D6 | — |
+| M5 | §8: `BranchFinding`, the tree-branch pass in `omniscience observe`, the notes in `status` and `branch list`, and `omniscience status/report`. **This ticket's only milestone now.** It adds no command (Minimalism) and calls no provider API | Independent of M0–M4 |
 
-**Acceptance.**
+**Acceptance of M0–M4, now gx4g's (§9).**
 - **Parsing.** For each provider, `parse_role` on the JSON recorded in §3.1
   gives the expected `ProviderRole`, including GitLab's group-versus-project
   maximum and Gitea's folded maintain.
@@ -413,3 +444,27 @@ is not "dead" (the same rule as `ObservationStatus.of_git_failure`).
 - **Reading it.** `omniscience status` and `omniscience report` list the open
   findings per project branch. A later `CLOSED` finding for the same branch
   closes a `vanished` or `half closed` one. Nothing is ever removed.
+
+## 9. The requirement handed to gx4g (split of 2026-10-27)
+
+Every provider API call is gx4g's privilege (the short ticket `minimalism`,
+and ProviderMigration). So the lock and the tiers the owner asked for in
+`deletion4devOnly` are built by gx4g, not here. gx4g starts from §2–§7:
+
+- **Lock a branch, and the other strategic assets** (§2 Q1, Q4). Use the
+  provider's protection, per §2's table, on the repositories an Operating
+  Space names. A repository is addressed by its MerkleRoot hash
+  (ProviderMigration §3).
+- **Recognise who may act** (§2 Q2, Q3). Read the provider's role. Closing is
+  a developer's right and deleting a maintainer's, mapped onto the provider's
+  roles, never invented.
+- **Its decisions** are §4's D1–D6.
+- **What `cgitsync` offers gx4g.** `branch close` and `branch delete` keep
+  refusing in a USER tree, by `require_dev`, before anything is touched. M5's
+  findings are in the register for gx4g to read (D10). `cgitsync` adds no
+  hook for gx4g's roles: gx4g decides who may run the command.
+- **What the beta can then promise** (BeforeBeta §2.3). Through `cgitsync`,
+  a USER tree cannot close or delete a branch. Through plain Git, only once
+  gx4g has protected the branch on the provider. Until then a user who has
+  push rights on the remote can delete a branch, and the register reports it
+  as `vanished` (M5).

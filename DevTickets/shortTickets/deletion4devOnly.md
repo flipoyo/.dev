@@ -57,3 +57,16 @@ user.
 **Suggested order for the next ticket:** answer 1 and 2 by trying `glab` and
 `gh` on a throwaway project (a short spike, no code in `src/`), then write the
 ticket for 3 on what the spike shows.
+
+---
+
+## Agent's note, 2026-10-27: the lock and the tiers are gx4g's
+
+*Added by the ticket review that integrated the short ticket `minimalism`.*
+Every call to a provider's API is now gx4g's privilege (owner). Locking a
+branch against deletion and recognising a developer or a maintainer both
+need one, so BranchProtection was split. `cgitsync` keeps the USER-tree
+refusal that DevOnlyClosure built, and reports a branch that died anyway to
+the Omniscience register (BranchProtection M5). The lock and the two tiers
+are the requirement handed to gx4g, in BranchProtection §9. This short
+ticket closes when BranchProtection is archived.

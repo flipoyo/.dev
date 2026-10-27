@@ -4,6 +4,12 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, sixth pass (short ticket `minimalism`).**
+> Rank unchanged. *The forge's push time* (§3) is read through the provider's
+> API, which is gx4g's privilege now (ProviderMigration). If D1 ever picks
+> that option, gx4g reads the time and `cgitsync` records what gx4g hands
+> it. NTP and RFC 3161 are not provider calls and are unaffected.
+
 > **Ticket review — 2026-10-27, owner's decision.** Filed when Omniscience
 > was archived. Omniscience's D8 ("what the universal clock is") was carried
 > to OmniscienceRegister, which answered it **"none in this milestone"**: the

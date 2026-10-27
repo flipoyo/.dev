@@ -4,6 +4,13 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, sixth pass (short ticket `minimalism`).**
+> Renumbered `main_1-6` → `main_1-2`: pile 1 is compacted, with CommitLogLoss,
+> WorkingAreaRename and StateLocking archived. BeforeBeta still runs it as
+> S4. Minimalism adds one constraint: the honest report and the retry change
+> what `push`, `tag` and `freeze` print and return, and add no command. This
+> ticket already ruled out new commands (§6), so nothing else changes.
+
 > **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-5` → `main_1-6`: CommitLogLoss is filed at `main_1-2`. BeforeBeta runs this ticket as step S4.
 
 > **From the owner's short ticket `robustness` (closed 2026-10-27 as
