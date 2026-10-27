@@ -83,7 +83,7 @@ the cost of never editing them.
 | Workstream | Branch | Ticket filename prefix |
 |---|---|---|
 | Everything else | `main` | `main_` |
-| Memory — a change that **migrates a stored memory format**: the state area's layout, the ledger schema, or the distant reference ledger | `memory-dev` | `memory-dev_` |
+| Memory — a change that **migrates a stored memory format**: the state area's layout, the ledger schema, or the distant reference ledger | `memory-dev` — **closed 2026-10-27**, see below | `memory-dev_` (no open ticket) |
 | Data — the `DataManager` layer, the DVC backend, `data_backend`/`data_paths`, and data materialisation and publication | `data-repo` | `data-repo_` |
 | Packaging awaiting the owner's review — UserInstallPath, held off `main` until the owner merges or drops it (owner, 2026-10-01) | `tmpPyPi` | `tmpPyPi_` |
 
@@ -96,7 +96,14 @@ is `main_<priority>-<rank>_<Name>_DevPlanTicket.md` and carries
 implied by its absence. Both conventions are defined in TICKETLIFECYCLE.md
 §2.3 and §3; this section only says which branches exist here.
 
-**A change that migrates a stored memory format is developed on
+**`memory-dev` is closed (owner, 2026-10-27).** It was 30 commits behind
+`main` and none ahead, so the owner moved its last ticket, WorkingAreaRename,
+to `main` and closed the branch. From now on, a change that migrates a stored
+memory format lands on `main`, protected by its own ticket's migration plan and
+acceptance instead of by a branch. The paragraphs below say why the branch
+existed, and are kept as history.
+
+**A change that migrates a stored memory format was developed on
 `memory-dev`.** The memory work was seven dependent milestones — see the
 MemoryArchitecture ticket in [archive/](archive/) — that between them renamed
 the state area, rewrote the ledger, moved code into a new `memory/` package

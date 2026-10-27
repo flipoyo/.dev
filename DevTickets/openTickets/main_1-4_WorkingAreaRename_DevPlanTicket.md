@@ -2,7 +2,15 @@
 
 *Created: 2026-09-19*
 
-*Branch: memory-dev*
+*Branch: main*
+
+> **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-3` → `main_1-4`: CommitLogLoss is filed at `main_1-2`. BeforeBeta runs this ticket as step S2.
+
+> **Ticket review — 2026-10-27, owner's decision (third pass).** Moved `memory-dev_1-3` → `main_1-3`, *Branch: memory-dev* → *Branch: main*: *"à ce niveau d'écart on rapatrie le ticket sur main, et on close la branch memory-dev"*. `memory-dev` was 30 commits behind `main` and none ahead, so a branch kept apart for a format migration had nothing of its own left. The migration this ticket may make (§2) lands on `main`, guarded by its D2 and §5 instead of a branch. §2's "exactly the shape of change that `memory-dev` exists for" no longer applies, and is kept as history.
+
+> **Ticket review — 2026-10-27, owner's decision (second pass).** Renumbered `memory-dev_2-8` → `memory-dev_1-3`: BeforeBeta, now the umbrella for everything mandatory before beta, runs it as step S2, so it moves into pile 1.
+
+> **Ticket review — 2026-10-27, owner's decision.** BeforeBeta (step S2) implements this ticket on `memory-dev`, between merging `main` in and merging back. D1 below **closes on the orchestrator's demand**: the orchestrator of this ticket asks it, then D2 if D1 says rename. The rank is unchanged.
 
 > **Ticket review — 2026-10-20, owner's decision.** Renumbered `memory-dev_2-11` → `memory-dev_2-8`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
 

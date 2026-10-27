@@ -4,6 +4,10 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-4` → `main_1-5`: CommitLogLoss is filed at `main_1-2`. BeforeBeta runs this ticket as step S3, after WorkingAreaRename.
+
+> **Ticket review — 2026-10-27, owner's decision.** Renumbered `main_2-9` → `main_1-4`: §3's first trigger has fired. In a GX4G Operating Space, gx4g runs `cgitsync` in a developer's tree (EnvConnect): that is "an agent running `cgitsync` in a workspace a person also uses". BeforeBeta runs it as step S4, on `main`, after WorkingAreaRename is merged back, so the lock is written against the final name of the state area. §4 says the lock sits under `.cgitsync/`; read that as the state area, whatever WorkingAreaRename names it.
+
 > **Ticket review — 2026-10-20, owner's decision.** Renumbered `main_2-12` → `main_2-9`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
 
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `main_2-5` → `main_2-12`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; still the end of the priority-2 pile, as the owner decided on 2026-10-01.

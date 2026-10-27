@@ -4,6 +4,10 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-6` → `main_1-7`: CommitLogLoss is filed at `main_1-2`. BeforeBeta runs this ticket as step S5, after its D3.
+
+> **Ticket review — 2026-10-27, owner's decision.** Renumbered `main_2-10` → `main_1-6`: **mandatory before beta.** A random user must not be able to delete a branch in the beta (the owner's short ticket `deletion4devOnly`). BeforeBeta runs this ticket as step S6. Whose job it is remains a frontier question: EnvConnect §5 says GX4G manages GitRepo rights through the providers' APIs, and this ticket has `cgitsync` read the provider's role. BeforeBeta's D3 asks it before S6 starts, and this ticket is rewritten on the answer. The short ticket `deletion4devOnly` still closes when M3 lands.
+
 > **Ticket review — 2026-10-20, owner's decision.** Moved `main_1-2` → `main_2-10`, the end of the priority-2 pile, to leave priority 1 to the Omniscience workstream (owner's short ticket `update-omniscience`). Omniscience's register is a branch that should be protected on the provider; until this ticket lands, OmniscienceQuery reports that protection as not checked rather than assuming it.
 
 > **From the owner's short ticket `deletion4devOnly` (2026-10-13).** The owner

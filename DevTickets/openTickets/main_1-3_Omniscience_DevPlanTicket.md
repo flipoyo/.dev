@@ -4,6 +4,17 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-2` → `main_1-3`: CommitLogLoss is filed at `main_1-2`, ahead of it. BeforeBeta still closes this ticket at its last step (S7).
+
+> **Ticket review — 2026-10-27, owner's decision.** Renumbered `main_1-1` → `main_1-2`: BeforeBeta, the beta rehearsal of a full branch cycle and a user install, is filed ahead of it at `main_1-1`.
+
+> **Ticket review — 2026-10-27, second pass.** Every milestone in §8 has
+> landed (the last, OmniscienceQuery, in 6.10.0), and this ticket says it is
+> archived when that one lands. It is not archived here, because nobody has
+> yet checked §10 on a real tree. BeforeBeta's step S6 checks §10 item by
+> item. This ticket is then archived in the same change as BeforeBeta, with
+> its own record from BeforeBeta's orchestrator.
+
 > **Ticket review — 2026-10-20, owner's decision, from the short ticket
 > [update-omniscience](../archive/.closedUserTicket/20261020_update-omniscience.md).**
 > Moved `memory-dev_2-10` → `main_1-1`, at the top of priority 1: the owner
