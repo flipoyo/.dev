@@ -1,0 +1,147 @@
+# WorkingAreaRename — the `.cgitsync` → `.working` rename, deferred on purpose
+
+*Created: 2026-09-19*
+
+*Branch: main*
+
+> **Implemented — 2026-10-27, owner's decision.** D1 answered through
+> `AskUserQuestion`: **prose only**, nothing is renamed. D2 does not arise. The
+> prose work landed on `main`: `memory status` prints `folded=` and `pending=`
+> and answers `pending_entries`; Tutorial 6 (§1, both status examples), the user
+> guide, the API guide and `AdditionalSpecs.md` (*Pending and folded*) say which
+> half is which and that `.cgitsync` stays the directory's name. Tests:
+> `test_memory_commands.py::test_the_client_methods_mirror_the_commands` and
+> `test_push_folds_memory.py::test_memory_status_counts_the_pending_entries_and_a_fold_empties_them`.
+
+> **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-3` → `main_1-4`: CommitLogLoss is filed at `main_1-2`. BeforeBeta runs this ticket as step S2.
+
+> **Ticket review — 2026-10-27, owner's decision (third pass).** Moved `memory-dev_1-3` → `main_1-3`, *Branch: memory-dev* → *Branch: main*: *"à ce niveau d'écart on rapatrie le ticket sur main, et on close la branch memory-dev"*. `memory-dev` was 30 commits behind `main` and none ahead, so a branch kept apart for a format migration had nothing of its own left. The migration this ticket may make (§2) lands on `main`, guarded by its D2 and §5 instead of a branch. §2's "exactly the shape of change that `memory-dev` exists for" no longer applies, and is kept as history.
+
+> **Ticket review — 2026-10-27, owner's decision (second pass).** Renumbered `memory-dev_2-8` → `memory-dev_1-3`: BeforeBeta, now the umbrella for everything mandatory before beta, runs it as step S2, so it moves into pile 1.
+
+> **Ticket review — 2026-10-27, owner's decision.** BeforeBeta (step S2) implements this ticket on `memory-dev`, between merging `main` in and merging back. D1 below **closes on the orchestrator's demand**: the orchestrator of this ticket asks it, then D2 if D1 says rename. The rank is unchanged.
+
+> **Ticket review — 2026-10-20, owner's decision.** Renumbered `memory-dev_2-11` → `memory-dev_2-8`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
+
+> **Ticket review — 2026-10-08, owner's decision.** Renumbered `memory-dev_2-2` → `memory-dev_2-11`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
+
+> **Where this comes from.** The owner's short ticket
+> `working-transition-state.md` (closed 2026-09-19 as
+> `archive/.closedUserTicket/20260919_working-transition-state.md`) asked
+> for a `.working` area. [WorkingTransitionState](../archive/20260917_WorkingTransitionState_DevPlanTicket.md)
+> built the frontier it described and **deliberately kept the outer name
+> `.cgitsync`**, recording why in its own header: `.cgitsync` names more
+> than the memory feature — `settings.py`'s CGSHOME discovery,
+> `snapshot_resolver.py` and `master.toml` all use it as the name of
+> every workspace's local state, memory or no memory — so renaming it
+> would migrate every cgitsync workspace in existence.
+>
+> That decision was right and this ticket does not reopen it. It exists
+> because the decision currently lives only inside an archived document,
+> and an archived ticket is a historical record that is never edited. The
+> open question deserves a file that can be closed.
+
+## Abstract — read this first
+
+**The one-line version.** The word `.working` was the owner's, the thing
+it named got built, and the name did not. This decides whether the name
+ever follows.
+
+**What this document is.** A stand-by ticket holding one question: is
+`.cgitsync` renamed to `.working`, and if so how does every existing
+workspace come across.
+
+**Why it exists.** The frontier works. `.cgitsync/.memory` is the folded,
+git-tracked half; `.cgitsync/`'s own top level is the pending half; the
+merge failure that prompted all of it is fixed and covered by
+`tests/integration/test_merge_into.py` and `test_push_folds_memory.py`.
+What is left is vocabulary — and vocabulary that half-matches is its own
+cost. Today `.cgitsync` means two things at once: the workspace's local
+state area, and the pending increment of a memory. The owner's word for
+the second one was `.working`, and it was a better word.
+
+**What you will find.** §1 what the name costs today. §2 the migration,
+which is the whole difficulty. §3 the cheaper alternative. §4 the
+decision. §5 acceptance, if it goes ahead.
+
+**Who it is for.** The owner, who owns §4.
+
+**What you need to do with it.** Nothing, until the owner answers §4.
+Read it before writing anything new that says `.cgitsync` in prose.
+
+```mermaid
+graph TD
+    CGS[".cgitsync/<br/>workspace local state<br/><i>and</i> pending memory"] -->|"nested mount"| MEM[".cgitsync/.memory/<br/>folded, git-tracked"]
+    CGS -.->|"the rename<br/>not done"| WORK[".working/<br/>the owner's word<br/>YOU ARE HERE"]
+
+    classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
+    class WORK here;
+```
+
+---
+
+## 1. What the current name costs
+
+Nothing functional. The cost is that one word carries two meanings:
+
+| Meaning | Who relies on it |
+|---|---|
+| The workspace's own local state area, whether or not a memory exists | `settings.py` (CGSHOME discovery), `snapshot_resolver.py`, `master.toml`, `paths.py` |
+| The *pending* half of a memory, waiting to be folded into `.cgitsync/.memory` | `memory/pending.py`, `memory/repository.py`, `orchestre.py`'s fold |
+
+A reader meeting `.cgitsync/lgr/` beside `.cgitsync/.memory/lgr/` has to
+already know which is which. `.working/lgr/` beside `.working/.memory/lgr/`
+says it.
+
+**No leak to fix.** `.working` appears nowhere in `src/`, `docs/`,
+`tutorials/` or `README.md` — the only matches are `working_tree` in
+`git_tree.py`, which is unrelated. The deferral was clean.
+
+## 2. The migration is the whole difficulty
+
+Every workspace anyone has ever created has a `.cgitsync/` directory, and
+the tool finds workspaces *by that name*. A rename therefore means:
+
+- Reading both names during discovery, for some period, with a rule for a
+  directory that somehow has both.
+- Deciding whether an old workspace is migrated in place, on first use,
+  silently — and what happens when that fails halfway.
+- `master.toml`, per-workspace and outside the `.cgs`/`.gts` spec, moving
+  with it.
+- The root `.gitignore` line in every tree the tool manages, which
+  `git_tree.py`'s `sync_gitignore` writes.
+
+This is exactly the shape of change that `memory-dev` exists for, which
+is why this ticket is filed there and not on `main`: it migrates a stored
+layout for every existing workspace, which is the narrowed test in
+`AdditionalSpecs.md`'s *Branches and ticket topics*.
+
+## 3. The cheaper alternative
+
+**Rename nothing; name the halves in prose.** Keep `.cgitsync` as the
+directory, and fix the ambiguity where it actually bites — in the words
+the tool and its documents use. `memory/pending.py` already does this
+well: it calls them *folded* and *pending*, consistently, and a reader of
+that module is never confused. Spreading those two words to
+`AdditionalSpecs.md`, `tutorials/06_memory.md` and `memory status`'s own
+output would buy most of the clarity for none of the migration.
+
+## 4. The decision
+
+| D | Question | Recommendation | Whose call |
+|---|---|---|---|
+| **D1** | **Answered (2026-10-27): prose only.** Rename, or name the halves in prose? | **§3, the cheaper alternative.** The frontier's real names are *folded* and *pending*, and those two words are better than `.working` at saying which side is which — `.working` says "not finished", which is true of both halves at different moments. A migration touching every workspace anyone owns is a large price for an outer directory name that users rarely type | **Owner** |
+| **D2** | **Moot.** If D1 says rename: in place on first use, or only for new workspaces? | In place, on first use, with the old name still discovered for a full release cycle | Owner, if D1 goes that way |
+
+## 5. Acceptance, if it goes ahead
+
+- A workspace created before the rename keeps working with no user action,
+  and says once what it did.
+- A workspace created after it has no `.cgitsync` directory at all.
+- `cgitsync status` shows `errors=0` on a migrated tree, and the ledger
+  chain still verifies — the migration moves files and must not touch a
+  single entry.
+
+If D1 takes §3 instead, this ticket is archived with the decision
+recorded, and the prose work lands as an ordinary documentation change on
+`main`.

@@ -4,6 +4,15 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-27, owner's decision.** D1 answered through
+> `AskUserQuestion`: **prose only**, nothing is renamed. D2 does not arise. The
+> prose work landed on `main`: `memory status` prints `folded=` and `pending=`
+> and answers `pending_entries`; Tutorial 6 (§1, both status examples), the user
+> guide, the API guide and `AdditionalSpecs.md` (*Pending and folded*) say which
+> half is which and that `.cgitsync` stays the directory's name. Tests:
+> `test_memory_commands.py::test_the_client_methods_mirror_the_commands` and
+> `test_push_folds_memory.py::test_memory_status_counts_the_pending_entries_and_a_fold_empties_them`.
+
 > **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-3` → `main_1-4`: CommitLogLoss is filed at `main_1-2`. BeforeBeta runs this ticket as step S2.
 
 > **Ticket review — 2026-10-27, owner's decision (third pass).** Moved `memory-dev_1-3` → `main_1-3`, *Branch: memory-dev* → *Branch: main*: *"à ce niveau d'écart on rapatrie le ticket sur main, et on close la branch memory-dev"*. `memory-dev` was 30 commits behind `main` and none ahead, so a branch kept apart for a format migration had nothing of its own left. The migration this ticket may make (§2) lands on `main`, guarded by its D2 and §5 instead of a branch. §2's "exactly the shape of change that `memory-dev` exists for" no longer applies, and is kept as history.
@@ -121,8 +130,8 @@ output would buy most of the clarity for none of the migration.
 
 | D | Question | Recommendation | Whose call |
 |---|---|---|---|
-| **D1** | Rename, or name the halves in prose? | **§3, the cheaper alternative.** The frontier's real names are *folded* and *pending*, and those two words are better than `.working` at saying which side is which — `.working` says "not finished", which is true of both halves at different moments. A migration touching every workspace anyone owns is a large price for an outer directory name that users rarely type | **Owner** |
-| **D2** | If D1 says rename: in place on first use, or only for new workspaces? | In place, on first use, with the old name still discovered for a full release cycle | Owner, if D1 goes that way |
+| **D1** | **Answered (2026-10-27): prose only.** Rename, or name the halves in prose? | **§3, the cheaper alternative.** The frontier's real names are *folded* and *pending*, and those two words are better than `.working` at saying which side is which — `.working` says "not finished", which is true of both halves at different moments. A migration touching every workspace anyone owns is a large price for an outer directory name that users rarely type | **Owner** |
+| **D2** | **Moot.** If D1 says rename: in place on first use, or only for new workspaces? | In place, on first use, with the old name still discovered for a full release cycle | Owner, if D1 goes that way |
 
 ## 5. Acceptance, if it goes ahead
 
