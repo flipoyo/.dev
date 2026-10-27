@@ -4,6 +4,26 @@
 
 *Branch: main*
 
+> **Owner's answers, 2026-10-27 (Minimalism D3, D4, D5).** Asked through
+> `AskUserQuestion` once the map existed.
+> - **Every hash is MerkleRoot's** (D4). The owner's model: the system converges on a
+>   tree, where hashes and Merkle trees are immaterial frontiers, *never exposed,
+>   always held to the test LEFT = RIGHT bit for bit*: the hash computed from the
+>   structure in memory equals the one recomputed from its materialised form
+>   (`.gts`, disk, remote). MerkleRoot owns the State hashes (`H_GITTREE`, `H_STATE`,
+>   `H_GLOBAL`, `os_id`), the ledger chain (its head is its root) and the content hashes
+>   of the commit log, the Environment and the records: the nine modules that import
+>   `hashlib` without being hashing modules, plus the eight that name a node (Minimalism
+>   §7.5). §2 and §6 below are read with that scope, and §6's acceptance gains the
+>   LEFT = RIGHT test for every hashed object, not only the State.
+> - **An audit path is a node** (D3). `InclusionProof.siblings` is private to
+>   `MerkleRoot`: no CLI, answer or file shows, returns or stores it. A caller learns
+>   *verified* or *invalid* and the root. `omniscience proof` and `state` leave with the
+>   register (D7), so nothing prints one.
+> - **Every byte as before.** The ledger entry hash contains the toolchain, so each
+>   moved computation must give the same bytes as the code it replaces, on every chain
+>   already written (§4 holds the golden vectors; this widens them to each moved hash).
+
 > **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
 > Rank unchanged. Two changes. First, `MerkleRoot` is the first resident of
 > SrcLayout's `Merkle/` folder, the *"never revealed interface"*, so it is

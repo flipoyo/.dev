@@ -4,6 +4,19 @@
 
 *Branch: main*
 
+> **Owner's answers, 2026-10-27 (Minimalism D1, D2, D3, D7).** The verdicts are the
+> owner's *autonomous rule*: a command stays if `cgitsync` needs it to run with no gx4g,
+> so `memory *` and `branch create` stay. **44 keep, 4 adapt, 5 reinforce, 13 withdraw**
+> (Minimalism §7.3). The 13 withdrawals are `repo create` and the 12 `omniscience *`
+> commands, all gx4g's, executed by ProviderMigration, not here. **This ticket therefore
+> withdraws nothing before gx4g offers it.** It adapts and reinforces: `submodules
+> report` and `import` become one command with `--apply`; `memory setup`'s create step
+> prints the provider command until gx4g offers it (ProviderMigration); `unlock` gains a
+> client method (D2: the CLI mirrors the API **one way**: every command has its method,
+> a method may have no command); and `pull`, `autofix`, `branch delete`, `verify repair`
+> and `memory reboot` gain the guards §2 lists. `AdditionalSpecs.md` states the new
+> mirror rule.
+
 > **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
 > Rank unchanged. It runs before SrcLayout, so that what is withdrawn is
 > never moved first. The register-writing commands (`omniscience mount`,

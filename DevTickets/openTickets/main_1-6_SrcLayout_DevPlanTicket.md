@@ -4,6 +4,18 @@
 
 *Branch: main*
 
+> **Owner's answers, 2026-10-27 (Minimalism D5, D6).** Asked once the map existed.
+> **D6, the folders:** the map's column, with **Omniscience apart**. The 14
+> Omniscience modules (`omniscience_*` and `orchestre/omniscience*`) go to a folder of
+> their own, `omniscience/`, which leaves `cgitsync` when gx4g takes the register
+> (ProviderMigration). `cli/` and `orchestre/` stay above the four folders, and
+> `memory/`, `operations/` and `autofix/` go under `Tree/`. **D5, OPX:** the operating
+> system. `OperatingSpace/` is the interface between the file tree (ring 1) and the Git
+> actions (ring 2); the ring 3 modules that consume it today (9 of them, Minimalism
+> §7.6) are a deviation this layout makes visible and CliReduction corrects. §3's table
+> and §5's D2 are read with these answers; D1 (the spelling) and D3 (the old paths)
+> are still to ask.
+
 > **From the owner's short ticket `gitRepo` (2026-10-27).** Filed at
 > `main_1-6` by the ticket review of the same day, as BeforeBeta's step S8.
 > The owner's words: *"GitRepo is a specific Graph for GX4G. cgitsync should
@@ -122,7 +134,7 @@ Asked through `AskUserQuestion` before the first edit.
 | D | Question | Recommendation |
 |---|---|---|
 | **D1** | The spelling: `GitRepo/` as the owner wrote it, or Python's lowercase `git_repo/`, `merkle/`, `tree/`, `operating_space/`? | **Lowercase.** Python packages are lowercase, and a test or linter would flag `GitRepo`. The prose and the docs keep the owner's names. |
-| **D2** | Minimalism D6's folder for each package and module, as a list the owner edits. | The map's column. |
+| **D2** | Minimalism D6's folder for each package and module, as a list the owner edits. | **Answered 2026-10-27:** the map's column, with Omniscience apart (banner above). |
 | **D3** | The old import paths: kept as re-exports for one release, or for good? | **One release,** named in the user guide's *What changed*. |
 
 ## 6. The work

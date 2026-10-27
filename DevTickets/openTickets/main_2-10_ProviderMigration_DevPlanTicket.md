@@ -4,6 +4,17 @@
 
 *Branch: main*
 
+> **Owner's answers, 2026-10-27 (Minimalism D1, D7).** *"La gate ne possède que
+> Omniscience. Les autres registres restent dans le projet protégé. cgitsync doit
+> pouvoir tourner en local. Il garde ainsi ses registres."* So the scope is wider than
+> §1a: **all 12 `omniscience *` commands leave `cgitsync`, the nine reads as well as the
+> three writes**, with `repo create`, which makes 13 withdrawals. They are carried out
+> here, when gx4g offers each one (Minimalism §7.3, D1). Two things stay: `omniscience
+> record`, because `cgitsync` produces the record gx4g writes, and every register of
+> the protected project: the ledger, the memory and the self-history. `cgitsync` runs
+> with no gx4g, and a standalone one prints the provider command (`gh repo create …`)
+> instead of running it.
+
 > **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
 > Rank unchanged, scope widened. *"GX4G manages access privileges to GitRepo.
 > It holds the GitProvider API and omniscience."* The answer through
@@ -82,8 +93,9 @@ what it starts from.
 What `cgitsync` keeps:
 - `omniscience record`, which builds the record a State would register and
   writes nothing;
-- the findings;
-- the reads that Minimalism D1 keeps.
+- the findings (BranchProtection M5), handed to gx4g;
+- no read: Minimalism D7 sends the nine reads to gx4g with the register, and the
+  proof is checked inside `MerkleRoot` and never shown (D3).
 
 ## 2. What gx4g must offer for each
 
