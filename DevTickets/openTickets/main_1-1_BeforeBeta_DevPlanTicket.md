@@ -113,11 +113,11 @@ Facts as of 2026-10-27:
 | Step | What | Facts going in |
 |---|---|---|
 | **S0** | `implement CommitLogLoss`, on `main` | **Done 2026-10-27, 7.1.0**, archived. Defect 3's cause, answered by D4 (b). |
-| **S1** | `cgitsync branch close memory-dev`, after S0 | `branch check` finds every repository `safe` except `.memory`, whose `ComplexGitSync_memory-dev` alone holds 2 ledger entries and 2 States; the close keeps them on `ancestors`. Refused on 2026-10-27 because the ledger does not verify (defect 3). It runs once S0 has landed. |
+| **S1** | `cgitsync branch close memory-dev`, after S0. **Done by the owner, 2026-10-27 03:01, under 7.1.0**: `closed/memory-dev` or `closed/ComplexGitSync_memory-dev` in all seven repositories, `.memory`'s two own commits on `ComplexGitSync_ancestors`. | `branch check` finds every repository `safe` except `.memory`, whose `ComplexGitSync_memory-dev` alone holds 2 ledger entries and 2 States; the close keeps them on `ancestors`. Refused on 2026-10-27 because the ledger does not verify (defect 3). It runs once S0 has landed. |
 | **S2** | `implement WorkingAreaRename`, on `main` | `.cgitsync` appears 159 times, in 37 files under `src/`. Its D1 is asked by its orchestrator, and its D2 too if D1 says rename. With no branch to hold a half-made migration, its §5 acceptance is the guard. |
 | **S3** | `implement StateLocking`, on `main` | Runs after S2, so the lock goes into the state area under its final name. |
 | **S4** | `implement Robustness`, on `main`: Phase 0 first, then D1–D5 | Phase 0's premise table (P1–P15) is re-checked against `HEAD`. Its deviations are also defects for §3. |
-| **S5** | `implement BranchProtection`, on `main`, after D3 | Its spike (M0) needs `gh` signed in, on a throwaway project. |
+| **S5** | `implement BranchProtection`, on `main`, after D3 | Its spike (M0) needs `gh` signed in, on a throwaway project. Since 2026-10-27 it also holds DeadBranchReport (§8, M5): a dying branch is reported to Omniscience. |
 | **S6** | The user install from `main`: `git clone github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then in it `pixi run cgitsync initialise install.cgs --output-path $CGSPATH` | `initialise` takes one source, plus `--output-path`, which is CGSPATH. CGSHOME is `CGSPATH/ComplexGitSync`, so the owner's `initialise $CGSHOME install.cgs` is spelled this way. `install.cgs` mounts the tool and `docs` only, so the tree is USER: its memory is local and never pushed. |
 | **S7** | The inspection in §2, in both trees | — |
 
@@ -215,6 +215,7 @@ fixed here, unless the ticket a step runs owns it (§5).
 | 1 | before S1 | `cgitsync verify check`, 7.0.0 | `status=corrupt`: 27 `COMMIT_LOG_MISMATCH` (seq 3–55, odd entries), "entry records a commit log whose rows are gone" | `ok`, or every finding explained as the loss recorded in 6.8.1 | fixed by S0: a recorded loss, `incomplete` |
 | 2 | known | Robustness P2 and P3 | A failed `push` reports one error and loses what completed; a `tag` retry can never converge | §3 of Robustness | fixed by S4 |
 | 3 | S1 | `cgitsync branch close memory-dev`, 7.0.0 | Refused, nothing renamed: "the ledger does not verify (seq=3 COMMIT_LOG_MISMATCH; …)". `verify repair` heals only a stale HEAD, never a chain, and 6.8.1 said the lost rows are not recovered. So this memory can never verify again, and every `branch close` and `branch delete` in this tree is refused for good. | A loss already recorded as unrecoverable does not refuse forever; a documented way through exists | fixed by S0 (CommitLogLoss, 7.1.0): `verify check` now says `incomplete`, 27 `COMMIT_LOG_LOST` |
+| 4 | S1 | `cgitsync branch close memory-dev`, 7.0.0, refused at 01:35 | Before refusing, it had already kept `ComplexGitSync_memory-dev` on `ComplexGitSync_ancestors` and pushed it (`99c6515`), written a State and ledger entry 69 (`branch_close_keep`). Only then did `_assert_history_holds` run. Its message, "nothing was renamed or deleted", is true but says nothing of the push and the record. | A history already corrupt before the command is refused before anything moves; a refusal after a step says which steps ran | to report (D2); the S1 close itself was then run by the owner at 03:01, under 7.1.0, and succeeded |
 
 ## 4. Decisions for the owner
 

@@ -1,8 +1,18 @@
-# BranchProtection — the provider locks the branch, and the provider says who may close and delete
+# BranchProtection — the provider locks the branch, says who may close and delete, and a dying branch is reported to Omniscience
 
 *Created: 2026-10-20*
 
 *Branch: main*
+
+> **Ticket review — 2026-10-27, owner's decision (fifth pass).** *"I think
+> main_1-7 and 1-8 can be merged."* DeadBranchReport, filed the same day from
+> the owner's *"The problem of branch management should be reported to
+> Omniscience especially when a dead GitTree-branch is detected and reported
+> by cgitsync"*, is merged here as §8, decisions D7–D10 and milestone M5. It
+> was never committed. Both are branch management: this ticket stops a branch
+> being removed by the wrong person, and §8 records in the shared register a
+> branch that died anyway. Rank unchanged, `main_1-7`; pile 1 ends here
+> again.
 
 > **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-6` → `main_1-7`: CommitLogLoss is filed at `main_1-2`. BeforeBeta runs this ticket as step S5, after its D3.
 
@@ -22,7 +32,7 @@
 |---|---|
 | Predecessors | [DevOnlyClosure](../archive/20261013_DevOnlyClosure_DevPlanTicket.md): `WorkingGitTree.require_dev`, the USER-tree refusal; the `provider.py` rule "store no credential, implement no provider's API, run the provider's own CLI" |
 | Closes | The short ticket `deletion4devOnly`, once M3 lands (§7) |
-| Touches | `branch close`, `branch delete`, `status`; Tutorial 7 §7 |
+| Touches | `branch close`, `branch delete`, `status`, `branch list`, `omniscience observe/status/report`; Tutorial 7 §7, Tutorial 8 |
 
 ## Abstract — read this first
 
@@ -32,12 +42,15 @@ protect a branch, through the CLI the user has already signed in to (`gh`,
 `glab`, `tea`). It also asks the provider what role the signed-in user has
 on the project, and gates `branch close` on a developer role and
 `branch delete` on a maintainer role. When no provider can answer, the
-DevOnlyClosure profile test stays as the offline fallback.
+DevOnlyClosure profile test stays as the offline fallback. And when a project branch
+dies anyway (vanished, half closed, split, or orphaned by its private
+branches), `cgitsync` records that in the Omniscience register (§8).
 
 **What this document is.** The plan: what is true today (§1), one answer to
 each of the six open questions (§2), a spike that checks the provider facts
 before any code is written (§3), the decisions (§4), the behaviour (§5),
-where the code goes (§6), and the milestones and acceptance (§7).
+where the code goes (§6), the milestones and acceptance (§7), and the
+report of a dead GitTree-branch to Omniscience (§8).
 
 **Why it exists.** Anything `cgitsync` records, `git push origin --delete`
 ignores. Only the provider refuses a push, so only the provider can hold a
@@ -232,6 +245,15 @@ yes, documented as advice.
 **D6 — Record who locked, in the ledger** (§2 Q6): no, or yes as display-only
 history.
 
+**D7–D10 — the report of a dead GitTree-branch** (§8). Asked before M5.
+
+| D | Question | Recommendation |
+|---|---|---|
+| **D7** | Which kinds in §8.2 are reported? | All five. Kind 5 (`closed`) keeps the record complete; the other four are the problems. |
+| **D8** | When is a finding written to the register? `observe` runs only when typed (OmniscienceAppend D3), and a register write is a push. | **When typed.** `omniscience observe` gains the tree-branch pass. `status` and `branch list` print the finding and the command that records it, and never write. The alternative, writing from `status` automatically, reverses D3 and makes a read command push. |
+| **D9** | Is a branch closed by plain Git (no ledger record) `vanished` even when `branch check` would have found nothing to keep? | **Yes**, with that fact in its evidence. Only the ledger proves nothing was lost. |
+| **D10** | Does gx4g read these findings through the register only, or also through a `cgitsync` command? | **The register only.** That is the frontier EnvConnect drew: gx4g reads what `cgitsync` recorded, and adds no access logic here. |
+
 The version level is the orchestrator's. A new command and a new refusal are
 `minor` at least.
 
@@ -292,6 +314,7 @@ raise, including any import-count rise, ask the owner for it by name.
 | M2 | `require_role` gate on close and delete, with the D2 fallback | The DevOnlyClosure tests still pass |
 | M3 | `branch protect` / `unprotect`, `status` note, docs | Closes `deletion4devOnly` |
 | M4 | D4's other assets, D5, D6, as answered | Optional, its own ticket if large |
+| M5 | §8: `BranchFinding`, the tree-branch pass in `omniscience observe`, the notes in `status` and `branch list`, and `omniscience status/report` | Independent of M0–M4. Once M2 lands, a branch vanished outside `cgitsync` is rarer, but it is still reported |
 
 **Acceptance.**
 - **Parsing.** For each provider, `parse_role` on the JSON recorded in §3.1
@@ -313,3 +336,80 @@ raise, including any import-count rise, ask the owner for it by name.
   `delete_remote_branch`, now accepts `require_role` as the guard.
 - `pixi run lint` and `pixi run test` pass, `bump-build` has run, and
   `cgitsync status` shows `errors=0`.
+
+**Acceptance, M5.**
+
+- On a tree with real bare remotes, each of §8.2's five kinds produces exactly
+  one `BranchFinding`, with its evidence.
+- A failed fetch produces none.
+- The tag, the default branch and `ancestors` produce none.
+- `omniscience observe` appends them fast-forward only, survives a lost race
+  by retrying, and is refused in a USER tree.
+- `omniscience status` and `report` list them per branch. A later `closed`
+  finding closes an earlier `vanished` one, and both stay in the register.
+- `H_GLOBAL` and every record's proof are byte-identical before and after.
+- `status` and `branch list` print the finding and the command, and write
+  nothing.
+- On this developer tree, `memory-dev` is reported `closed`, since the owner
+  closed it through `cgitsync` on 2026-10-27 with its relocation recorded,
+  and nothing else is reported.
+
+## 8. A dead GitTree-branch, reported to Omniscience
+
+Why it belongs here: §1–§7 keep the wrong person from removing a branch,
+and this section records a branch that was removed, or is dying, anyway.
+The provider's lock is only as strong as the provider. A finding in the
+shared register is what every contributor, and gx4g, can read afterwards.
+
+### 8.1 What cgitsync detects today
+
+| Where | What it sees | Where it goes |
+|---|---|---|
+| `GitTreeBranches.project_branches` (`branch list`) | Per project branch: local, on origin, closed, and which following repositories lack it (`missing`) or are not cloned | Printed |
+| `status` (`Reporting`) | "tree is split across branches": repositories not on the tree's branch | A warning, printed |
+| `branch check` (`AncestorOperation.inspect`) | Per repository, whether a branch alone holds commits | Printed |
+| `omniscience observe` | Per registered repository and ref: `REF_MISSING`, or `CLOSED` when the ledger recorded the close (`_declared_closes`) | **The register**, as observations |
+
+Only the last one reaches the register, and only per repository, only for refs
+a registered State names, and only when `observe` is typed (owner,
+OmniscienceAppend D3).
+
+### 8.2 What a dead GitTree-branch is
+
+A project branch `B` of the tree is reported when one of these holds.
+Severity is in brackets.
+
+1. **Vanished** [error]. `B` is gone from the root's remote, and no ledger
+   relocation records keeping it on `ancestors`. It was deleted outside
+   `cgitsync`, and what it alone held may be lost.
+2. **Half closed** [warning]. `closed/B` exists in some following
+   repositories and live `B` in others.
+3. **Split** [warning]. Some following repositories hold `B` and some do not,
+   on the remote as of the last fetch. This is `ProjectBranch.missing`.
+4. **Orphaned private branch** [warning]. A private/local branch
+   `<P>_B` (or a twin's `ComplexGitSync_<P>_B`) survives with no project
+   branch `B`. `B` was closed or deleted without its configuration and memory
+   branches.
+5. **Closed** [info]. `B` closed by `cgitsync`, with its relocation in the
+   ledger: the healthy end of a branch, recorded so the register shows it
+   ended on purpose.
+
+A tag, the default branch, `ancestors` and a private/distant repository's
+branches are never judged. A failed fetch never produces a finding: no answer
+is not "dead" (the same rule as `ObservationStatus.of_git_failure`).
+
+### 8.3 How a finding reaches the register
+
+- **`BranchFinding`**, a new Ring-0 record beside `Observation`: `os_id`, the
+  project branch, the kind (§8.2), each repository's evidence (ref present or
+  absent, commit, ledger seq), and the build that observed it. Its canonical
+  form and name follow `Observation`'s: content-addressed and append-only. It
+  is **not hashed into `H_GLOBAL`** and never changes a leaf.
+- **Detection runs in one place**, `GitTreeBranches`, beside
+  `project_branches`, so `status`, `branch list` and `observe` agree.
+- **Writing it uses the existing appender** (`RegisterAppender`):
+  fast-forward only, retried from the new tip, never forced. It is refused by
+  name in a USER tree, as `observe` is.
+- **Reading it.** `omniscience status` and `omniscience report` list the open
+  findings per project branch. A later `CLOSED` finding for the same branch
+  closes a `vanished` or `half closed` one. Nothing is ever removed.
