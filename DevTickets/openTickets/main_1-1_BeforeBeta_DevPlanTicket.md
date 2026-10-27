@@ -91,6 +91,12 @@
 > BranchProtection moves to `main_1-7` and S9: its M5 hands the dead-branch
 > findings to gx4g instead of writing them. The user install is now S10 and
 > the inspection S11. §2.5 gains constraints 6 and 7.
+>
+> **Seventh pass, the same day (owner):** *"merge tickets AgenticControl and
+> NestedAgentMaster."* The owner filed NestedAgentMaster from a real failure
+> of gx4g's DEV bootstrap. AgenticControl, filed from the short ticket
+> `mount`, is merged into it as its §7, at `main_1-8`. It runs as **S10**.
+> The user install moves to S11 and the inspection to S12.
 
 ## Abstract — read this first
 
@@ -100,7 +106,7 @@ memory-format change among it), and makes a fresh user install from `main`. Then
 reports what it finds; the only code it changes is through the tickets it
 runs.
 
-**What this document is.** The order of twelve steps, S0 to S11 (§1), what
+**What this document is.** The order of thirteen steps, S0 to S12 (§1), what
 to watch in each and the constraints that bind them all (§2), the defects
 found (§3), the decisions (§4) and when it is done (§5). Each ticket it runs keeps its own plan and its own worker/orchestrator
 pair: this ticket is the order, not the content.
@@ -119,7 +125,9 @@ minimal CLI that sits at the ring interfaces, with every State hash behind
 one class that never hands its tree out (S5–S7). Then a source tree that
 shows the dependency, the hashes and the operator apart (S8). Last, a branch
 a USER tree cannot remove through `cgitsync`, and a dying branch found and
-handed to gx4g, which holds the register (S9). The provider's lock and roles are gx4g's (BranchProtection
+handed to gx4g, which holds the register (S9). And one `.agent` per tree, so
+that a project nesting ComplexGitSync's developer spec, gx4g first, can open
+its DEV tree at all (S10). The provider's lock and roles are gx4g's (BranchProtection
 §9). All of these must hold before gx4g's frontier is closed, and the
 frontier is drawn on Minimalism's map.
 
@@ -137,9 +145,10 @@ graph TD
     S6 --> S7["S7 CliReduction<br/>(main_1-5)"]
     S7 --> S8["S8 SrcLayout<br/>(main_1-6)"]
     S8 --> S9["S9 BranchProtection, M5<br/>(main_1-7)"]
-    S9 --> S10["S10 user install<br/>initialise install.cgs"]
-    S10 --> S11["S11 inspect .memory, .omniscience<br/>Omniscience §10 (archived 7.1.1)"]
-    S11 --> R["§3 defects<br/>YOU ARE HERE"]
+    S9 --> S10["S10 NestedAgentMaster<br/>(main_1-8)"]
+    S10 --> S11["S11 user install<br/>initialise install.cgs"]
+    S11 --> S12["S12 inspect .memory, .omniscience<br/>Omniscience §10 (archived 7.1.1)"]
+    S12 --> R["§3 defects<br/>YOU ARE HERE"]
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
     class R here;
@@ -166,8 +175,9 @@ Facts as of 2026-10-27:
 | **S7** | `implement CliReduction`, on `main` | Carries out Minimalism D1. The tutorials and the user guide shrink with the CLI. Provider commands wait for ProviderMigration. |
 | **S8** | `implement SrcLayout`, on `main` | It applies Minimalism D6's folder column, `GitRepo/` first with its no-import test. `Merkle/` already holds MerkleRoot. Behaviour, public names and ceilings are unchanged. |
 | **S9** | `implement BranchProtection`, on `main`: M5 only, after its D7 and D9 | Split on 2026-10-27. `require_dev` is kept. M5 finds a dead GitTree-branch and hands it to gx4g, writing nothing to the register. M0–M4 (provider protection and roles) are §9, handed to gx4g. No provider call. |
-| **S10** | The user install from `main`: `git clone github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then in it `pixi run cgitsync initialise install.cgs --output-path $CGSPATH` | `initialise` takes one source, plus `--output-path`, which is CGSPATH. CGSHOME is `CGSPATH/ComplexGitSync`, so the owner's `initialise $CGSHOME install.cgs` is spelled this way. `install.cgs` mounts the tool and `docs` only, so the tree is USER: its memory is local and never pushed. |
-| **S11** | The inspection in §2, in both trees, with the CLI S7 left and the layout S8 left | — |
+| **S10** | `implement NestedAgentMaster`, on `main`, after its D1–D4 | It is a real failure: gx4g's DEV bootstrap clones fifteen repositories, then refuses its own State, with a duplicate `relative_path`. The fix has three parts. Integrity schema 2 keys leaves by `tree_path`. A collision is refused before cloning. And the PROJECT's `.agent` is master under `initialise`. Its §7 is the agentic control model (merged from AgenticControl). Schema 2 is computed where MerkleRoot (S6) put the hashes. |
+| **S11** | The user install from `main`: `git clone github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then in it `pixi run cgitsync initialise install.cgs --output-path $CGSPATH` | `initialise` takes one source, plus `--output-path`, which is CGSPATH. CGSHOME is `CGSPATH/ComplexGitSync`, so the owner's `initialise $CGSHOME install.cgs` is spelled this way. `install.cgs` mounts the tool and `docs` only, so the tree is USER: its memory is local and never pushed. |
+| **S12** | The inspection in §2, in three trees: this developer tree, the user tree (S11) and gx4g's DEV tree (S10). It uses the CLI that S7 left and the layout that S8 left | — |
 
 ## 2. What to watch, with the utmost attention
 
@@ -182,7 +192,7 @@ as a new version between two steps, not as an older build left in the tree.
 
 - **Baseline, before S1.** `verify check` already says `corrupt`, with 27
   `COMMIT_LOG_MISMATCH` findings (§3, defect 1).
-  - S11 checks that no new finding appears.
+  - S12 checks that no new finding appears.
   - It also checks whether the rows 6.8.1 recorded as lost explain all 27.
 - **The close (S1).**
   - `.memory`'s 2 own commits are on `ancestors`, recorded in the ledger,
@@ -216,7 +226,7 @@ as a new version between two steps, not as an older build left in the tree.
   - The retry converges.
 - **Status.** `cgitsync status` shows `errors=0` after every step.
 
-### 2.3 `.memory` and branches, in the user tree (S10)
+### 2.3 `.memory` and branches, in the user tree (S11)
 
 - The tree is USER, and its memory is created locally, never declared.
 - Nothing is pushed, even when a remote is added by hand.
@@ -227,7 +237,7 @@ as a new version between two steps, not as an older build left in the tree.
     refusal says why (`require_dev`);
   - through plain Git, the branch is protected only once gx4g has locked it
     on the provider (BranchProtection §9). Until then, a deletion is
-    found as `vanished` (M5) and handed to gx4g. S11 records which of the
+    found as `vanished` (M5) and handed to gx4g. S12 records which of the
     two it found.
 - `status` shows `errors=0`.
 
@@ -245,7 +255,7 @@ Then:
   "deleted".
 - **Omniscience §10.** Each of its eleven items gets a row in §3, either a
   defect or "holds". Omniscience itself was proved and archived on
-  2026-10-27 against 7.1.0 (its §11); S11 reruns the same checks, after
+  2026-10-27 against 7.1.0 (its §11); S12 reruns the same checks, after
   MerkleRoot (S6) moved every hash, so they also prove nothing moved.
 - **MerkleRoot (S6).** A State's name and `os_id` are unchanged, so every
   registered record still verifies, and `omniscience proof` answers as
@@ -272,7 +282,7 @@ orchestrator quotes against them, and a breach is a defect in §3.
 3. **The Merkle tree is never materialised.** No step adds code that walks,
    stores or hands out inner nodes outside the hashing modules. From S6 on,
    that means outside `MerkleRoot`.
-4. **The CLI the beta ships is the reduced one.** S10 and S11, the tutorials
+4. **The CLI the beta ships is the reduced one.** S11 and S12, the tutorials
    and the user guide all run against the CLI that S7 left, in the layout
    that S8 left.
 5. **The frontier with gx4g is drawn on the map.** What `cgitsync` hands to
@@ -317,10 +327,12 @@ demand (owner, 2026-10-27).
 ## 5. Done when, and what this refuses
 
 **Done when:**
-- S0 to S10 have run, and S11's inspection has its rows.
+- S0 to S11 have run, and S12's inspection has its rows.
 - CommitLogLoss, WorkingAreaRename, StateLocking, Robustness, Minimalism,
-  MerkleRoot, CliReduction, SrcLayout and BranchProtection are each archived
-  with their own orchestrator's record.
+  MerkleRoot, CliReduction, SrcLayout, BranchProtection and NestedAgentMaster
+  are each archived with their own orchestrator's record.
+- gx4g's DEV tree (`examples/gx4g4dev.cgs`) opens with the command
+  NestedAgentMaster's D4 names, and S12 inspects it beside the two others.
 - Every step was quoted against §2.5.
 - ProviderMigration and BranchProtection §9 are handed to gx4g as its
   requirements. They are not done here: ProviderMigration stays in pile 2

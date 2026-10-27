@@ -113,8 +113,12 @@ delegation, or filed as a defect in BeforeBeta §3.
 - Every State on disk keeps its name.
 - Every `os_id`, every `H_GLOBAL` and every proof in a register is
   byte-identical.
-- No schema number moves. A change to anything hashed is a new schema, never
-  an edit (digest), and is out of scope.
+- No schema number moves here. A change to anything hashed is a new schema,
+  never an edit (digest). Integrity schema 2, which keys a leaf by its
+  `tree_path`, is NestedAgentMaster's N1 (BeforeBeta S10). It lands after
+  this ticket, inside `MerkleRoot`, beside schema 1, which keeps verifying
+  under its own rule. So the class takes the schema as an argument from the
+  start, with schema 1 its only value for now.
 
 ## 5. Decisions for the owner
 
