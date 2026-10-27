@@ -4,6 +4,24 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-27.** Decisions asked through `AskUserQuestion` before
+> the first edit, all four on the recommendation: **D1** the client takes the lock
+> (`orchestre/workspace_locking.py`, so the CLI and a Python caller share it);
+> **D2** the command is `cgitsync unlock` (refuses a live holder unless
+> `--force`); **D3** a refused ledger append is a visible `UserWarning` and the
+> command still succeeds; **D4** a lock is stale when its process id is gone,
+> never by age. §5, item by item: two concurrent writers, one refused before any
+> repository is touched (`test_state_locking.py`, with two real processes in
+> `test_workspace_lock.py`); a stale lock recognised and cleared by `unlock`; the
+> read-only commands run while a write holds the lock; the lock is never in the
+> memory mount or on its remote; the refused ledger append reaches the person.
+> **Two departures from §4, for the owner to see.** `autofix` takes the lock,
+> because the CLI command always repairs and the client has no diagnosis-only
+> method; and the refused ledger append is reported as a warning and in the run
+> log, with no field added to any JSON answer. The shared `.<name>.tmp` of
+> `write_atomically` (§2) is not changed: with one writer per workspace the two
+> writers it needed no longer exist.
+
 > **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-4` → `main_1-5`: CommitLogLoss is filed at `main_1-2`. BeforeBeta runs this ticket as step S3, after WorkingAreaRename.
 
 > **Ticket review — 2026-10-27, owner's decision.** Renumbered `main_2-9` → `main_1-4`: §3's first trigger has fired. In a GX4G Operating Space, gx4g runs `cgitsync` in a developer's tree (EnvConnect): that is "an agent running `cgitsync` in a workspace a person also uses". BeforeBeta runs it as step S4, on `main`, after WorkingAreaRename is merged back, so the lock is written against the final name of the state area. §4 says the lock sits under `.cgitsync/`; read that as the state area, whatever WorkingAreaRename names it.
