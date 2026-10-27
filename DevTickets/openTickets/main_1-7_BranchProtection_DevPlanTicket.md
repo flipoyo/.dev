@@ -1,8 +1,22 @@
-# BranchProtection — cgitsync guards a USER tree and reports a dying branch to Omniscience; the provider's lock and roles are gx4g's
+# BranchProtection — cgitsync guards a USER tree and finds a dying branch for gx4g to record; the provider's lock and roles are gx4g's
 
 *Created: 2026-10-20*
 
 *Branch: main*
+
+> **Ticket review — 2026-10-27, owner's decision (seventh pass, short
+> ticket `gitRepo`).** Renumbered `main_1-6` → `main_1-7`, BeforeBeta's step
+> S9, because SrcLayout is filed at `main_1-6`. The owner's short ticket puts
+> the Omniscience register with gx4g: *"GX4G manages access privileges to
+> GitRepo. It holds the GitProvider API and omniscience."* The answer through
+> `AskUserQuestion` was **"gx4g writes, cgitsync produces"**, so M5 changes
+> shape. `cgitsync` still detects a dead GitTree-branch, in one place
+> (`GitTreeBranches`), prints it in `status` and `branch list`, and builds
+> the `BranchFinding`. It no longer appends that finding to the register:
+> gx4g does. That answers D8 and D10, and §8.3's writing bullet is gx4g's
+> now. Until gx4g writes (ProviderMigration), the finding is printed and
+> handed over through the client and `--json`. No new register write path
+> enters `cgitsync`.
 
 > **Ticket review — 2026-10-27, owner's decision (sixth pass, short ticket
 > `minimalism`).** Renumbered `main_1-7` → `main_1-6`, BeforeBeta's step S8,
@@ -48,7 +62,7 @@
 |---|---|
 | Predecessors | [DevOnlyClosure](../archive/20261013_DevOnlyClosure_DevPlanTicket.md): `WorkingGitTree.require_dev`, the USER-tree refusal; the `provider.py` rule "store no credential, implement no provider's API, run the provider's own CLI" |
 | Closes | The short ticket `deletion4devOnly`, when this ticket is archived with §9 handed to gx4g |
-| Touches | `branch close`, `branch delete`, `status`, `branch list`, `omniscience observe/status/report`; Tutorial 7 §7, Tutorial 8 |
+| Touches | `branch close`, `branch delete`, `status`, `branch list` (and their `--json`); Tutorial 7 §7, Tutorial 8 |
 
 ## Abstract — read this first
 
@@ -58,8 +72,8 @@ the provider's branch protection and the user's role on the provider are
 gx4g's, because every provider API call is (§9). `cgitsync` keeps the
 DevOnlyClosure guard: `branch close` and `branch delete` are refused in a USER
 tree. When a project branch dies anyway (vanished, half closed, split, or
-orphaned by its private branches), `cgitsync` records that in the Omniscience
-register (§8, M5), which gx4g reads.
+orphaned by its private branches), `cgitsync` finds it and hands the finding
+to gx4g, which records it in the Omniscience register it holds (§8, M5).
 
 **The plan as first written** (kept for §9): `cgitsync` would ask the
 hosting service (GitHub, GitLab, Codeberg/Gitea) to protect a branch through
@@ -82,14 +96,15 @@ edit in their own `.cgs`.
 **Who it is for.** The worker who runs the spike and builds the milestones,
 the orchestrator who quotes them, and the owner, for §4.
 
-**What you need to do with it.** Worker: build M5 (§8), after asking
-D7–D10. Owner: hand §9 to gx4g. §2–§7 are no longer this ticket's work.
+**What you need to do with it.** Worker: build M5 (§8), after asking D7 and
+D9; D8 and D10 are answered. Owner: hand §9 to gx4g. §2–§7 are no longer this
+ticket's work.
 
 ```mermaid
 graph LR
     U2["branch close / delete"] --> RD["require_dev()<br/>USER tree refused (kept)"]
-    OBS["omniscience observe"] --> BF["BranchFinding (M5)<br/>YOU ARE HERE"]
-    BF --> REG["register, read by gx4g"]
+    ST["status / branch list<br/>--json, client"] --> BF["BranchFinding (M5)<br/>YOU ARE HERE"]
+    BF --> GX2["gx4g writes it<br/>into the register"]
     GX["gx4g (§9)"] --> PROV2["provider's protection<br/>and roles"]
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
@@ -281,9 +296,9 @@ history.
 | D | Question | Recommendation |
 |---|---|---|
 | **D7** | Which kinds in §8.2 are reported? | All five. Kind 5 (`closed`) keeps the record complete; the other four are the problems. |
-| **D8** | When is a finding written to the register? `observe` runs only when typed (OmniscienceAppend D3), and a register write is a push. | **When typed.** `omniscience observe` gains the tree-branch pass. `status` and `branch list` print the finding and the command that records it, and never write. The alternative, writing from `status` automatically, reverses D3 and makes a read command push. |
+| **D8** | When is a finding written to the register? | **Answered 2026-10-27 (short ticket `gitRepo`): by gx4g, never by `cgitsync`.** `cgitsync` prints the finding in `status` and `branch list` and hands it over through the client and `--json`. It writes nothing. |
 | **D9** | Is a branch closed by plain Git (no ledger record) `vanished` even when `branch check` would have found nothing to keep? | **Yes**, with that fact in its evidence. Only the ledger proves nothing was lost. |
-| **D10** | Does gx4g read these findings through the register only, or also through a `cgitsync` command? | **The register only.** That is the frontier EnvConnect drew: gx4g reads what `cgitsync` recorded, and adds no access logic here. |
+| **D10** | Does gx4g read these findings through the register only, or also through a `cgitsync` command? | **Answered 2026-10-27 (short ticket `gitRepo`): from `cgitsync`, which produces them, and gx4g writes them into the register it holds.** |
 
 The version level is the orchestrator's. A new command and a new refusal are
 `minor` at least.
@@ -345,7 +360,7 @@ raise, including any import-count rise, ask the owner for it by name.
 | M2 | **Moved to gx4g (§9).** The role gate. `cgitsync` keeps `require_dev` unchanged | — |
 | M3 | **Moved to gx4g (§9).** Protect and unprotect, the protection note | — |
 | M4 | **Moved to gx4g (§9).** D4's other assets, D5, D6 | — |
-| M5 | §8: `BranchFinding`, the tree-branch pass in `omniscience observe`, the notes in `status` and `branch list`, and `omniscience status/report`. **This ticket's only milestone now.** It adds no command (Minimalism) and calls no provider API | Independent of M0–M4 |
+| M5 | §8: `BranchFinding` and its detection in `GitTreeBranches`, the notes in `status` and `branch list`, and the finding handed over through the client and `--json` for gx4g to write. **This ticket's only milestone now.** It adds no command (Minimalism), calls no provider API and writes nothing to the register (`gitRepo`) | Independent of M0–M4 |
 
 **Acceptance of M0–M4, now gx4g's (§9).**
 - **Parsing.** For each provider, `parse_role` on the JSON recorded in §3.1
@@ -374,10 +389,11 @@ raise, including any import-count rise, ask the owner for it by name.
   one `BranchFinding`, with its evidence.
 - A failed fetch produces none.
 - The tag, the default branch and `ancestors` produce none.
-- `omniscience observe` appends them fast-forward only, survives a lost race
-  by retrying, and is refused in a USER tree.
-- `omniscience status` and `report` list them per branch. A later `closed`
-  finding closes an earlier `vanished` one, and both stay in the register.
+- The client and `status --json` hand each finding over whole, with its
+  canonical form and name, for gx4g to write. `cgitsync` appends nothing to
+  the register.
+- A later `closed` finding for the same branch says it closes an earlier
+  `vanished` one. gx4g keeps both in the register.
 - `H_GLOBAL` and every record's proof are byte-identical before and after.
 - `status` and `branch list` print the finding and the command, and write
   nothing.
@@ -438,9 +454,10 @@ is not "dead" (the same rule as `ObservationStatus.of_git_failure`).
   is **not hashed into `H_GLOBAL`** and never changes a leaf.
 - **Detection runs in one place**, `GitTreeBranches`, beside
   `project_branches`, so `status`, `branch list` and `observe` agree.
-- **Writing it uses the existing appender** (`RegisterAppender`):
-  fast-forward only, retried from the new tip, never forced. It is refused by
-  name in a USER tree, as `observe` is.
+- **Writing it is gx4g's** (short ticket `gitRepo`, 2026-10-27). gx4g
+  holds the register. `cgitsync` builds the finding and hands it over, and
+  does not call `RegisterAppender` for it. As first written, it used the
+  existing appender, fast-forward only and never forced.
 - **Reading it.** `omniscience status` and `omniscience report` list the open
   findings per project branch. A later `CLOSED` finding for the same branch
   closes a `vanished` or `half closed` one. Nothing is ever removed.
@@ -461,7 +478,7 @@ and ProviderMigration). So the lock and the tiers the owner asked for in
 - **Its decisions** are §4's D1–D6.
 - **What `cgitsync` offers gx4g.** `branch close` and `branch delete` keep
   refusing in a USER tree, by `require_dev`, before anything is touched. M5's
-  findings are in the register for gx4g to read (D10). `cgitsync` adds no
+  findings are handed to gx4g, which writes them into the register (D10). `cgitsync` adds no
   hook for gx4g's roles: gx4g decides who may run the command.
 - **What the beta can then promise** (BeforeBeta §2.3). Through `cgitsync`,
   a USER tree cannot close or delete a branch. Through plain Git, only once

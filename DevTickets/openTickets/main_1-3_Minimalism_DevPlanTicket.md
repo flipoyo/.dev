@@ -4,6 +4,15 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
+> Rank unchanged. The map gains three things. A **folder column** (D6):
+> SrcLayout moves every module into `GitRepo/`, `Merkle/`, `Tree/` or
+> `OperatingSpace/`, and the owner decides the moves from this column. The
+> **`GitRepo` boundary**: GitRepo is the dependency gx4g will share, and it
+> imports nothing back. And **Omniscience's split**: gx4g holds the register
+> and writes to it, and `cgitsync` produces what is written
+> (ProviderMigration §1a). BranchProtection is now `main_1-7`.
+
 > **From the owner's short ticket `minimalism` (2026-10-27).** Filed at
 > `main_1-3` by the ticket review of the same day, as BeforeBeta's step S5.
 > The owner's words: *"The CLI is very rich. It would be wise to reduce it to
@@ -12,8 +21,7 @@
 > through the CLI, with the objective that the CLI lands mostly at ring
 > interfaces. This is a mapping ticket for further decisions."* The short
 > ticket's other parts went to MerkleRoot (`main_1-4`), CliReduction
-> (`main_1-5`), BranchProtection (`main_1-6`) and ProviderMigration
-> (`main_2-10`). The owner's answers in that review, asked through
+> (`main_1-5`), BranchProtection and ProviderMigration (`main_2-10`). The owner's answers in that review, asked through
 > `AskUserQuestion`:
 > - **Provider APIs.** Every call to a provider's API migrates to gx4g, the
 >   reads as well as the writes. Before beta, `cgitsync` gains no new call,
@@ -81,6 +89,8 @@ graph TD
 | `OperatingSpace` | "the API of OPX" | ring 1 ↔ 2 |
 | `WorkingGitTree` | "the Operating Space" | — |
 | `MerkleRoot` | its own class, computing the State hashes; later its own repository. "The Merkle Tree of MerkleRoot must never be accessible by cgitsync nor gx4g. It is the interface never materialised." | — |
+| `GitRepo` | *(short ticket `gitRepo`)* "a specific Graph for GX4G"; the dependency that provides Graph and GitRepo, and that `cgitsync` mounts as GitTree | below everything; imports nothing back |
+| Omniscience | *(`gitRepo`)* synthesises the GitTree "with hash256(MerkleRoot)"; held by gx4g, which "manages access privileges to GitRepo" | gx4g's |
 
 "OPX" is the owner's term and is not defined anywhere in the spec tree (D5).
 
@@ -150,7 +160,12 @@ and written by hand only where a judgement is needed.
 4. **The Merkle surface.** Every function that computes a State hash or walks a
    Merkle tree, and every API, CLI or file that hands out an inner node. An
    audit path counts, and so does a leaf list.
-5. **The verdict column.** Each leaf command is marked keep, reinforce, adapt
+5. **The folder column** (short ticket `gitRepo`). For each module, the
+   SrcLayout folder it moves to: `GitRepo/`, `Merkle/`, `Tree/` or
+   `OperatingSpace/`, or a place of its own with a reason. `cli/`,
+   `orchestre/`, `memory/`, `operations/` and `autofix/` are proposed here,
+   and the owner decides (D6).
+6. **The verdict column.** Each leaf command is marked keep, reinforce, adapt
    or withdraw, with one line of reason. A withdrawn command names what
    replaces it, or "nothing; the method is removed" (D1).
 
@@ -161,7 +176,10 @@ and written by hand only where a judgement is needed.
   - `.cgs` is produced and consumed only across ring 3 ↔ 4;
   - `.gts` only across ring 2 ↔ 3;
   - `OperatingSpace` only across ring 1 ↔ 2;
-  - nothing in `cgitsync` stands where gx4g should.
+  - nothing in `cgitsync` stands where gx4g should: no provider call, and no
+    register write beyond those ProviderMigration §1a lists;
+  - the modules proposed for `GitRepo/` import nothing else from
+    `ComplexGitSync`, or the map lists each import that would have to go.
 - **The CLI lands at ring interfaces.** It lists every command that reaches
   deeper than the interface it should land on, or that has logic of its own.
 - **Unused and deprecated methods.** Each one is listed with its callers and
@@ -184,13 +202,16 @@ needs the map's numbers.
 | **D3** | Does an audit path (`omniscience proof`, `InclusionProof`) count as "the Merkle tree accessible"? | **No,** as long as only MerkleRoot computes it and hands it out as a proof object to be verified, never as a tree to walk. If yes, `omniscience proof` is withdrawn and the proof is verified inside MerkleRoot only. |
 | **D4** | Which hashes MerkleRoot owns: the State hashes only (`H_GITTREE`, `H_STATE`, `H_GLOBAL`, `os_id`), or every content hash too (ledger, commit log, Environment, record)? | **The State hashes only.** The others hash one record, not a tree. |
 | **D5** | What "OPX" names, so that the map can say what the `OperatingSpace` interface serves. | Asked, not guessed. |
+| **D6** | The folder per module and package, from §3's folder column, as a list the owner edits. SrcLayout carries it out. | The map's column. |
+| **D7** | Omniscience's reads (`get`, `branches`, `history`, `state`, `proof`, `verify`, `status`, `report`, `memory`): kept in `cgitsync`, or gx4g's with the register? Its writes are gx4g's already (ProviderMigration §1a). | The map's verdict per command. The default is to keep the reads that verify, since checking a proof is not holding the register. |
 
 ## 6. Done when
 
-- §7 holds the five tables of §3, generated by a script kept under
+- §7 holds the six tables of §3, generated by a script kept under
   `scripts/` so that it can be run again after CliReduction.
 - Every check in §4 has its result in §7.
-- D1–D5 are answered and written into MerkleRoot and CliReduction.
+- D1–D7 are answered and written into MerkleRoot, CliReduction and
+  SrcLayout.
 - `src/` is unchanged. `pixi run lint` and `pixi run test` pass. The script is
   the only new code, and it has a test.
 - The orchestrator's record is written. Its version level is `patch`, for a

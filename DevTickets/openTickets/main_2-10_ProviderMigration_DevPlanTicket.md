@@ -1,8 +1,18 @@
-# ProviderMigration — every call to a Git host's API moves to gx4g; cgitsync only executes
+# ProviderMigration — every Git host API call and every Omniscience register write moves to gx4g; cgitsync only executes
 
 *Created: 2026-10-27*
 
 *Branch: main*
+
+> **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
+> Rank unchanged, scope widened. *"GX4G manages access privileges to GitRepo.
+> It holds the GitProvider API and omniscience."* The answer through
+> `AskUserQuestion` was **"gx4g writes, cgitsync produces"**. Every write to
+> the Omniscience register (`omniscience mount`, `register`, `observe`, and
+> BranchProtection's dead-branch findings) moves to gx4g with the provider
+> calls. `cgitsync` keeps building what is written: a State's record, by
+> hash256(MerkleRoot) (`omniscience record`), and the findings. Which
+> register *reads* stay is Minimalism's map's verdict (§1a).
 
 > **From the owner's short ticket `minimalism` (2026-10-27).** Filed at
 > `main_2-10`, the end of pile 2, by the ticket review of the same day. It is
@@ -20,7 +30,9 @@
 today: one write (`repo create`, which `memory setup` reuses) and one read
 (the sign-in check every Environment record makes). Both move to gx4g. gx4g
 addresses what it acts on by the MerkleRoot hash of the State and of the
-repository. `cgitsync` keeps Git itself, and nothing else.
+repository. Since the short ticket `gitRepo`, the Omniscience register's
+writes go too (§1a): gx4g holds the register, and `cgitsync` produces what is
+written. `cgitsync` keeps Git itself, and nothing else.
 
 **What this document is.** The calls (§1), what gx4g must offer for each
 (§2), how a call is addressed (§3), the decisions (§4) and acceptance (§5).
@@ -58,8 +70,28 @@ what it starts from.
 | `gh auth status` and peers | read | `env show`, `env check`, and every Environment record a State write makes | `TreeObserver._provider_auth` (`tree_env.py`) |
 | Role, protection, login (`gh api …`) | read and write | none: planned by BranchProtection M0–M4, which moved to gx4g | — |
 
+### 1a. The register writes (short ticket `gitRepo`)
+
+| Write | Reached by | In `src/` |
+|---|---|---|
+| Declare and clone the register | `omniscience mount` | `OmniscienceCommands` |
+| Append a State's record and extend the `_global` chain | `omniscience register` | `IntegrityControl`, `RegisterAppender`, `GlobalCheckpoints` |
+| Append observations | `omniscience observe` | `OmniscienceObserver`, `RegisterAppender` |
+| Dead-branch findings | none, by design: BranchProtection M5 hands them to gx4g | — |
+
+What `cgitsync` keeps:
+- `omniscience record`, which builds the record a State would register and
+  writes nothing;
+- the findings;
+- the reads that Minimalism D1 keeps.
+
 ## 2. What gx4g must offer for each
 
+- **Hold the register.** gx4g writes records, checkpoints, observations and
+  findings, with the guarantees `cgitsync`'s writer has today (fast-forward
+  only, never forced, never edited; `AdditionalSpecs.md`, *Appending to the
+  register*). It takes what `cgitsync` produced, byte for byte, so every
+  name and `H_GLOBAL` stays the same.
 - **Create a repository.** It takes a provider, an owner, a name and
   visibility, and answers with the identifier `cgitsync` then declares in the
   `.cgs`. Until then `memory setup` prints the command instead of running it,
@@ -89,6 +121,9 @@ the Operating Space by `os_id`. It is never addressed by a path or URL that
 
 - No `run_tool` call to a provider's CLI is left in `src/`. Minimalism's
   provider-call check is tightened to zero.
+- No register write is left in `cgitsync`: `RegisterAppender` and the
+  `mount`, `register` and `observe` commands are gone. `omniscience record`
+  still builds a record byte-identical to the one gx4g appends.
 - `memory setup` and `env show` still work, with the provider step handed to
   gx4g or printed.
 - Every State name and every Environment record already written still

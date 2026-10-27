@@ -4,6 +4,15 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
+> Rank unchanged. Two changes. First, `MerkleRoot` is the first resident of
+> SrcLayout's `Merkle/` folder, the *"never revealed interface"*, so it is
+> created there and not as a top-level module. Second, Omniscience
+> *"synthesises with hash256(MerkleRoot)"* and gx4g holds the register. The
+> roots and record names this class computes are therefore exactly what gx4g
+> writes (ProviderMigration §1a), and they must stay byte for byte (§4).
+> `Merkle/` may import from `GitRepo/` and from nothing else.
+
 > **From the owner's short ticket `minimalism` (2026-10-27).** Filed at
 > `main_1-4` by the ticket review of the same day, as BeforeBeta's step S6,
 > after Minimalism draws the map. The owner's words: *"The Merkle Tree of
@@ -113,8 +122,8 @@ Asked through `AskUserQuestion` before the first edit.
 
 | D | Question | Recommendation |
 |---|---|---|
-| **D1** | The class name and module: `MerkleRoot` in `merkle_root.py`, or another name. | `MerkleRoot`, `merkle_root.py`, ring 0, as the owner wrote it. |
-| **D2** | "Later its own repository": prepare now (no import from the rest of the package, a test that asserts it), or only keep the door small? | **Prepare now:** a test that `merkle_root.py` imports nothing from `ComplexGitSync`. It costs one test and keeps the move possible. |
+| **D1** | The class name and module: `MerkleRoot` in the `Merkle/` folder (spelled as SrcLayout D1 decides), or another name. | `MerkleRoot`, in `Merkle/merkle_root.py`, ring 0, as the owner wrote it. |
+| **D2** | "Later its own repository": prepare now (no import from the rest of the package, a test that asserts it), or only keep the door small? | **Prepare now:** a test that `Merkle/` imports nothing from `ComplexGitSync` except `GitRepo/`. It costs one test and keeps the move possible. |
 | **D3** | `GtsIntegrity` and `GlobalIntegrity`: kept as thin aliases for one release, or removed in this change? | **Removed,** with every caller moved. They are not public API in `api_python.tex`; Minimalism's map confirms it. |
 
 ## 6. The work

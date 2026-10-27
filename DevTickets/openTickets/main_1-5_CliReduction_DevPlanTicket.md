@@ -4,6 +4,13 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
+> Rank unchanged. It runs before SrcLayout, so that what is withdrawn is
+> never moved first. The register-writing commands (`omniscience mount`,
+> `register` and `observe`) are gx4g's now. Like the provider commands, they
+> are withdrawn by ProviderMigration once gx4g writes, not here. Minimalism
+> D7 gives the verdict on the register reads.
+
 > **From the owner's short ticket `minimalism` (2026-10-27).** Filed at
 > `main_1-5` by the ticket review of the same day, as BeforeBeta's step S7,
 > after Minimalism and MerkleRoot. The owner's words: *"From this map CLI cmd
@@ -70,7 +77,8 @@ fixes the mirror rule this ticket applies. Nothing is withdrawn on a guess.
     with its tests.
   - A withdrawn command that a tutorial runs is the tutorial's change too, in
     the same commit.
-- **A provider command (`repo create`, `memory setup`'s create step).** It is
+- **A provider command (`repo create`, `memory setup`'s create step), or a
+  register-writing one (`omniscience mount`, `register`, `observe`).** It is
   not withdrawn before gx4g can do it (ProviderMigration). Its verdict is
   carried out there.
 

@@ -4,6 +4,13 @@
 
 *Branch: main*
 
+> **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
+> Rank unchanged. The lag fields are filled when a record is written to the
+> register, and gx4g holds the register now (ProviderMigration §1a). So D2
+> ("read by the command that writes to the register") makes the clock read
+> gx4g's. `cgitsync` could only measure an offset and hand it over with the
+> record. That choice is a new D4, asked when the ticket is picked up.
+
 > **Ticket review — 2026-10-27, sixth pass (short ticket `minimalism`).**
 > Rank unchanged. *The forge's push time* (§3) is read through the provider's
 > API, which is gx4g's privilege now (ProviderMigration). If D1 ever picks
@@ -80,6 +87,7 @@ recorded where.
 | **D1** | Which clock? | **NTP**, recorded as offset plus uncertainty, the recommendation the ticket first made. RFC 3161 is the upgrade if a signed time is ever required. |
 | **D2** | When is it read: at every register write, or by a separate command? | By the command that writes to the register, once per run. A failed read leaves the fields empty and never blocks the write. |
 | **D3** | Does it need the separate time-reference repository (OmniscienceRegister D3) built first? | Only for RFC 3161 or a shared server list; NTP alone does not. |
+| **D4** | *(short ticket `gitRepo`)* Who reads the clock: gx4g, which writes the record, or `cgitsync`, which hands an offset over with it? | **gx4g,** since it holds the register; `cgitsync` adds no network read. |
 
 ## 5. Acceptance, when it is picked up
 

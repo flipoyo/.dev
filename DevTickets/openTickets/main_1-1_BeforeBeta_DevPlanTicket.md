@@ -75,6 +75,22 @@
 > S7 CliReduction and S8 BranchProtection (its M5 only), then S9 the user
 > install and S10 the inspection, which were S6 and S7. §2.5 is the
 > constraint the short ticket puts on every step.
+>
+> **Sixth pass, the same day (owner):** *"adapt DevPlan to new shortTicket
+> gitRepo."* The owner's answers through `AskUserQuestion`:
+> - **GitRepo** (Graph and GitRepo) is a subfolder first, the dependency
+>   that imports nothing back, and later a repository of its own.
+> - **The Omniscience register is gx4g's:** gx4g writes, and `cgitsync`
+>   produces what is written. ProviderMigration now covers the register
+>   writes too.
+> - **`src/` is split before beta** into `GitRepo/`, `Merkle/`, `Tree/` and
+>   `OperatingSpace/`. The other packages go where Minimalism's map
+>   proposes, and the owner decides.
+>
+> SrcLayout is filed at `main_1-6` and runs as **S8**, after CliReduction.
+> BranchProtection moves to `main_1-7` and S9: its M5 hands the dead-branch
+> findings to gx4g instead of writing them. The user install is now S10 and
+> the inspection S11. §2.5 gains constraints 6 and 7.
 
 ## Abstract — read this first
 
@@ -84,7 +100,7 @@ memory-format change among it), and makes a fresh user install from `main`. Then
 reports what it finds; the only code it changes is through the tickets it
 runs.
 
-**What this document is.** The order of eleven steps, S0 to S10 (§1), what
+**What this document is.** The order of twelve steps, S0 to S11 (§1), what
 to watch in each and the constraints that bind them all (§2), the defects
 found (§3), the decisions (§4) and when it is done (§5). Each ticket it runs keeps its own plan and its own worker/orchestrator
 pair: this ticket is the order, not the content.
@@ -100,9 +116,10 @@ that have never run end to end on a real tree:
 It also relies on things being built here. The workspace lock landed in
 7.3.0 (S3). Still to come are an honest partial-failure report (S4), and a
 minimal CLI that sits at the ring interfaces, with every State hash behind
-one class that never hands its tree out (S5–S7). Last, a branch a USER tree
-cannot remove through `cgitsync`, and a dying branch reported to the
-register (S8). The provider's lock and roles are gx4g's (BranchProtection
+one class that never hands its tree out (S5–S7). Then a source tree that
+shows the dependency, the hashes and the operator apart (S8). Last, a branch
+a USER tree cannot remove through `cgitsync`, and a dying branch found and
+handed to gx4g, which holds the register (S9). The provider's lock and roles are gx4g's (BranchProtection
 §9). All of these must hold before gx4g's frontier is closed, and the
 frontier is drawn on Minimalism's map.
 
@@ -118,10 +135,11 @@ graph TD
     S4 --> S5["S5 Minimalism: the map<br/>(main_1-3)"]
     S5 --> S6["S6 MerkleRoot<br/>(main_1-4)"]
     S6 --> S7["S7 CliReduction<br/>(main_1-5)"]
-    S7 --> S8["S8 BranchProtection, M5<br/>(main_1-6)"]
-    S8 --> S9["S9 user install<br/>initialise install.cgs"]
-    S9 --> S10["S10 inspect .memory, .omniscience<br/>Omniscience §10 (archived 7.1.1)"]
-    S10 --> R["§3 defects<br/>YOU ARE HERE"]
+    S7 --> S8["S8 SrcLayout<br/>(main_1-6)"]
+    S8 --> S9["S9 BranchProtection, M5<br/>(main_1-7)"]
+    S9 --> S10["S10 user install<br/>initialise install.cgs"]
+    S10 --> S11["S11 inspect .memory, .omniscience<br/>Omniscience §10 (archived 7.1.1)"]
+    S11 --> R["§3 defects<br/>YOU ARE HERE"]
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
     class R here;
@@ -146,9 +164,10 @@ Facts as of 2026-10-27:
 | **S5** | `implement Minimalism`, on `main`: the map | No change to `src/` beyond a map script. It covers 27 commands, 66 leaf commands, 115 public client methods, the provider calls, the Merkle surface and the ring-interface checks. It ends with the verdict per command (its D1) and D2–D5. |
 | **S6** | `implement MerkleRoot`, on `main` | Scope is fixed by Minimalism D3 and D4. Every golden vector, State name, `os_id` and `H_GLOBAL` stays byte for byte. |
 | **S7** | `implement CliReduction`, on `main` | Carries out Minimalism D1. The tutorials and the user guide shrink with the CLI. Provider commands wait for ProviderMigration. |
-| **S8** | `implement BranchProtection`, on `main`: M5 only, after its D7–D10 | Split on 2026-10-27. `require_dev` is kept, and M5 reports a dead GitTree-branch to the register. M0–M4 (provider protection and roles) are §9, handed to gx4g. No provider call. |
-| **S9** | The user install from `main`: `git clone github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then in it `pixi run cgitsync initialise install.cgs --output-path $CGSPATH` | `initialise` takes one source, plus `--output-path`, which is CGSPATH. CGSHOME is `CGSPATH/ComplexGitSync`, so the owner's `initialise $CGSHOME install.cgs` is spelled this way. `install.cgs` mounts the tool and `docs` only, so the tree is USER: its memory is local and never pushed. |
-| **S10** | The inspection in §2, in both trees, with the CLI S7 left | — |
+| **S8** | `implement SrcLayout`, on `main` | It applies Minimalism D6's folder column, `GitRepo/` first with its no-import test. `Merkle/` already holds MerkleRoot. Behaviour, public names and ceilings are unchanged. |
+| **S9** | `implement BranchProtection`, on `main`: M5 only, after its D7 and D9 | Split on 2026-10-27. `require_dev` is kept. M5 finds a dead GitTree-branch and hands it to gx4g, writing nothing to the register. M0–M4 (provider protection and roles) are §9, handed to gx4g. No provider call. |
+| **S10** | The user install from `main`: `git clone github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then in it `pixi run cgitsync initialise install.cgs --output-path $CGSPATH` | `initialise` takes one source, plus `--output-path`, which is CGSPATH. CGSHOME is `CGSPATH/ComplexGitSync`, so the owner's `initialise $CGSHOME install.cgs` is spelled this way. `install.cgs` mounts the tool and `docs` only, so the tree is USER: its memory is local and never pushed. |
+| **S11** | The inspection in §2, in both trees, with the CLI S7 left and the layout S8 left | — |
 
 ## 2. What to watch, with the utmost attention
 
@@ -163,7 +182,7 @@ as a new version between two steps, not as an older build left in the tree.
 
 - **Baseline, before S1.** `verify check` already says `corrupt`, with 27
   `COMMIT_LOG_MISMATCH` findings (§3, defect 1).
-  - S10 checks that no new finding appears.
+  - S11 checks that no new finding appears.
   - It also checks whether the rows 6.8.1 recorded as lost explain all 27.
 - **The close (S1).**
   - `.memory`'s 2 own commits are on `ancestors`, recorded in the ledger,
@@ -197,7 +216,7 @@ as a new version between two steps, not as an older build left in the tree.
   - The retry converges.
 - **Status.** `cgitsync status` shows `errors=0` after every step.
 
-### 2.3 `.memory` and branches, in the user tree (S9)
+### 2.3 `.memory` and branches, in the user tree (S10)
 
 - The tree is USER, and its memory is created locally, never declared.
 - Nothing is pushed, even when a remote is added by hand.
@@ -208,8 +227,8 @@ as a new version between two steps, not as an older build left in the tree.
     refusal says why (`require_dev`);
   - through plain Git, the branch is protected only once gx4g has locked it
     on the provider (BranchProtection §9). Until then, a deletion is
-    reported by `omniscience observe` as `vanished` (M5). S10 records which
-    of the two it found.
+    found as `vanished` (M5) and handed to gx4g. S11 records which of the
+    two it found.
 - `status` shows `errors=0`.
 
 ### 2.4 `.omniscience`, and Omniscience §10
@@ -226,15 +245,17 @@ Then:
   "deleted".
 - **Omniscience §10.** Each of its eleven items gets a row in §3, either a
   defect or "holds". Omniscience itself was proved and archived on
-  2026-10-27 against 7.1.0 (its §11); S10 reruns the same checks, after
+  2026-10-27 against 7.1.0 (its §11); S11 reruns the same checks, after
   MerkleRoot (S6) moved every hash, so they also prove nothing moved.
 - **MerkleRoot (S6).** A State's name and `os_id` are unchanged, so every
   registered record still verifies, and `omniscience proof` answers as
   Minimalism D3 decided.
 - **BranchProtection.** Protecting the register's branch on the provider is
   gx4g's (§9). OmniscienceQuery keeps reporting that protection as "not
-  checked", and that is not a defect. M5's findings appear in
-  `omniscience status` and `report`.
+  checked", and that is not a defect. M5's findings appear in `status`,
+  `branch list` and their `--json`, ready for gx4g. Until gx4g holds the
+  register, `cgitsync`'s existing writer still serves tutorial 8, and §2.5
+  rule 6 keeps it from growing.
 
 ### 2.5 The constraints `minimalism` puts on every step
 
@@ -251,11 +272,20 @@ orchestrator quotes against them, and a breach is a defect in §3.
 3. **The Merkle tree is never materialised.** No step adds code that walks,
    stores or hands out inner nodes outside the hashing modules. From S6 on,
    that means outside `MerkleRoot`.
-4. **The CLI the beta ships is the reduced one.** S9 and S10, the tutorials
-   and the user guide all run against the CLI that S7 left.
+4. **The CLI the beta ships is the reduced one.** S10 and S11, the tutorials
+   and the user guide all run against the CLI that S7 left, in the layout
+   that S8 left.
 5. **The frontier with gx4g is drawn on the map.** What `cgitsync` hands to
-   gx4g is listed in two places, ProviderMigration and BranchProtection §9.
-   Nothing else crosses without a row in the map.
+   gx4g is listed in two places, ProviderMigration (the provider calls and
+   the register writes) and BranchProtection §9. Nothing else crosses
+   without a row in the map.
+6. **No new write to the Omniscience register** *(short ticket `gitRepo`)*.
+   gx4g holds the register. `cgitsync` produces records and findings, and its
+   existing writer (`mount`, `register`, `observe`) stays only until
+   ProviderMigration.
+7. **`GitRepo/` is the dependency** *(`gitRepo`)*. From S8 on, a test fails
+   when it imports anything else from `ComplexGitSync`. Before S8, no step
+   adds a dependency from the repository and graph code back to the rest.
 
 ## 3. Defects found
 
@@ -287,10 +317,10 @@ demand (owner, 2026-10-27).
 ## 5. Done when, and what this refuses
 
 **Done when:**
-- S0 to S9 have run, and S10's inspection has its rows.
+- S0 to S10 have run, and S11's inspection has its rows.
 - CommitLogLoss, WorkingAreaRename, StateLocking, Robustness, Minimalism,
-  MerkleRoot, CliReduction and BranchProtection are each archived with their
-  own orchestrator's record.
+  MerkleRoot, CliReduction, SrcLayout and BranchProtection are each archived
+  with their own orchestrator's record.
 - Every step was quoted against §2.5.
 - ProviderMigration and BranchProtection §9 are handed to gx4g as its
   requirements. They are not done here: ProviderMigration stays in pile 2

@@ -4,6 +4,15 @@
 
 *Branch: data-repo*
 
+> **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
+> Ranks unchanged, binding all seven `data-repo` tickets. `GitRepo` becomes
+> the dependency (SrcLayout's `GitRepo/`, which imports nothing back). So
+> DataSchema's `DataSpec` and `GitRepo.data` (WP-S1) land in `GitRepo/`, as
+> pure data with no import from the rest of the package. DataBackendContract's
+> `DataManager` (WP-B2) dispatches processes and stays outside `GitRepo/`,
+> under `Tree/`. The data work is in pile 2 and SrcLayout before beta, so it
+> lands in the new folders.
+
 > **Ticket review — 2026-10-27, sixth pass (short ticket `minimalism`).**
 > Ranks unchanged, for all seven `data-repo` tickets; this note binds them
 > all. Two constraints come from the owner's short ticket. First, any command
