@@ -4,6 +4,13 @@
 
 *Branch: main*
 
+> **Landed early by MerkleRoot, 2026-10-27:** `src/ComplexGitSync/merkle/` exists, lowercase
+> (SrcLayout D1, answered for this folder: Python packages are lowercase, and the other
+> three folders follow). It holds `MerkleRoot` and its proofs and imports nothing.
+> `global_index.py` is **not** in it (it imports `OmniscienceRecord`): it goes to
+> `omniscience/` with the register. Minimalism §7.7 listed it under `Merkle`; that column
+> is corrected here.
+
 > **Owner's answers, 2026-10-27 (Minimalism D5, D6).** Asked once the map existed.
 > **D6, the folders:** the map's column, with **Omniscience apart**. The 14
 > Omniscience modules (`omniscience_*` and `orchestre/omniscience*`) go to a folder of
@@ -65,8 +72,8 @@ graph TD
     OS["OperatingSpace/<br/>the API of OPX"] --> TREE["Tree/<br/>GitTree, operated by cgitsync"]
     TREE --> MERKLE["Merkle/<br/>never revealed"]
     TREE --> GR["GitRepo/<br/>Graph + GitRepo,<br/>the dependency"]
-    MERKLE --> GR
     GR -.-x|"imports nothing back"| TREE
+    MERKLE -.-x|"imports nothing"| GR
     L["the layout<br/>YOU ARE HERE"] -.-> TREE
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
@@ -109,7 +116,7 @@ a tree. The Omniscience register and the provider API are gx4g's
 | Folder | Holds (to be confirmed by Minimalism D6) | Rule |
 |---|---|---|
 | `GitRepo/` | A repository's identity, the graph of repositories (`Graph`), branches and the fallback rule, the Git runner | **Imports nothing from the rest of `ComplexGitSync`**, and a test asserts it. It is the dependency, not a part. |
-| `Merkle/` | `MerkleRoot` and the proofs (MerkleRoot) | Imports from `GitRepo/` at most. No public name returns an inner node. |
+| `Merkle/` | `MerkleRoot` and the proofs (MerkleRoot) | **Imports nothing**, not even `GitRepo/` (owner, 2026-10-27, MerkleRoot A): it receives plain values from the adapter in `Tree/`. No public name returns an inner node. |
 | `Tree/` | The GitTree `cgitsync` mounts and operates: tree structures, actions, memory | May import `GitRepo/` and `Merkle/` |
 | `OperatingSpace/` | The Operating Space, its identity, and the API that serves it | May import everything below it |
 

@@ -4,6 +4,52 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-27 (`cgitsync-8.0.1`, a major: a `--json` field of `omniscience proof` is removed).**
+> Decisions asked through `AskUserQuestion` before the first edit: **D1** the folder is
+> `merkle/` in lowercase (this also answers SrcLayout's D1 for this folder, and the
+> other three follow the same rule); **D3** `GtsIntegrity` and `GlobalIntegrity` are
+> removed, with every caller moved, no alias; **hashes that are not recorded** (a
+> tie-break in `git_tree`, a cache key in `runtime_state_store`) are exempt and named
+> by a test; **the interim output** of `omniscience proof` and `state`: the `siblings`
+> are gone now, not at ProviderMigration. What landed:
+> - `merkle/merkle_root.py`: `MerkleRoot`, `InclusionProof`, `GlobalInclusionProof`,
+>   `MerkleError`. It replaces `gts_integrity.py`, `global_integrity.py` and
+>   `inclusion_proof.py`, and imports nothing of the package (a test holds it).
+> - Every content hash goes through it: the ledger entry, the commit log, the
+>   Environment, the agent contract, the self-history, a manifest's digest, a snapshot
+>   file's digest, `os_id`, and the ledger chain's `GENESIS_PREV`, which
+>   `autofix/repair_divergent_user.py` no longer copies.
+> - **Bit for bit.** Every golden vector passes unchanged (115 tests, moved onto the
+>   class), and this tree's real chain, 92 entries written by 5.0.0 to 7.3.x, still
+>   verifies with the same answer as before (`incomplete`, 27 `COMMIT_LOG_LOST`, no bad
+>   entry hash).
+> - **The proof path is private.** `InclusionProof` has `verify` and `summary()` (schema,
+>   leaf index, tree size, root), no `siblings`, `to_dict` or `from_dict`. `omniscience
+>   proof` and `state` print `leaf n of m, root …` and no path (tutorial 8, user guide and
+>   API guide updated). This changes a documented output.
+> - **Deviations from §2 and §4, for the owner to see.** (1) `global_index.py` stays
+>   outside `merkle/`: it imports `OmniscienceRecord`, and `merkle/` imports nothing; it
+>   is the adapter that turns records into leaf digests, and it goes with the
+>   Omniscience modules (`omniscience/`, SrcLayout). (2) The class does **not** yet take
+>   the integrity schema as an argument: `SCHEMA = 1` and `GLOBAL_SCHEMA = 1` are
+>   constants. NestedAgentMaster's N1 (schema 2, keyed by `tree_path`) adds the argument,
+>   additively. (3) `GtsDocument.checked` translates `MerkleError` into
+>   `ConfigValidationError`, in one place, because `merkle/` cannot import `errors`.
+>   (4) Tests: `test_merkle_state.py`, `test_merkle_global.py`, `test_merkle_proofs.py`
+>   (the old integrity tests, moved) and `test_merkle_root.py` (imports, public surface,
+>   the leaf's field set, LEFT = RIGHT for a ledger entry, an Environment, an agent
+>   contract and a commit log). The State's own LEFT = RIGHT (tree, `.gts` in memory, on
+>   disk, reloaded) is held by `test_operating_space_integrity.py`, unchanged.
+> - **Two edges the orchestrator found, left as follow-ups.** The path is private by
+>   convention: `dataclasses.asdict(proof)` and `proof._path` still reach it (`__slots__`
+>   does not hide it). Nothing does, and `repr` and `summary()` are clean; a test that
+>   forbids `asdict` on a proof, or a wrapper that holds the path, would close it. And
+>   `autofix/repair_divergent_user.py` has two stray blank lines where `_GENESIS_PREV` was.
+> - **The version is 8.0.1, not 7.4.0:** removing `siblings` from `omniscience proof
+>   --json` removes a documented `--json` field, which `.dev/Versioning.md` calls major.
+> - **Ceilings:** none raised. `gts_document.py` was kept at its baseline by joining
+>   three calls and two strings.
+
 > **Owner's answers, 2026-10-27 (Minimalism D3, D4, D5).** Asked through
 > `AskUserQuestion` once the map existed.
 > - **Every hash is MerkleRoot's** (D4). The owner's model: the system converges on a
@@ -31,7 +77,20 @@
 > *"synthesises with hash256(MerkleRoot)"* and gx4g holds the register. The
 > roots and record names this class computes are therefore exactly what gx4g
 > writes (ProviderMigration §1a), and they must stay byte for byte (§4).
-> `Merkle/` may import from `GitRepo/` and from nothing else.
+> **Answered 2026-10-27 (owner, A): `Merkle/` imports nothing, not even
+> `GitRepo/`.** It receives raw data and gives back a root, a name or a verdict.
+> What the owner asked: *does the hash of a `GitRepo` move into Merkle, or does
+> `GitRepo` hold an object shared with Merkle?* Neither. The hash was never in
+> `git_repo.py`; what moves is the **computation**. The list of fields that make a
+> repository's identity (`GtsDocument.repo_leaf`: name, relative path, state, refs,
+> `commit_sha`, owner, provider… and not `access_protocol`) **stays with the adapter**,
+> `GtsDocument` in `Tree/`, which builds each leaf from a `GitRepo` and hands plain values
+> to `MerkleRoot`. So `GitRepo/` and `Merkle/` are two independent folders that import
+> nothing from each other or from the rest of the package, and `Tree/` is the one place
+> that knows both. Consequence, accepted: the choice of fields is outside `Merkle/`, so
+> the LEFT = RIGHT test cannot see it. A **field-set test** in `Tree/` pins the exact
+> leaf keys and fails loudly when one is added or dropped, since either changes every
+> State's name.
 
 > **From the owner's short ticket `minimalism` (2026-10-27).** Filed at
 > `main_1-4` by the ticket review of the same day, as BeforeBeta's step S6,
@@ -147,7 +206,7 @@ Asked through `AskUserQuestion` before the first edit.
 | D | Question | Recommendation |
 |---|---|---|
 | **D1** | The class name and module: `MerkleRoot` in the `Merkle/` folder (spelled as SrcLayout D1 decides), or another name. | `MerkleRoot`, in `Merkle/merkle_root.py`, ring 0, as the owner wrote it. |
-| **D2** | "Later its own repository": prepare now (no import from the rest of the package, a test that asserts it), or only keep the door small? | **Prepare now:** a test that `Merkle/` imports nothing from `ComplexGitSync` except `GitRepo/`. It costs one test and keeps the move possible. |
+| **D2** | "Later its own repository": prepare now (no import from the rest of the package, a test that asserts it), or only keep the door small? | **Answered 2026-10-27 (owner, A): prepare now, and strictly.** A test that `Merkle/` imports nothing from `ComplexGitSync`, `GitRepo/` included. It costs one test and keeps the move possible. |
 | **D3** | `GtsIntegrity` and `GlobalIntegrity`: kept as thin aliases for one release, or removed in this change? | **Removed,** with every caller moved. They are not public API in `api_python.tex`; Minimalism's map confirms it. |
 
 ## 6. The work
@@ -171,5 +230,9 @@ Asked through `AskUserQuestion` before the first edit.
 - No public method of `MerkleRoot` returns an inner node, and a test lists
   its public surface.
 - §4 holds: golden vectors, State names, `os_id`, `H_GLOBAL` and the proofs.
+- A **field-set test** in `Tree/` pins the exact keys of a repository's leaf
+  (`GtsDocument.repo_leaf`), because under answer A the choice of fields is the adapter's,
+  not `Merkle/`'s, and adding or dropping a key renames every State.
+- A test that `Merkle/` imports nothing from `ComplexGitSync`, `GitRepo/` included.
 - `pixi run lint`, `pixi run test`, `bump-build`, and `cgitsync status` with
   `errors=0`.
