@@ -4,6 +4,21 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-27, owner's decision.** *"Implement next in line
+> DevPlanTicket, Omniscience I guess."* Nothing was left to build, so the
+> work was to prove §10 item by item, now, against 7.1.0. BeforeBeta's S7
+> reruns the same checks after WorkingAreaRename and StateLocking (owner).
+> The checks ran on local bare registers only; nothing reached
+> `github:flipoyo/omniscience` (owner). They found and closed two gaps:
+> - **Item 8:** a register file the tip already holds with other content was
+>   overwritten. It is now refused before anything is written
+>   (`RegisterAppender._refuse_rewrites`), and tested.
+> - **Item 1:** `os_id` had no test across the ways a tree is installed. One
+>   now covers all of them.
+>
+> D7 and D8 are closed in §7. §11 is the evidence. This ticket is archived
+> on its own orchestrator's record, not with BeforeBeta.
+
 > **Ticket review — 2026-10-27, fourth pass.** Renumbered `main_1-2` → `main_1-3`: CommitLogLoss is filed at `main_1-2`, ahead of it. BeforeBeta still closes this ticket at its last step (S7).
 
 > **Ticket review — 2026-10-27, owner's decision.** Renumbered `main_1-1` → `main_1-2`: BeforeBeta, the beta rehearsal of a full branch cycle and a user install, is filed ahead of it at `main_1-1`.
@@ -388,8 +403,8 @@ Omniscience.
 | D4 | A record's published state from `ls-remote` or from `.gts` | **Answered 2026-10-20:** both — the `ls-remote` attestation is kept and tied to the immutable `.gts` and Memory commitments; historical publication is kept apart from today's ref |
 | D5 | A diverged register | **Answered 2026-09-16 and kept:** retry, never force, never rebase |
 | D6 | States in the register, or records about them | **Answered 2026-10-20:** commitments and `.memory` descriptors only; no copy of a State or a private repository |
-| D7 | One repository for time and register, or two | Open; OmniscienceRegister asks it |
-| D8 | What the universal clock is | Open; OmniscienceRegister asks it (NTP recommended) |
+| D7 | One repository for time and register, or two | **Answered 2026-10-21** (OmniscienceRegister D3 (a)): a separate, read-only repository for the time reference; not built |
+| D8 | What the universal clock is | **Deferred 2026-10-21** (OmniscienceRegister D4 (d)): none yet, the lag fields stay empty and outside every preimage. **Carried 2026-10-27** to the stand-by ticket UniversalTime (owner) |
 | D9 | The shared-time module's name | **Answered 2026-10-20:** `time_reference.py` |
 | D10 | Does O0 wait for anything | **Answered 2026-10-20:** no; PushAnchor is independent |
 | — | An `OperatingSpace` class | Refused 2026-10-20, **reversed 2026-10-21 (owner):** one class wrapping the `GitTree`, no lifecycle, no GitTree machinery |
@@ -410,16 +425,16 @@ interface, so the run stays inside 6.x unless a milestone proves otherwise.
 | done (6.7.1) | [OperatingSpace](../archive/20261021_OperatingSpace_DevPlanTicket.md) | — (owner, 2026-10-21) | The tree as the only reference: one name, `H_GITTREE` from the tree, git operations on a READY tree | minor |
 | done (6.7.2) | [InclusionProofs](../archive/20261021_InclusionProofs_DevPlanTicket.md) | O1b | Private Merkle inclusion proofs over schema 1 | patch |
 | done (6.8.1) | [OmniscienceRegister](../archive/20261021_OmniscienceRegister_DevPlanTicket.md) | O1c + O2 (was O1, O2) | The registration record, the MemoryRepoDescriptor, the mount, the global index and `H_GLOBAL` | minor |
-| `1-6` | [OmniscienceAppend](../archive/20261021_OmniscienceAppend_DevPlanTicket.md) | O3 (was O3) | `IntegrityControl`: registering, concurrency, accepting hand appends, lifecycle and availability observations | minor |
+| done (6.9.0) | [OmniscienceAppend](../archive/20261021_OmniscienceAppend_DevPlanTicket.md) | O3 (was O3) | `IntegrityControl`: registering, concurrency, accepting hand appends, lifecycle and availability observations | minor |
 | done (6.10.0) | [OmniscienceQuery](../archive/20261021_OmniscienceQuery_DevPlanTicket.md) | O4 + O5 (was O4, O5) | The public `Omniscience` API and `cgitsync omniscience ...`, and the two-developer, two-project end-to-end test | minor |
 
 ```mermaid
 graph LR
-    A["1-2 PushAnchor<br/>O0"] --> R["1-5 OmniscienceRegister<br/>O1c + O2"]
-    I["1-3 OperatingSpaceId<br/>O1a"] --> P["1-4 InclusionProofs<br/>O1b"]
+    A["PushAnchor<br/>O0 · 6.5.1"] --> R["OmniscienceRegister<br/>O1c + O2 · 6.8.1"]
+    I["OperatingSpaceId<br/>O1a · 6.6.0"] --> P["InclusionProofs<br/>O1b · 6.7.2"]
     P --> R
-    R --> W["1-6 OmniscienceAppend<br/>O3"]
-    W --> Q["1-7 OmniscienceQuery<br/>O4 + O5"]
+    R --> W["OmniscienceAppend<br/>O3 · 6.9.0"]
+    W --> Q["OmniscienceQuery<br/>O4 + O5 · 6.10.0"]
 ```
 
 PushAnchor and OperatingSpaceId do not depend on each other. Before coding,
@@ -478,3 +493,27 @@ reopens no archived decision.
 > history. OMNISCIENCE is the global `.memory` MerkleGitTree of registered
 > histories. Integrity proves privately; IntegrityControl maintains
 > privately; Omniscience answers through an authorized public API.*
+
+## 11. §10, item by item — the evidence (2026-10-27, 7.1.0)
+
+Every test below runs on real Git, with a local bare register. "Holds" means
+the named tests pass in the full suite at the version stated.
+
+| # | §10 item | Evidence | Verdict |
+|---|---|---|---|
+| 1 | `os_id` from the root's `project_name`, through every way of materialising the tree | `test_operating_space.py` (golden vectors, NFC, case, rejected names); `test_operating_space_integrity.py::test_every_document_agrees_with_the_tree` (tree, `.gts` in memory and on disk, reloaded, `.cgs`, `memory show`, `status --json`); **new** `test_env_connect.py::test_os_id_survives_every_way_the_tree_is_materialised` (bootstrap `.cgs` and `.gts`, `initialise`, `release load <State hash>` in place, a twin). The new test reads `os_id` from each materialised tree; that the `.gts` written by each route carries the same `os_id` is the agreement test's, and `release load --workspace` is not exercised | holds |
+| 2 | `.memory`, branch naming, the ledger and schema-1 integrity as before | `test_gts_integrity.py` golden leaf and roots; `test_integrity.py`; `test_git_branch.py`; the full suite | holds |
+| 3 | Append-only, content-addressed registrations, one global checkpoint over several projects' branches | `test_omniscience_append.py::test_register_appends_the_record_and_the_first_checkpoint_and_twice_does_nothing`; `test_global_integrity.py` (the root is independent of arrival order; two branches are two leaves); `test_omniscience_query.py::test_two_projects_with_two_branches_by_four_developers_resolve_prove_and_restore` | holds |
+| 4 | Only authorized DEV contributors register; private data unreadable to others | `…append.py::test_a_user_tree_is_refused_by_name_before_anything_is_touched`, `::test_a_read_only_or_dirty_mount_is_refused` (a dirty mount only), **new** `::test_a_push_the_provider_refuses_with_nobody_else_appending_is_the_callers_error_unretried`; `…query.py::test_a_reader_the_provider_refuses_gets_unauthorized_and_none_of_the_content`. Authorisation is the provider's push right (D3), never `cgitsync`'s | holds |
+| 5 | Read-only API: projects, branches, States, a proof with its checkpoint, the `.memory` at its commit when authorized | `…query.py::test_two_projects_…`, `::test_the_query_writes_nothing_to_the_register_the_memory_or_the_worktree`, `::test_the_nine_subcommands_print_a_status_and_exit_0_only_for_verified`; `test_tuto_omniscience.py` | holds |
+| 6 | Membership verified locally and globally; an inconsistent Operating Space located down to the repository | `test_inclusion_proof.py` (1–33 leaves against RFC 6962; global and GitTree proofs never cross); `…query.py::test_a_tampered_memory_commit_is_located_down_to_the_repository`, `::test_a_memory_whose_evidence_is_gone_says_the_diagnosis_is_unavailable` | holds |
+| 7 | Two machines restore one Operating Space and continue it; concurrent heads kept, no destructive ledger merge | `…query.py::test_two_projects_…` (restore); `…append.py::test_two_workspaces_registering_at_once_both_land_and_the_second_retries_without_forcing`; `tests/unit/test_memory_merge_operation.py` (the memory's branches are merged by keeping one side's tree with both parents, never by rewriting the ledger) | holds |
+| 8 | Non-fast-forward retries, crash recovery, content-address collisions, an unauthorized append, a missing memory, a forced rewrite | `…append.py`: the race, `::test_a_crash_between_commit_and_push_then_a_rerun_leaves_one_record`, **new** `::test_a_file_the_register_holds_with_other_content_is_never_rewritten`, **new** `::test_a_push_the_provider_refuses_with_nobody_else_appending_is_the_callers_error_unretried` (unauthorized: the error unchanged, nothing moved, no retry), `::test_a_record_whose_memory_commit_cannot_be_fetched_stays_unaccepted`, `::test_a_forced_rewrite_of_the_index_is_reported_and_not_repaired` | **held only after the fixes** (collision; the unauthorized append had no test) |
+| 9 | Hand appends are proposals; only valid, authorized records enter the index | `…append.py::test_hand_appended_files_are_proposed_and_only_a_valid_one_is_accepted`; `…query.py::test_a_file_added_by_hand_is_proposed_not_registered` | holds |
+| 10 | No OWNER/DEV split, no `OperatingSpace` lifecycle, no changed preimage, no application-specific dependency | No such class in `src/`; `OperatingSpace` holds a tree and no state; `test_global_integrity.py::test_the_schema_is_one_and_apart_from_schema_one` and the schema-1 golden vectors; the only runtime dependency is `tomli-w` | holds |
+| 11 | Closed, inaccessible, unreachable, missing, confirmed-deleted: separate, evidenced findings; completeness flagged; nothing erased | `…append.py`: `::test_a_closed_branch_comes_from_the_ledger_and_never_from_a_failed_fetch`, `::test_revoked_access_is_access_denied_and_is_not_a_deletion`, `::test_a_network_outage_is_unreachable_and_never_a_deletion`, `::test_a_missing_memory_is_not_found_and_when_it_reappears_it_is_available_again`, `::test_a_deletion_is_confirmed_only_by_a_signed_owner_note_about_a_target_the_host_says_is_gone`; `test_omniscience_observation.py` (escalation); `…query.py::test_a_repository_deleted_after_registration_keeps_its_proof_but_is_never_reported_verified` | holds |
+
+**Not covered by §10, and not this ticket's:** the register says nothing
+about a *branch of the tree* as a whole. That is BranchProtection's §8
+(DeadBranchReport), merged on 2026-10-27.
+

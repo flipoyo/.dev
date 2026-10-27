@@ -94,7 +94,7 @@ graph TD
     S3 --> S4["S4 Robustness<br/>(main_1-6)"]
     S4 --> S5["S5 BranchProtection<br/>(main_1-7, after D3)"]
     S5 --> S6["S6 user install<br/>initialise install.cgs"]
-    S6 --> S7["S7 inspect .memory, .omniscience<br/>Omniscience §10 (main_1-3)"]
+    S6 --> S7["S7 inspect .memory, .omniscience<br/>Omniscience §10 (archived 7.1.1)"]
     S7 --> R["§3 defects<br/>YOU ARE HERE"]
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
@@ -195,7 +195,8 @@ Then:
   statuses. None writes anything, and none turns a failed read into
   "deleted".
 - **Omniscience §10.** Each of its eleven items gets a row in §3, either a
-  defect or "holds". Only then is Omniscience archived.
+  defect or "holds". Omniscience itself was proved and archived on
+  2026-10-27 against 7.1.0 (its §11); S7 reruns the same checks.
 - **Rename (if D1 said rename).**
   - A State's name and `os_id` are unchanged, so every registered record
     still verifies.
@@ -242,9 +243,9 @@ demand (owner, 2026-10-27).
   §3, even if the row says "holds".
 - Both trees show `cgitsync status` with `errors=0`, or the row in §3 that
   says why not.
-- BeforeBeta and Omniscience are archived in one change, each with a record
-  from BeforeBeta's orchestrator. Pile 1 is then empty, and the frontier with
-  gx4g can be finalised.
+- BeforeBeta is archived with its orchestrator's record. Omniscience was
+  archived on its own record on 2026-10-27. Pile 1 is then empty, and the
+  frontier with gx4g can be finalised.
 
 **Refuses:**
 - **To fix anything outside the tickets it runs.** Every other defect is

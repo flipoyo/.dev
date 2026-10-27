@@ -16,7 +16,7 @@
 > analysed work (priority 2, stand-by) that nothing outside this
 > workstream is waiting on yet, ranked as a block behind the `main`-branch
 > items promoted ahead of it and ahead of
-> [Omniscience](main_1-3_Omniscience_DevPlanTicket.md).
+> [Omniscience](../archive/20261027_Omniscience_DevPlanTicket.md).
 
 > **The umbrella ticket of the data workstream.** Analysed from the owner's
 > short ticket
