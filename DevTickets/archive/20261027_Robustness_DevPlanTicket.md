@@ -4,6 +4,49 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-27, `cgitsync-7.x` (the orchestrator sets the level).**
+> Decisions asked through `AskUserQuestion` before the first edit, all on the
+> recommendation:
+> - **`release freeze`** resumes by its root tag: the annotated root tag is made
+>   last, so it says a release is complete. A finished release is refused and
+>   recorded once; an interrupted one resumes; a tag on another commit, or on a
+>   repository that still has work to commit, is refused before anything moves.
+> - **D4 covers `push`, `tag` and `freeze-release`.** The matrix classes the
+>   others `PARTIAL_REPORT_REQUIRED` and leaves them as follow-up. This amends
+>   §4's *"and only those"*.
+> - **The Phase 0 matrix** is a section of `AdditionalSpecs.md`, *How a
+>   tree-wide write fails*, not a new file.
+>
+> **Phase 0, re-checked against `HEAD` (7.3.0).** P1, P4–P7, P9, P10, P12 and
+> P14, P15 hold. Deviations, none blocking:
+> - **P2 and P3** are defects at `HEAD`, as written, and are fixed here (D4, D5).
+> - **P8:** a refused ledger append is no longer only logged: StateLocking (7.3.0)
+>   also emits a `UserWarning`. The State still exists, the command still exits 0,
+>   and `verify` still finds the orphan.
+> - **P11:** `memory reboot`'s calls moved to `memory_commands.py:1364-1368`. It is
+>   RobustnessCrash's.
+> - **P13:** still true in `src/`; `tests/support/faults.py` now has the one
+>   `os._exit(137)`, in kill mode.
+> - **§5's `test_no_command_deletes_unpushed_work`** does not exist at `HEAD`.
+>   `test_clone_guard.py` holds the nearest guarantee and is kept green.
+>
+> **What differs from §4.**
+> - D1's harness lives in `tests/support/` (`faults.py`, `failpoints.py`, and
+>   `trees.py` for the real three-repository tree).
+> - D5's *"INFO already tagged"* is the outcome's own `detail` (`already tagged`),
+>   not a new preflight severity: `PreflightSeverity` has only two values and the
+>   sweep is where the fact is known.
+> - **Two edges the orchestrator found, left as follow-ups** (the first is the
+>   limit of the owner's root-tag rule). If the root's annotated tag is made
+>   locally but its push fails, a retry is refused as "already exists" while the
+>   release is not published; the way out is to push the tag by hand, and a
+>   follow-up could judge the root by "tag exists and is on the remote". And the
+>   report's retry sentence says `cgitsync release freeze` without the original
+>   message or `--force-tag`; without `--force-tag` a retry may compute another
+>   tag name.
+> - The three xfail tests of D3 were never written as xfail: D4 and D5 landed in
+>   the same change, so they are plain tests.
+
 > **Ticket review — 2026-10-27, sixth pass (short ticket `minimalism`).**
 > Renumbered `main_1-6` → `main_1-2`: pile 1 is compacted, with CommitLogLoss,
 > WorkingAreaRename and StateLocking archived. BeforeBeta still runs it as

@@ -139,7 +139,7 @@ graph TD
     S0["S0 CommitLogLoss<br/>(done, 7.1.0)"] --> S1["S1 close memory-dev<br/>(done)"]
     S1 --> S2["S2 WorkingAreaRename<br/>(done, 7.2.0)"]
     S2 --> S3["S3 StateLocking<br/>(done, 7.3.0)"]
-    S3 --> S4["S4 Robustness<br/>(main_1-2)"]
+    S3 --> S4["S4 Robustness<br/>(done, 7.3.1)"]
     S4 --> S5["S5 Minimalism: the map<br/>(main_1-3)"]
     S5 --> S6["S6 MerkleRoot<br/>(main_1-4)"]
     S6 --> S7["S7 CliReduction<br/>(main_1-5)"]
@@ -169,7 +169,7 @@ Facts as of 2026-10-27:
 | **S1** | `cgitsync branch close memory-dev`, after S0. **Done by the owner, 2026-10-27 03:01, under 7.1.0**: `closed/memory-dev` or `closed/ComplexGitSync_memory-dev` in all seven repositories, `.memory`'s two own commits on `ComplexGitSync_ancestors`. | `branch check` finds every repository `safe` except `.memory`, whose `ComplexGitSync_memory-dev` alone holds 2 ledger entries and 2 States; the close keeps them on `ancestors`. Refused on 2026-10-27 because the ledger does not verify (defect 3). It runs once S0 has landed. |
 | **S2** | `implement WorkingAreaRename`, on `main` | **Done 2026-10-27, 7.2.0**, archived. D1: prose only, nothing renamed; `memory status` prints `folded=` and `pending=`. |
 | **S3** | `implement StateLocking`, on `main` | **Done 2026-10-27, 7.3.0**, archived. `.cgitsync/.lock`, taken by every writing client method; `cgitsync unlock`. |
-| **S4** | `implement Robustness`, on `main`: Phase 0 first, then D1–D5 | Phase 0's premise table (P1–P15) is re-checked against `HEAD`. Its deviations are also defects for §3. Adds no command (§2.5). |
+| **S4** | `implement Robustness`, on `main`: Phase 0 first, then D1–D5 | **Done 2026-10-27, 7.3.1**, archived. `push`, `tag` and `release freeze` raise `TreePartialFailure` and converge on retry; the matrix is in `AdditionalSpecs.md`. Two edges are its follow-ups (its banner). Phase 0's deviations are for §3. Adds no command (§2.5). |
 | **S5** | `implement Minimalism`, on `main`: the map | No change to `src/` beyond a map script. It covers 27 commands, 66 leaf commands, 115 public client methods, the provider calls, the Merkle surface and the ring-interface checks. It ends with the verdict per command (its D1) and D2–D5. |
 | **S6** | `implement MerkleRoot`, on `main` | Scope is fixed by Minimalism D3 and D4. Every golden vector, State name, `os_id` and `H_GLOBAL` stays byte for byte. |
 | **S7** | `implement CliReduction`, on `main` | Carries out Minimalism D1. The tutorials and the user guide shrink with the CLI. Provider commands wait for ProviderMigration. |
