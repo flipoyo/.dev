@@ -4,6 +4,11 @@
 
 *Branch: main*
 
+> **Owner's answers, 2026-10-28 (D7, D9, and the hand-over).** **D7:** all five kinds (§8.2).
+> **D9:** yes: a branch closed by plain Git is `vanished`, with "the ledger holds no relocation"
+> in its evidence. **Hand-over:** the client and `status --json` / `branch list --json`, with a
+> note for a person; no command is added.
+
 > **Ticket review — 2026-10-27, owner's decision (seventh pass, short
 > ticket `gitRepo`).** Renumbered `main_1-6` → `main_1-7`, BeforeBeta's step
 > S9, because SrcLayout is filed at `main_1-6`. The owner's short ticket puts
@@ -485,3 +490,30 @@ and ProviderMigration). So the lock and the tiers the owner asked for in
   gx4g has protected the branch on the provider. Until then a user who has
   push rights on the remote can delete a branch, and the register reports it
   as `vanished` (M5).
+
+## 10. As delivered (M5, 2026-10-28)
+
+- **`tree/branch_findings.py`.** `FindingKind`, `BranchFinding` (content-addressed `name`, `to_record()`,
+  `describe()`) and `BranchWatch`, which reads the root's branches, each following repository's branches
+  and the ledger (`PendingMemory`: the commit logs' published rows, and the relocations) and writes
+  nothing. It sits in its own module, not in `GitTreeBranches`, so that module keeps its ceiling; it
+  reuses `GitTreeBranches.project_branches` and `.target`, so the privacy rule stays in `git_branch.py`.
+- **Vanished** needs a push the commit logs recorded (`branch`, `entry`), the branch absent from origin
+  as of the last fetch and from `closed/`, and no relocation in the ledger. D9 follows from that: only
+  the ledger proves nothing was lost.
+- **No answer is not dead.** A root with no remote-tracking branch is judged by nothing; a failed fetch
+  leaves the old refs and so makes nothing vanish. The tag, the default branch, `ancestors` and
+  `<name>.archived-<date>` (a memory `reboot` archives on purpose) are never judged. The last exclusion
+  came from running it on this tree, where `ComplexGitSync_memory-dev.archived-20261008` read as an orphan.
+- **Hand-over.** `ComplexGitSyncClient.branch_findings()` and `.branch_list_json()`; `status` and
+  `branch list` print one line per finding; `status --json` and `branch list --json` carry
+  `branch_findings`. `branch list` gained `--json`, not a command. No register write, no provider call.
+- **On this tree** it reports `closed` for `memory-dev` and `alpha-tech`, and two real orphans the owner
+  may want to clean up: `ComplexGitSync_multi-branch` in `.claude` and `.localSpec`. §7's acceptance
+  line expected `memory-dev` alone; `alpha-tech` is a real closed branch and the orphans are real.
+- **Tests.** `tests/integration/test_branch_findings.py`: the five kinds on real bare remotes, a
+  relocation that keeps a branch from vanishing, a never-fetched root, a failed fetch, the tag/default/
+  `ancestors`/archived exclusions, no ref changed, the printed lines and both `--json` shapes.
+- **Ceilings.** None grew. `branch_command`, `reporting`, `expert` and `client` stayed at baseline by
+  joining multi-line calls.
+- **Not done, and not this ticket's.** M0–M4 (provider locks, roles) stay gx4g's (§9).
