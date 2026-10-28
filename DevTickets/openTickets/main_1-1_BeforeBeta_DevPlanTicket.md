@@ -137,8 +137,7 @@ shows the dependency, the hashes and the operator apart (S8). Last, a branch
 a USER tree cannot remove through `cgitsync`, and a dying branch found and
 handed to gx4g, which holds the register (S9). And one `.agent` per tree, so
 that a project nesting ComplexGitSync's developer spec, gx4g first, can open
-its DEV tree at all (S10). The provider's lock and roles are gx4g's (BranchProtection
-§9). All of these must hold before gx4g's frontier is closed, and the
+its DEV tree at all (S10). The provider's lock and roles are gx4g's (§3c). All of these must hold before gx4g's frontier is closed, and the
 frontier is drawn on Minimalism's map.
 
 **What you need to do with it.** Answer D2 (§4). D3 was answered on
@@ -154,7 +153,7 @@ graph TD
     S5 --> S6["S6 MerkleRoot<br/>(done, 8.0.1)"]
     S6 --> S7["S7 CliReduction<br/>(done)"]
     S7 --> S8["S8 SrcLayout<br/>(main_1-6)"]
-    S8 --> S9["S9 BranchProtection, M5<br/>(main_1-7)"]
+    S8 --> S9["S9 BranchProtection, M5<br/>(done, 8.1.0)"]
     S9 --> S10["S10 NestedAgentMaster<br/>(main_1-8)"]
     S10 --> S11["S11 user install<br/>initialise install.cgs"]
     S11 --> S12["S12 inspect .memory, .omniscience<br/>Omniscience §10 (archived 7.1.1)"]
@@ -184,7 +183,7 @@ Facts as of 2026-10-27:
 | **S6** | `implement MerkleRoot`, on `main`. **Done 2026-10-27, 8.0.1** | Scope was fixed by Minimalism D3 and D4. Every golden vector, State name, `os_id` and `H_GLOBAL` stays byte for byte. |
 | **S7** | `implement CliReduction`, on `main`. **Done 2026-10-27** | Carried out Minimalism D1. The tutorials and the user guide shrink with the CLI. Provider commands wait for ProviderMigration. |
 | **S8** | `implement SrcLayout`, on `main`. **Done 2026-10-28, 8.0.4** | It applies Minimalism D6's folder column, `GitRepo/` first with its no-import test. `Merkle/` already holds MerkleRoot. Behaviour, public names and ceilings are unchanged. |
-| **S9** | `implement BranchProtection`, on `main`: M5 only, after its D7 and D9 | Split on 2026-10-27. `require_dev` is kept. M5 finds a dead GitTree-branch and hands it to gx4g, writing nothing to the register. M0–M4 (provider protection and roles) are §9, handed to gx4g. No provider call. |
+| **S9** | `implement BranchProtection`, on `main`: M5 only, after its D7 and D9. **Done 2026-10-28, 8.1.0**, archived | Split on 2026-10-27. M5 landed as `tree/branch_findings.py`: `status` and `branch list`, and their `--json`, report `vanished`, `half-closed`, `split`, `orphaned-private` and `closed`; nothing is recorded. The rest is §3c. `require_dev` is kept. M5 finds a dead GitTree-branch and hands it to gx4g, writing nothing to the register. M0–M4 (provider protection and roles) are §9, handed to gx4g. No provider call. |
 | **S10** | `implement NestedAgentMaster`, on `main`, after its D1–D4 | It is a real failure: gx4g's DEV bootstrap clones fifteen repositories, then refuses its own State, with a duplicate `relative_path`. The fix has three parts. Integrity schema 2 keys leaves by `tree_path`. A collision is refused before cloning. And the PROJECT's `.agent` is master under `initialise`. Its §7 is the agentic control model (merged from AgenticControl). Schema 2 is computed where MerkleRoot (S6) put the hashes. |
 | **S11** | The user install from `main`: `git clone github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then in it `pixi run cgitsync initialise install.cgs --output-path $CGSPATH` | `initialise` takes one source, plus `--output-path`, which is CGSPATH. CGSHOME is `CGSPATH/ComplexGitSync`, so the owner's `initialise $CGSHOME install.cgs` is spelled this way. `install.cgs` mounts the tool and `docs` only, so the tree is USER: its memory is local and never pushed. |
 | **S12** | The inspection in §2, in three trees: this developer tree, the user tree (S11) and gx4g's DEV tree (S10). It uses the CLI that S7 left and the layout that S8 left | — |
@@ -246,7 +245,7 @@ as a new version between two steps, not as an older build left in the tree.
   - the user cannot close or delete a branch through `cgitsync`, and the
     refusal says why (`require_dev`);
   - through plain Git, the branch is protected only once gx4g has locked it
-    on the provider (BranchProtection §9). Until then, a deletion is
+    on the provider (§3c). Until then, a deletion is
     found as `vanished` (M5) and handed to gx4g. S12 records which of the
     two it found.
 - `status` shows `errors=0`.
@@ -297,7 +296,7 @@ orchestrator quotes against them, and a breach is a defect in §3.
    that S8 left.
 5. **The frontier with gx4g is drawn on the map.** What `cgitsync` hands to
    gx4g is listed in two places, ProviderMigration (the provider calls and
-   the register writes) and BranchProtection §9. Nothing else crosses
+   the register writes) and §3c. Nothing else crosses
    without a row in the map.
 6. **No new write to the Omniscience register** *(short ticket `gitRepo`)*.
    gx4g holds the register. `cgitsync` produces records and findings, and its
@@ -335,13 +334,51 @@ Until then the release is 8.0.x, a MAJOR against the last committed 7.3.2 as a w
 step that removes a command, a flag, an exported name or a documented module path says so in
 its own record, so the orchestrator decides the level with this table in front of it.
 
+## 3c. What BranchProtection hands to gx4g
+
+Recorded 2026-10-28, when BranchProtection was archived (its M5 shipped as 8.1.0; its
+analysis, §2–§7 of the archived ticket `archive/20261028_BranchProtection_DevPlanTicket.md`,
+is what gx4g starts from). The short ticket `deletion4devOnly` closed with it. Every provider
+API call is gx4g's privilege, so the lock and the two tiers the owner asked for are built there.
+This is a requirement, not work for this ticket, and S12 checks only what `cgitsync` keeps.
+
+**gx4g builds:**
+- **A lock on a branch, and on the other strategic assets** (tags, `ancestors`, the memory
+  branch, the default branch). It is the provider's own branch protection, set on the repositories
+  an Operating Space names; a repository is addressed by its MerkleRoot hash (ProviderMigration §3).
+  A lock `cgitsync` kept itself would protect nothing against `git` or the provider.
+- **Recognising who may act.** The provider's authenticated answer for the user's role, never
+  `git config`. Closing is a developer's right (GitHub push, GitLab Developer) and deleting a
+  maintainer's (GitHub maintain, GitLab Maintainer, Gitea admin); the tiers are mapped onto the
+  provider's roles, never invented. When the provider cannot answer (offline, CLI missing, `custom`
+  host), the fallback is `require_dev`, said in the refusal.
+- **Its decisions**, left open in the archived ticket's §4: where the role is read from (D1), the
+  fallback (D2), the tier mapping (D3), which assets beyond branches (D4), an advisory `protected`
+  key in a `.cgs` (D5, recommended no) and whether to record who locked (D6, display-only history).
+- **Recording what `cgitsync` finds.** The five kinds of dead branch (M5) are written by gx4g into
+  the register it holds; `cgitsync` never appends them.
+
+**`cgitsync` keeps, and the beta can promise:**
+- `branch close` and `branch delete` refuse in a USER tree, by `require_dev`, before any repository
+  is touched. It is an accident guard with no override flag, not a lock.
+- M5's findings, handed over through `status`, `branch list`, their `--json` and
+  `ComplexGitSync.branch_findings()`. `cgitsync` adds no hook for gx4g's roles: gx4g decides who may
+  run the command.
+- Through `cgitsync`, a USER tree cannot close or delete a branch. Through plain Git, only once gx4g
+  has protected the branch on the provider. Until then a user with push rights can delete a branch,
+  and the next listing reports it `vanished` (an error) with the ledger's silence as evidence. One
+  limit: a branch deleted with a bare `client.delete_branch()` call leaves no branch name in the
+  ledger's `argv`, so it can still read `vanished`.
+- This tree, for S12: `branch list` reports `closed` for `memory-dev` and `alpha-tech`, and two real
+  orphans, `ComplexGitSync_multi-branch` in `.claude` and `.localSpec`, for the owner to clean up.
+
 ## 4. Decisions for the owner
 
 | D | Question | Recommendation |
 |---|---|---|
 | **D1** | Withdrawn on 2026-10-27, third pass: with `memory-dev` closed, no step changes the tree's branch. | — |
 | **D2** | Where each defect goes once it is reported. | **One short ticket each, in `shortTickets/`**, ranked by the next ticket review, unless a ticket this one runs owns it. |
-| **D3** | BranchProtection: whose job is it? EnvConnect §5 gives GitRepo rights on a host to gx4g, through the providers' APIs. | **Answered 2026-10-27, through the short ticket `minimalism` (owner): split the other way.** Every provider API call is gx4g's, so the provider's protection and the roles go to gx4g (BranchProtection §9). `cgitsync` keeps `require_dev` and M5. The first recommendation, which had `cgitsync` keep the provider's protection, is overturned. |
+| **D3** | BranchProtection: whose job is it? EnvConnect §5 gives GitRepo rights on a host to gx4g, through the providers' APIs. | **Answered 2026-10-27, through the short ticket `minimalism` (owner): split the other way.** Every provider API call is gx4g's, so the provider's protection and the roles go to gx4g (§3c). `cgitsync` keeps `require_dev` and M5. The first recommendation, which had `cgitsync` keep the provider's protection, is overturned. |
 
 | D | Question | Options |
 |---|---|---|
@@ -360,7 +397,7 @@ demand (owner, 2026-10-27).
 - gx4g's DEV tree (`examples/gx4g4dev.cgs`) opens with the command
   NestedAgentMaster's D4 names, and S12 inspects it beside the two others.
 - Every step was quoted against §2.5.
-- ProviderMigration and BranchProtection §9 are handed to gx4g as its
+- ProviderMigration and §3c are handed to gx4g as its
   requirements. They are not done here: ProviderMigration stays in pile 2
   until gx4g offers each call.
 - Every check in §2, and each of Omniscience §10's eleven items, has a row in

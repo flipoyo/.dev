@@ -112,7 +112,7 @@ What `cgitsync` keeps:
   are reachable. Without the probe it records "not observed by cgitsync", and
   that never changes a State's name (Environment records sit beside a State,
   outside its hash).
-- **Protection and roles** (BranchProtection §9, the requirement handed to
+- **Protection and roles** (BeforeBeta §3c (from BranchProtection §9), the requirement handed to
   gx4g).
 
 ## 3. How a call is addressed: hash256(MerkleRoot)

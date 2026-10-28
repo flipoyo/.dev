@@ -4,6 +4,10 @@
 
 *Branch: main*
 
+> **Closed 2026-10-28.** M5 shipped as 8.1.0 (§10). M0–M4 and §9 are gx4g's, and what `cgitsync`
+> keeps and promises is now BeforeBeta §3c, which is where a reader looks first. §2–§7 stay here as
+> the analysis gx4g starts from. The short ticket `deletion4devOnly` closed with this ticket.
+
 > **Owner's answers, 2026-10-28 (D7, D9, and the hand-over).** **D7:** all five kinds (§8.2).
 > **D9:** yes: a branch closed by plain Git is `vanished`, with "the ledger holds no relocation"
 > in its evidence. **Hand-over:** the client and `status --json` / `branch list --json`, with a

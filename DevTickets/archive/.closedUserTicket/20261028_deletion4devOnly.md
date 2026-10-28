@@ -70,3 +70,12 @@ refusal that DevOnlyClosure built, and reports a branch that died anyway to
 the Omniscience register (BranchProtection M5). The lock and the two tiers
 are the requirement handed to gx4g, in BranchProtection §9. This short
 ticket closes when BranchProtection is archived.
+
+---
+
+## Closed 2026-10-28
+
+BranchProtection is archived. What was answered: `cgitsync` keeps the USER-tree refusal
+(DevOnlyClosure's `require_dev`), and reports a branch that died anyway (M5, 8.1.0). The provider's
+lock, the role that may set it and the two tiers (closing a developer's, deleting a maintainer's) are
+gx4g's, set down as its requirement in BeforeBeta §3c.
