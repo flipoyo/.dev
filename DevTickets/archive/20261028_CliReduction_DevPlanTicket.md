@@ -4,6 +4,18 @@
 
 *Branch: main*
 
+> **Implemented — 2026-10-27 (the orchestrator sets the level).** Decisions asked through
+> `AskUserQuestion` before the first edit:
+> - **`submodules`** (the owner's own wording): `submodules import` on its own is a syntax
+>   error; `submodules import --dry-run` is the old `report`; `submodules import --now`
+>   converts, and the run is logged. `submodules report` disappears with no transition
+>   message (D1 of this ticket).
+> - **Dead code:** the 14 names the map listed are removed with the tests that existed only for
+>   them.
+> - **Below the client:** the three behaviour calls go through the client; the value types stay.
+>
+> What changed is §6.
+
 > **Owner's answers, 2026-10-27 (Minimalism D1, D2, D3, D7).** The verdicts are the
 > owner's *autonomous rule*: a command stays if `cgitsync` needs it to run with no gx4g,
 > so `memory *` and `branch create` stay. **44 keep, 4 adapt, 5 reinforce, 13 withdraw**
@@ -126,3 +138,49 @@ fixes the mirror rule this ticket applies. Nothing is withdrawn on a guess.
 - `pixi run lint`, `pixi run test`, `bump-build`, and `cgitsync status` with
   `errors=0`. The user guide, `api_python.tex` and the tutorials match the
   CLI that remains.
+
+## 6. What was done, command by command (2026-10-27)
+
+**Counts, before and after** (`scripts/map_surface.py`):
+
+| | before | after |
+|---|---|---|
+| CLI leaf commands | 66 | 65 |
+| Public client methods | 115 | 117 (`unlock`, `memory_repo_names`) |
+| …reached by a command | 86 | 88 |
+| Public names nothing in `src/` refers to | 25 | 13 (0 used by nothing; 13 by a test only) |
+| Commands naming a class below the client for behaviour | 3 (`ReleaseCommands.subject`, `MemoryMergeOperation.is_memory`, `WorkspaceLock`) | 0, bar the plumbing every command shares and one record formatter (`ConformityScale.render`) |
+
+**Adapted (4 of the verdict table; 2 here, 2 are ProviderMigration's):**
+- `submodules report` and `submodules import` became one command, `submodules import (--dry-run | --now)`.
+- `unlock` gained a client method, `unlock(cgshome, force=False)`, and the command only calls it.
+- `memory setup` and the register commands are carried out by ProviderMigration, as the banner says.
+
+**Reinforced (5):**
+- `verify repair`: `verify(repair=True)` now takes the workspace lock (`WRITING_WHEN`); `verify check` never does.
+- `pull`, `merge`: no longer name `MemoryMergeOperation` (`client.memory_repo_names()`).
+- `release freeze --dry-run`: no longer calls `ReleaseCommands.subject` (`next_release_tag(..., message)` carries the subject).
+- `autofix`, `branch delete`, `memory reboot`: unchanged here. `autofix` already takes the lock (7.3.0), `branch delete` waits for BranchProtection, and `memory reboot` for RobustnessCrash D7. Nothing in the map asked more of them in this ticket.
+
+**Removed, 14 names with the tests that existed only for them:** `CgsDocument.from_project_definition`,
+`BranchResolution.is_default`, `GitRepo.resolved_group_name`, `RepoAddress.from_repo`,
+`GitTree.force_repo_sha` and `force_repo_keys`, `CommitLog.find_state_for_commit`,
+`MemoryFacts.release_snapshot_slug`, `Orchestre.register_repo`, `PathResolver.resolve_clone_root`,
+`LedgerStore.append_entry` (its chain-building helper moved to `tests/support/ledgers.py`, because
+production chains onto the folded and pending ledger, not one directory), `MemoryStates.resolve_directory`
+and `snapshot_candidates_for_id`, and `SyncLedger.record_event` (the legacy `.lgr` writer; its reader stays,
+tested against a hand-written fixture). Removing `resolve_directory` orphaned `MemoryStates.temporary_directory_name`, removed with it.
+
+**Kept without a caller in `src/`, each with its reason (13):**
+
+| Name | Why it stays |
+|---|---|
+| `CgsDocument.to_git_tree`, `WorkingGitTree.to_gts`, `GitTree.propagate_tag`, `GitTreeBranches.refresh` | documented in the architecture or API guide |
+| `ConfigDocumentIOMixin.to_json`, `from_json`, `to_yaml`, `from_yaml` | the documented way to read and write a config document in another format |
+| `GitTree.add_repo`, `WorkingGitTree.add_repo` | how a Python caller, and every test, builds a tree |
+| `Toolchain.reset_cache`, `TreeObserver.reset_cache` | seams a test needs to re-observe |
+| `MemoryStates.directory_name` | the one statement of the legacy State directory name, the inverse of `order_from_directory_name` |
+
+**Held by a test:** `tests/unit/test_map_surface.py` fails when a command reaches a class below the
+client for behaviour beyond the one known formatter.
+

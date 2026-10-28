@@ -152,7 +152,7 @@ graph TD
     S3 --> S4["S4 Robustness<br/>(done, 7.3.1)"]
     S4 --> S5["S5 Minimalism: the map<br/>(done, 7.3.2)"]
     S5 --> S6["S6 MerkleRoot<br/>(done, 8.0.1)"]
-    S6 --> S7["S7 CliReduction<br/>(main_1-5)"]
+    S6 --> S7["S7 CliReduction<br/>(done)"]
     S7 --> S8["S8 SrcLayout<br/>(main_1-6)"]
     S8 --> S9["S9 BranchProtection, M5<br/>(main_1-7)"]
     S9 --> S10["S10 NestedAgentMaster<br/>(main_1-8)"]
@@ -182,7 +182,7 @@ Facts as of 2026-10-27:
 | **S4** | `implement Robustness`, on `main`: Phase 0 first, then D1–D5 | **Done 2026-10-27, 7.3.1**, archived. `push`, `tag` and `release freeze` raise `TreePartialFailure` and converge on retry; the matrix is in `AdditionalSpecs.md`. Two edges are its follow-ups (its banner). Phase 0's deviations are for §3. Adds no command (§2.5). |
 | **S5** | `implement Minimalism`, on `main`: the map. **Done 2026-10-27, 7.3.2**, D1–D7 answered | No change to `src/` beyond a map script. It covers 27 commands, 66 leaf commands, 115 public client methods, the provider calls, the Merkle surface and the ring-interface checks. It ends with the verdict per command (its D1) and D2–D5. |
 | **S6** | `implement MerkleRoot`, on `main`. **Done 2026-10-27, 8.0.1** | Scope was fixed by Minimalism D3 and D4. Every golden vector, State name, `os_id` and `H_GLOBAL` stays byte for byte. |
-| **S7** | `implement CliReduction`, on `main` | Carries out Minimalism D1. The tutorials and the user guide shrink with the CLI. Provider commands wait for ProviderMigration. |
+| **S7** | `implement CliReduction`, on `main`. **Done 2026-10-27** | Carried out Minimalism D1. The tutorials and the user guide shrink with the CLI. Provider commands wait for ProviderMigration. |
 | **S8** | `implement SrcLayout`, on `main` | It applies Minimalism D6's folder column, `GitRepo/` first with its no-import test. `Merkle/` already holds MerkleRoot. Behaviour, public names and ceilings are unchanged. |
 | **S9** | `implement BranchProtection`, on `main`: M5 only, after its D7 and D9 | Split on 2026-10-27. `require_dev` is kept. M5 finds a dead GitTree-branch and hands it to gx4g, writing nothing to the register. M0–M4 (provider protection and roles) are §9, handed to gx4g. No provider call. |
 | **S10** | `implement NestedAgentMaster`, on `main`, after its D1–D4 | It is a real failure: gx4g's DEV bootstrap clones fifteen repositories, then refuses its own State, with a duplicate `relative_path`. The fix has three parts. Integrity schema 2 keys leaves by `tree_path`. A collision is refused before cloning. And the PROJECT's `.agent` is master under `initialise`. Its §7 is the agentic control model (merged from AgenticControl). Schema 2 is computed where MerkleRoot (S6) put the hashes. |
