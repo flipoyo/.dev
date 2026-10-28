@@ -183,7 +183,7 @@ Facts as of 2026-10-27:
 | **S5** | `implement Minimalism`, on `main`: the map. **Done 2026-10-27, 7.3.2**, D1–D7 answered | No change to `src/` beyond a map script. It covers 27 commands, 66 leaf commands, 115 public client methods, the provider calls, the Merkle surface and the ring-interface checks. It ends with the verdict per command (its D1) and D2–D5. |
 | **S6** | `implement MerkleRoot`, on `main`. **Done 2026-10-27, 8.0.1** | Scope was fixed by Minimalism D3 and D4. Every golden vector, State name, `os_id` and `H_GLOBAL` stays byte for byte. |
 | **S7** | `implement CliReduction`, on `main`. **Done 2026-10-27** | Carried out Minimalism D1. The tutorials and the user guide shrink with the CLI. Provider commands wait for ProviderMigration. |
-| **S8** | `implement SrcLayout`, on `main` | It applies Minimalism D6's folder column, `GitRepo/` first with its no-import test. `Merkle/` already holds MerkleRoot. Behaviour, public names and ceilings are unchanged. |
+| **S8** | `implement SrcLayout`, on `main`. **Done 2026-10-28, 8.0.4** | It applies Minimalism D6's folder column, `GitRepo/` first with its no-import test. `Merkle/` already holds MerkleRoot. Behaviour, public names and ceilings are unchanged. |
 | **S9** | `implement BranchProtection`, on `main`: M5 only, after its D7 and D9 | Split on 2026-10-27. `require_dev` is kept. M5 finds a dead GitTree-branch and hands it to gx4g, writing nothing to the register. M0–M4 (provider protection and roles) are §9, handed to gx4g. No provider call. |
 | **S10** | `implement NestedAgentMaster`, on `main`, after its D1–D4 | It is a real failure: gx4g's DEV bootstrap clones fifteen repositories, then refuses its own State, with a duplicate `relative_path`. The fix has three parts. Integrity schema 2 keys leaves by `tree_path`. A collision is refused before cloning. And the PROJECT's `.agent` is master under `initialise`. Its §7 is the agentic control model (merged from AgenticControl). Schema 2 is computed where MerkleRoot (S6) put the hashes. |
 | **S11** | The user install from `main`: `git clone github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then in it `pixi run cgitsync initialise install.cgs --output-path $CGSPATH` | `initialise` takes one source, plus `--output-path`, which is CGSPATH. CGSHOME is `CGSPATH/ComplexGitSync`, so the owner's `initialise $CGSHOME install.cgs` is spelled this way. `install.cgs` mounts the tool and `docs` only, so the tree is USER: its memory is local and never pushed. |
@@ -318,6 +318,22 @@ fixed here, unless the ticket a step runs owns it (§5).
 | 2 | known | Robustness P2 and P3 | A failed `push` reports one error and loses what completed; a `tag` retry can never converge | §3 of Robustness | fixed by S4 |
 | 3 | S1 | `cgitsync branch close memory-dev`, 7.0.0 | Refused, nothing renamed: "the ledger does not verify (seq=3 COMMIT_LOG_MISMATCH; …)". `verify repair` heals only a stale HEAD, never a chain, and 6.8.1 said the lost rows are not recovered. So this memory can never verify again, and every `branch close` and `branch delete` in this tree is refused for good. | A loss already recorded as unrecoverable does not refuse forever; a documented way through exists | fixed by S0 (CommitLogLoss, 7.1.0): `verify check` now says `incomplete`, 27 `COMMIT_LOG_LOST` |
 | 4 | S1 | `cgitsync branch close memory-dev`, 7.0.0, refused at 01:35 | Before refusing, it had already kept `ComplexGitSync_memory-dev` on `ComplexGitSync_ancestors` and pushed it (`99c6515`), written a State and ledger entry 69 (`branch_close_keep`). Only then did `_assert_history_holds` run. Its message, "nothing was renamed or deleted", is true but says nothing of the push and the record. | A history already corrupt before the command is refused before anything moves; a refusal after a step says which steps ran | to report (D2); the S1 close itself was then run by the owner at 03:01, under 7.1.0, and succeeded |
+
+## 3b. Corrections that will need a MAJOR release
+
+Recorded 2026-10-28, after SrcLayout. A release is MAJOR when it removes or changes
+something a user can rely on (`Versioning.md`). Three corrections are already planned
+that do, and each must be released as its own MAJOR, not folded into a patch:
+
+| Correction | Where it is owed | Why it is a MAJOR | Waits for |
+|---|---|---|---|
+| **Remove `legacy_paths.py`** and the line in `src/ComplexGitSync/__init__.py` that installs it | SrcLayout §8, the release after 8.0.4 (D3: the old import paths last **one** release) | `import ComplexGitSync.memory.store`, `ComplexGitSync.git_runner` and the 40 other old module paths stop working. SrcLayout shipped as a PATCH on the reading that module paths are not public (`Versioning.md`: `src/` is not a public interface). **If the owner counts the paths `api_python.tex` documents as public, this removal is a MAJOR.** | The owner's word on whether module paths are public. The user guide's *What changed* already tells users to move to the new paths now. |
+| **Withdraw `repo create` and the 12 `omniscience *` commands** | ProviderMigration (pile 2), by Minimalism D1 | A command disappears from the CLI. CliReduction was released as a MAJOR for the same reason (`submodules report`). | gx4g offering each provider call and the register. |
+| **Drop the SrcLayout leftovers that touch a documented name** | Not owed today | None is: the stale `GitSyncError` docstring in `git_repo/git_runner.py`, the bare file names in the `.tex` files and the missing private `_SSH_REMOTE_RE` change no exported name. They ride in any later patch. | Nothing. |
+
+Until then the release is 8.0.x, a MAJOR against the last committed 7.3.2 as a whole. Any
+step that removes a command, a flag, an exported name or a documented module path says so in
+its own record, so the orchestrator decides the level with this table in front of it.
 
 ## 4. Decisions for the owner
 
