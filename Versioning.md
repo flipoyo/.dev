@@ -164,7 +164,7 @@ the pairing.
 ## The release register
 
 The release register is the Ledger: a release is one ledger entry carrying
-an additive `release` field (`memory/ledger_entry.py` — see
+an additive `release` field (`tree/memory/ledger_entry.py` — see
 `AdditionalSpecs.md`, *The hash-chained ledger*, for the field's schema),
 written automatically by `ComplexGitSyncClient.freeze_release()`
 (`release freeze`): the tool's own `__version__`/`__build__` (`semver`,
@@ -177,7 +177,7 @@ enters a State's hash — a release row only ever cites a State by id,
 alongside it in the ledger, never inside it.
 
 `freeze_release()` also reads `.agent/.distant/dev-sync/agent-contracts/current`
-(`memory/agent_contract.py`) and, when it names a signed
+(`tree/memory/agent_contract.py`) and, when it names a signed
 `AgentContractRecord`, adds `artefact:agent_contract` to the row, naming that
 record's terms version — absent, not fatal, when nothing has been signed yet.
 

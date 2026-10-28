@@ -150,7 +150,7 @@ Do all of these as part of the change, not as a follow-up. The shape is
    repository that changed. Deliver it
    as text in the finishing report; whether to commit is the owner's call
    unless the owner asks for it. `cgitsync commit` checks the message itself
-   in a tree that has adopted DevSpec (`commit_message.py`) and refuses one
+   in a tree that has adopted DevSpec (`tree/commit_message.py`) and refuses one
    that breaks the rule, naming which.
 
    This project's own fill-ins of
@@ -189,7 +189,7 @@ Agent tool and `AskUserQuestion`. It is not restated here.
 **The gate** is this project's fill-in of AgentConduct.md §4.2: a
 planning ticket archived on or after 2026-10-09 with no orchestrator's
 record fails `pixi run check-tickets`, and `cgitsync commit` refuses to
-add it (`ticket_gate.py`). A ticket the owner dropped unbuilt opens with
+add it (`tree/ticket_gate.py`). A ticket the owner dropped unbuilt opens with
 `> **Dropped — YYYY-MM-DD, owner's decision.**` and needs no record
 (DroppedTicketGate).
 
@@ -203,7 +203,7 @@ permit the intent only with training opt-out enabled and outside the
 Feedback/safety-review carve-outs, for the consumer-subscription access
 path this project runs under today. The signed record lives at
 `.agent/.distant/dev-sync/agent-contracts/`
-(`ComplexGitSync.memory.agent_contract`), one per provider, with a
+(`ComplexGitSync.tree.memory.agent_contract`), one per provider, with a
 `current` pointer naming the one in force. `freeze_release()` and
 `cgitsync self-history add` both read it and record its hash, absent rather
 than fatal when nothing is signed.
@@ -248,7 +248,7 @@ attribution rules. This project's fill-ins:
   the repository root.
 - Tests must not depend on network access or live git remotes.
 - **A test that asserts on a date injects the date.** Every dated fact a
-  command writes goes through `ClockProtocol` (`memory/ledger_entry.py`) —
+  command writes goes through `ClockProtocol` (`tree/memory/ledger_entry.py`) —
   real by default (`orchestre.SystemClock`), fake by injection — so a test
   asserting on one supplies a fixed clock rather than reaching for
   `monkeypatch` on the real one. A test that patches only part of a scenario

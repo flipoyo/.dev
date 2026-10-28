@@ -23,6 +23,16 @@
 > and §5's D2 are read with these answers; D1 (the spelling) and D3 (the old paths)
 > are still to ask.
 
+> **Owner's answers, 2026-10-28 (D1, D3 and two found while implementing).** **D1:**
+> lowercase, `git_repo/`, `merkle/`, `tree/`, `operating_space/`, and `omniscience/` for D6's
+> apart folder. **D3:** the old import paths stay for one release as re-exports, named in the
+> API guide's *What changed*. **D4 (new): how `git_repo/` imports nothing.** Minimalism §7.7
+> measured two imports left, `errors` and `universal_clock`, both in `git_runner`: the owner chose
+> **injection by argument**, so `GitRunner` takes `error` and `scratch` and a bare runner raises its
+> own `GitRepoError`. **D5 (new): the graph.** `git_tree` and `git_tree_branch` stay in `tree/`
+> (they import `cgs_format`, `memory/repository` and two package `__init__`s); `git_repo/` is the
+> five modules of §7.7.
+
 > **From the owner's short ticket `gitRepo` (2026-10-27).** Filed at
 > `main_1-6` by the ticket review of the same day, as BeforeBeta's step S8.
 > The owner's words: *"GitRepo is a specific Graph for GX4G. cgitsync should
@@ -163,3 +173,29 @@ Asked through `AskUserQuestion` before the first edit.
 - `pixi run lint`, `pixi run test`, `bump-build`, `check-ceilings`,
   `check-oo` and `check-spectree` pass, and `cgitsync status` shows
   `errors=0`.
+
+## 8. As delivered (2026-10-28)
+
+- **Moves.** 74 modules, by `git mv`, imports rewritten from the AST: `git_repo/` 5
+  (`clone_guard`, `git_branch`, `git_repo`, `git_runner`, `provider`), `tree/` 50 (with
+  `memory/`, `operations/`, `autofix/` under it, their `__init__`s moved too, plus the new `git_runner`), `omniscience/` 15 (`global_index`, the five
+  `omniscience_*` and the nine `orchestre/omniscience*`), `operating_space/` 1. `merkle/` was
+  MerkleRoot's. `cli/`, `orchestre/`, `errors`, `universal_clock`, `json_render`, `status_render`
+  stay above.
+- **`git_repo/` imports nothing.** `tests/unit/test_src_layout.py` reads every file in the folder
+  and fails on one import of the rest of the package, absolute or relative, in or out of
+  `TYPE_CHECKING`. `GitRunner` gained the fields `error` (default `GitRepoError`) and `scratch`
+  (default a temporary directory); `tree/git_runner.py` is the subclass cgitsync uses
+  (`GitSyncError`, `SystemClock.scratch_directory`), named by the client, `ComplexGitSync.GitRunner`
+  and `orchestre.GitRunner`. Tests that built a bare `GitRunner()` and expected `GitSyncError` import
+  it from there.
+- **The old paths.** `legacy_paths.py`, a `MetaPathFinder` installed by the root `__init__`, answers
+  42 old names (and everything under `memory`, `operations`, `autofix`) with the module at its new
+  path: the same object, `__spec__` restored. `git_repo` and `operating_space` are packages that took
+  a module's name, so they re-export what that module held. The root `__init__` reaches the finder
+  through an absolute import, so its relative-import ceiling (57) did not move. One release, then
+  `legacy_paths.py` and its install line go.
+- **Ceilings.** None grew: the baseline keys moved with the files and every value is the one it had.
+  The scripts' module names (`map_surface`: the folder column, the hash and provider keys) moved too.
+- **Not done, on purpose.** `tree/` is not split further, and `operating_space/` is still one module.
+  The nine ring-3 modules that consume `OperatingSpace` are CliReduction's, not this ticket's.
