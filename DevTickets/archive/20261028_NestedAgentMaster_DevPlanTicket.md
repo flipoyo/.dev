@@ -20,6 +20,15 @@
 >   project that nests ComplexGitSync's developer spec, gx4g first. That
 >   answers AgenticControl's D1.
 
+> **Owner's answers, 2026-10-28.** **D1:** `tree_path` in integrity schema 2, `relative_path` kept.
+> **D2:** a relative symlink at the slave's path. **D3** (free text): a tree holds one state of a
+> repository, and *the highest mount level always wins*, read as the distance from the trunk. The
+> worker checked it against the specs: the cycle-breaking engine groups entries by **absolute path**,
+> so it never merged one repository at two paths; the rule is implemented in discovery, not inherited.
+> **D4:** the relation follows the tree, never the command. **Q2:** the Parent's own checklist binds
+> in its own source, the PROJECT's rules where the two meet. **Q4:** computed from the State through
+> the existing outputs. **Q6:** a local rule for now.
+
 > **Owner's decision — 2026-10-27.** Filed from gx4g's DEV bootstrap
 > (`examples/gx4g4dev.cgs`, gx4g 0.1.1, run by cgitsync 6.10.0), which
 > cloned fifteen repositories and then refused its own State. The three files
@@ -264,3 +273,28 @@ A **local agent** is one whose instructions (`.claude`), specs
   pattern in `DevSpec`, which is `private/distant` and read-only here, so it
   is changed upstream, and each project fills it in. Or it stays a rule of
   this project.
+
+## 8. As delivered (2026-10-28)
+
+- **`tree/mount_alias.py`** (ring 1). `master_of` finds the mount nearer the trunk that a nested `[[repos]]`
+  duplicates (same host, group, owner and name, case-insensitive, branch ignored; an ancestor of the holder never
+  counts; a tie in distance keeps both); `alias` records it on the master (`WorkingRepo.aliases`) and links the
+  slave's path with a relative symlink, unless a real directory is already there; `refuse_clash` raises
+  `NestedConfigDiscoveryError` naming both specs when a nested spec puts a different repository at a used path.
+  `discover_nested_configs` now handles the shallowest pending entry first.
+- **Schema 2 (N1).** `MerkleRoot.SCHEMA` stays 1; `TREE_PATH_SCHEMA = 2`, `SCHEMAS`, `schema_of(leaves)`. Leaves are keyed
+  (and proved) by `tree_path` when they carry one, every leaf then must. A State is written under schema 2 **when and only
+  when** its tree shares a `relative_path` or has an alias (`needs_tree_path`), so no earlier State, `gittree_root` or
+  registered record changes; `GtsDocument` reads both and refuses a newer one by name. Aliases round-trip through the State.
+- **N5.** `bootstrap` of a standalone ComplexGitSync adds nothing: no nearer mount, no alias, schema 1.
+- **N6/N7.** `AdditionalSpecs.md` §One clone per repository, `digest.md`, `.localSpec/AGENT.md`, Tutorial 5, the user guide.
+- **Not done.** `validate` of a `.cgs` cannot see a nested spec, so the clash is refused at discovery (before cloning), not
+  by `validate`. The real run on gx4g's DEV tree (§6's first acceptance line) is S12's inspection, not this change's.
+  Q4 needs no code, so Minimalism's map gets no row. The upstream pattern in DevSpec (Q6) is a later ticket.
+- **Tests.** `tests/unit/test_mount_alias.py`: alias, symlink, nearer mount wins whatever the branch, own mount stays, tie, clash
+  refused, schema 2 State valid and verifying, schema 1 kept, round trip, schema-2 proofs.
+- **Limits the orchestrator found, left as follow-ups.** (1) A bootstrap from a `.gts` rebuilds the aliases in the registry but does
+  not recreate the symlink on a fresh machine: only discovery creates it. (2) The alias path is not a registry entry, so the
+  `.gitignore` sync does not cover it: a Parent project that does not already ignore `.agent` would see the link as untracked.
+  (3) A real directory already at the alias path keeps the old double registration (the State is then schema 2). (4) The comment
+  in `docs/DocCGS.cgs` ("would clone twice") is stale. Released as 8.2.0 (MINOR).
