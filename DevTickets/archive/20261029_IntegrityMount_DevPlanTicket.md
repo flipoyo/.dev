@@ -160,9 +160,10 @@ Answered at filing (banner). Kept here as asked and answered.
 | **D5** | A State written under schema 2 by 8.2.0? | 8.2.0 was never used: none exists. The reader goes with no transition and no MAJOR for it. |
 | **D6** | The §7 agent rules? | Kept, without the sentences about aliases and links. |
 
-Still open, asked at `implement`: whether the run log is the right "log file" or a dedicated one
-under `.cgitsync/`, and the version level (the orchestrator's: a private repository's branch name
-changes for every nested Parent, which a tree already opened under the old name must survive).
+Asked at `implement` (owner, 2026-10-28): the log file is **the existing run log**
+(`CommandRunLogger`, a `mount_denied` event); a nested Parent already opened on the old branch name
+gets **nothing automatic**: the existing fallback applies until the new branch is created, nothing is
+renamed. The version level is the orchestrator's.
 
 ## 6. Acceptance
 
@@ -185,3 +186,36 @@ changes for every nested Parent, which a tree already opened under the old name 
 
 Related: `archive/20261028_NestedAgentMaster_DevPlanTicket.md` (the analysis of gx4g's failure, §1
 and §2, still holds; its §3 rule and N1–N4 are what this ticket reverses).
+
+## 7. As delivered (2026-10-28)
+
+- **N1.** `git_repo.py`, `merkle_root.py`, `operating_space.py`, `gts_document.py`, `registry.py` and the four
+  adjusted tests are back to their 8.1.0 content; `tree/mount_alias.py` and its tests are deleted. One State
+  schema (1), no `tree_path`, no aliases, no link on disk.
+- **N2.** `tree/mount_guard.py` (`MountGuard`, ring 1): identity, distance, `clash` (denial 1, inline in discovery),
+  `owner` and `base`. `tree/mount_denial.py` (`MountDenial.deny`, ring 2): denials 2 and 3, run by the client right
+  after discovery, once privacy has propagated, so a private repository's real branch is compared; a denied entry
+  is removed from the registry before any clone and is not also reported as discovered. Identity is host, group,
+  owner and name; case 2 compares it *and* the branch `GitTreeBranches.target` gives. A mount already in the tree is
+  never displaced: a holder cloned late, whose request meets a deeper mount kept before, is the one denied.
+- **N3.** `private_local_branch(..., owner=)` and `resolve_propagated_ref(..., owner=)`; `MountGuard.owner` names
+  the Parent from the tree, never from the entry's own `source_cgs_path` (promotion overwrites it): none for an entry
+  the root's spec declared; else its parent when that parent holds a nested spec in its own directory or shares its
+  spec, or the parent's own Parent when the parent is private (so this tree's `.self-history` stays on
+  `ComplexGitSync`, and a nested Parent's memory's `.self-history` follows its memory); `GitTreeBranches.target` passes
+  it, `merge` (both forms, and the dry run) passes `MountGuard.base`, and `orphaned-private` findings read the
+  Parent's base. `checkout`, `branch`, `push`, `close` and `branch list` resolve through `GitTreeBranches.target`.
+- **N4.** `ComplexGitSyncClient._log_nested_discovery` warns `denied: <repo_id>: <why>` and logs `mount_denied`
+  (repo_id, reason) to the run log. Nothing in the `.gts`.
+- **N5.** `AdditionalSpecs.md` §A `.cgs` asks, the `.gts` may refuse (replacing 8.2.0's section; the agent rules
+  kept), `digest.md` (two lines), `.localSpec/AGENT.md`, Tutorial 5, the user guide, `docs/DocCGS.cgs`'s comment.
+- **Tests.** `tests/unit/test_mount_guard.py`: each denial, a distinct-branch repository held twice, the Parent's
+  branch and `base`, the Project's own private repository and the memory's nested one unchanged, a schema-1 State
+  that never names a denial, the client's warning and run-log event.
+- **Re-quote round (orchestrator's B1, B2, M1–M5).** The owner approved restoring the lines the worker had joined
+  to fit the ceilings, with the exact raise (merge.py, git_branch.py, git_tree_branch.py, tree_commands.py,
+  discovery.py). Tests added: the promoted holder keeps its Parent's branch, a top-level entry under a container has
+  no owner, a denied request is not also reported as discovered.
+- **Not done.** No test per command (`checkout`, `push`, `close`) on a tree with a nested Parent: they all resolve
+  through `GitTreeBranches.target`, which the tests cover. The live gx4g DEV run is S12's.
+- **Released as 8.3.0 (MINOR)** after the orchestrator's re-quote: no blocking defect; 2618 passed, 4 skipped after the bump.
