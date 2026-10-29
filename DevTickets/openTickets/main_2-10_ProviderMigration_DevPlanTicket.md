@@ -35,6 +35,11 @@
 > GitRepo concernés."* Scope (owner, the same review): **every** provider call,
 > the reads as well as the writes. Before beta, no new call enters `cgitsync`.
 
+> **Owner's rule, 2026-10-29 (recorded in OpBoundary, `main_2-11`):** only a PoE-typed graph, a `*G`, is
+> entered in the PoE register, as `(Timestamp, NAME, SHA256(G.MerkleRoot))`, and `.omniscience` records its
+> Sigma visibly, as a `sigma` field of `OmniscienceRecord`, committed when present (OpBoundary Q6, Q7). When the
+> register moves to gx4g, it moves with that field.
+
 ## Abstract — read this first
 
 **The one-line version.** `cgitsync` runs `gh`, `glab` or `tea` in two places

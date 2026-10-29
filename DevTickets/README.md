@@ -86,8 +86,9 @@ the cost of never editing them.
 | Memory — a change that **migrates a stored memory format**: the state area's layout, the ledger schema, or the distant reference ledger | `memory-dev` — **closed 2026-10-27**, see below | `memory-dev_` (no open ticket) |
 | Data — the `DataManager` layer, the DVC backend, `data_backend`/`data_paths`, and data materialisation and publication | `data-repo` | `data-repo_` |
 | Packaging awaiting the owner's review — UserInstallPath, held off `main` until the owner merges or drops it (owner, 2026-10-01) | `tmpPyPi` | `tmpPyPi_` |
+| gx4g's requirements on ComplexGitSync — the install protocol by PoE level and the `OP` boundary class gx4g drives (owner, 2026-10-29, short ticket `ExplDistantLocal`) | `gx4g-main` | `gx4g-main_` |
 
-Those four are the only ticket filename prefixes this project has. An open
+Those five are the only ticket filename prefixes this project has. An open
 memory ticket is named
 `memory-dev_<priority>-<rank>_<Name>_DevPlanTicket.md` and carries
 `*Branch: memory-dev*` under its `*Created:*` line; every other open ticket
