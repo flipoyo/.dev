@@ -20,7 +20,7 @@ Details
 
 ## Closed 2026-10-29: turned into a plan
 
-Planned as `openTickets/main_1-2_FixGoldenVector_DevPlanTicket.md`, run by BeforeBeta as S10b. What the CI logs
+Planned as FixGoldenVector, then merged the same day into `openTickets/main_1-2_alpha2beta_DevPlanTicket.md` (Part B), run by BeforeBeta as S10b. What the CI logs
 show:
 - **`golden-vectors`** has run no test since 8.0.1. It names `tests/unit/test_gts_integrity.py`, which MerkleRoot
   deleted, so pytest exits with "file or directory not found" on all three systems.
