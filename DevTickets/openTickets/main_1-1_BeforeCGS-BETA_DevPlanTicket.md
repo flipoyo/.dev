@@ -334,6 +334,10 @@ fixed here, unless the ticket a step runs owns it (§5).
 | 3 | S1 | `cgitsync branch close memory-dev`, 7.0.0 | Refused, nothing renamed: "the ledger does not verify (seq=3 COMMIT_LOG_MISMATCH; …)". `verify repair` heals only a stale HEAD, never a chain, and 6.8.1 said the lost rows are not recovered. So this memory can never verify again, and every `branch close` and `branch delete` in this tree is refused for good. | A loss already recorded as unrecoverable does not refuse forever; a documented way through exists | fixed by S0 (CommitLogLoss, 7.1.0): `verify check` now says `incomplete`, 27 `COMMIT_LOG_LOST` |
 | 4 | S1 | `cgitsync branch close memory-dev`, 7.0.0, refused at 01:35 | Before refusing, it had already kept `ComplexGitSync_memory-dev` on `ComplexGitSync_ancestors` and pushed it (`99c6515`), written a State and ledger entry 69 (`branch_close_keep`). Only then did `_assert_history_holds` run. Its message, "nothing was renamed or deleted", is true but says nothing of the push and the record. | A history already corrupt before the command is refused before anything moves; a refusal after a step says which steps ran | to report (D2); the S1 close itself was then run by the owner at 03:01, under 7.1.0, and succeeded |
 | 5 | after S10 | GitHub CI, 8.0.1 → 8.4.0 (runs `40577139142` … `40886166452`) | `golden-vectors` runs no test on any system since 8.0.1: it names `tests/unit/test_gts_integrity.py`, deleted by MerkleRoot. `test` has 3 failures since 8.3.0, on `examples/gx4g-dev.cgs` and `gx4g-opx.cgs`, which open with notes that are not TOML. | The golden vectors run, and agree, on Ubuntu, macOS and Windows; `test` green | blocks beta: §8 (S10b) |
+| 6 | S11 | A clone of `main` at `ad86bd6` (the commit the owner pushed), `pixi install`, then in it `pixi run cgitsync initialise install.cgs --output-path ..`, 8.4.0 | **Holds.** `READY`, tree `ComplexGitSync` + `DocComplexGitSync`, `status` clean and synced, `verify check` `verified` with 0 findings. Two details of the route, not defects: `initialise` must run from a ComplexGitSync at `$CGSPATH/ComplexGitSync` (it refuses one anywhere else, by name), and `omniscience mount` takes no argument. | as observed | none |
+| 7 | S12, the user tree | The tree of row 6 | **Holds.** `branch close` is refused by name ("this tree holds no private repository, so it is a user's tree"); `omniscience mount` and `register` are refused (USER tree); the memory is local (`.cgitsync/.memory` without a remote). | as observed | none |
+| 8 | S12, the developer tree | This tree, 8.4.0, before the commit of this ticket | `verify check`: the 27 historic `COMMIT_LOG_LOST` of 6.7.x, recorded as the loss 6.8.1 named (`incomplete`, not `corrupt`); `status errors=0`; `branch list` reports `closed` for `memory-dev` and `alpha-tech`, and two real orphans, `ComplexGitSync_multi-branch` in `.claude` and `.localSpec`. | `incomplete` with every finding explained | the two orphans are for the owner to clean up |
+| 9 | S12, gx4g's DEV tree | Not run: it needs gx4g's repositories and the owner's credentials | Rehearsed in tests only (`test_mount_guard.py`, 12 tests): `.agent/.local/.dev` denied on the shared key, the Parent's branches on `ComplexGitSync_gx4g`. | the real tree opens with its denials said by name | open: to run with the owner, from `examples/gx4g-dev.cgs` |
 
 ## 3b. Corrections that will need a MAJOR release
 
@@ -754,3 +758,24 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 - With BD3's matrix, the full suite is green on the three systems, or each red test is a defect fixed in `src/`, never skipped by system.
 - The gitlinks are handled as BD4 decided, and checkout no longer warns.
 - `pixi run lint`, `pixi run test`, `check-ceilings`, `check-oo` and `check-spectree` pass; `bump-build` if `src/` changed; `cgitsync status` shows `errors=0`.
+
+## 9. As delivered (2026-10-29)
+
+- **§8.** The `golden` marker (`pyproject.toml`) on `test_merkle_state`, `test_merkle_global`, `test_gts_document`; `ci.yml` runs
+  `pytest -m golden` and the full suite on Linux, macOS and Windows; `tests/unit/test_ci_workflow.py` guards the paths, the
+  marker and the three platforms; the four `.agent/` gitlinks are removed from the index. **F4 is the owner's:** reading the
+  three systems needs the push.
+- **§7.** `tree/named_cgs.py` (`NamedCgs`, hooked in `CgsDocument.from_toml`, so `initialise` and `bootstrap` both refuse by
+  name before cloning); `project.fallback_branch` (`git_branch.apply_declared_defaults(..., project_fallback)`); the clone
+  chain target, project fallback, `main` (`client._select_clone_ref`); `gx4g-dev.cgs` and `gx4g-opx.cgs` follow the rule, their
+  private/local entries drop `default_branch` (the derived branch is `gx4g_dev`); `orchestre/op_levels.py` (`PoE`, `LEVELS`,
+  `LevelCommand`, `Leaves`), re-exported by `op_boundary`.
+- **§6.** `Op.is_poe(beta=)` adds `leaves` at the levels that expose nodes; the BETA side is a registered State
+  (`Leaves.of_state`). Reading it from `.omniscience` is the BETA tool's (FD1).
+- **Ceiling.** `git_repo/git_branch.py` 444 → 445, approved.
+- **Tests.** `test_named_cgs.py` (13), ten more in `test_op_boundary.py`, `test_ci_workflow.py` (3).
+- **Orchestrator's fix.** A `memory reboot` export `<project>-v10.cgs` to `-v99.cgs` has three characters after the dash and its
+  `yyyy` is its project, so the rule refused it; `NamedCgs` now reads `-v<digits>` as a version, not an operation (test added).
+  The clone chain's error also names `main` among the expected branches. Released as 8.5.0 (MINOR).
+- **Not done.** F4 and row 9 (they need the push and gx4g's tree). `omniscience register` is not restricted to PoE graphs
+  (§3b).

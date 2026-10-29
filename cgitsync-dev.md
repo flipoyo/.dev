@@ -55,8 +55,11 @@ pixi run check-spectree   # the spec tree: links, mounts, fills-in lines, digest
 pixi run check-ceilings   # module ratchet, and every .agent/ path cited in code
 ```
 
-CI (`.github/workflows/ci.yml`) runs both `lint` and `test` on push/PR to
-`main`/`lechat`. Run both locally before pushing.
+CI (`.github/workflows/ci.yml`) runs `lint` and the full `test` suite on **Linux, macOS and Windows** (the platforms
+`pixi.toml` declares), and a `golden-vectors` job, `pytest -m golden`, on the same three, on push/PR to `main`/`lechat`.
+The `golden` marker is on the tests that hold the cross-platform contract (the Merkle golden vectors and the snapshot
+document); `tests/unit/test_ci_workflow.py` fails when `ci.yml` names a test path that is gone or a marker that collects
+nothing. Run lint and test locally before pushing; the owner pushes, and `gh run list` shows the three systems.
 
 ### Bootstrapping a working checkout
 
