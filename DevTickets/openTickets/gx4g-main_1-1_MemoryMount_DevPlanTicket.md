@@ -128,7 +128,7 @@ The more a level operates, the less it exposes.
 
 ## 3. What exists today
 
-- **`.USER`.** `initialise install.cgs` is BeforeBeta's S11. The tree is USER, and its memory is local and never pushed.
+- **`.USER`.** `initialise install.cgs` is BeforeCGS-BETA's S11. The tree is USER, and its memory is local and never pushed.
 - **`.DEV`.** Opened today with `bootstrap examples/complexgitsync4dev.cgs` for ComplexGitSync, and with
   `examples/gx4g-dev.cgs` for gx4g (G.OP.NAME `gx4g-dev`). The protocol moves the spec to `$HOME/.cgs/$G-NAME/$G-NAME-dev.cgs`, outside both clones.
 - **`.OPX`.** No `-opx.cgs` exists. `OperatingSpace` is "the API of OPX, the operating system" (Minimalism D5),
@@ -172,7 +172,7 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 |---|---|
 | **Q1** | Does the developer spec move from `examples/<project>4dev.cgs` to `$HOME/.cgs/$G-NAME/$G-NAME-dev.cgs` for every project, ComplexGitSync included? And who writes that file, the owner or `initialise`? |
 | **Q2** | What is an `.OPX` tree concretely: which repositories does `$G-NAME-opx.cgs` mount, and what does it run that `.DEV` does not? |
-| **Q3** | Where does this ticket, and OpBoundary with it, rank against BeforeBeta: before beta (pile 1), or after it? |
+| **Q3** | Where does this ticket, and OpBoundary with it, rank against BeforeCGS-BETA: before beta (pile 1), or after it? |
 | **Q4** | Where the `*G` OpBoundary derives lives: computed on demand (`status --json`), written to the memory and pushed when the level allows, or handed to gx4g? |
 | **Q5** | CGS-BETA, and G's credentials per level: what is CGS-BETA, and what does `DEV` or `USER` for CGS-ALPHA and CGS-BETA let a tree do? |
 
@@ -191,4 +191,4 @@ Related:
 - `archive/20261027_EnvConnect_DevPlanTicket.md`: the install frontier, the twin, PoE in the Operating Space.
 - `archive/20260705_CGS.POC.md`: `PoE.state`, `PoE.PUBLIC`.
 - `archive/20261029_IntegrityMount_DevPlanTicket.md`: the `.gts` may refuse.
-- BeforeBeta §3c and `main_2-10_ProviderMigration_DevPlanTicket.md`: what is gx4g's.
+- BeforeCGS-BETA §3c and `main_2-10_ProviderMigration_DevPlanTicket.md`: what is gx4g's.

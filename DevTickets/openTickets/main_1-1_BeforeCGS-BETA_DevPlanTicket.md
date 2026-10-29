@@ -1,8 +1,15 @@
-# BeforeBeta — everything mandatory before beta, landed on main and checked by a user install
+# BeforeCGS-BETA — everything mandatory before CGS-BETA, landed on main and checked by a user install
 
 *Created: 2026-10-27*
 
 *Branch: main*
+
+> **Merged, 2026-10-29 (owner):** *"Merge BeforeBeta and alpha2beta integrating the shortTicket A2B-frontier.md.
+> The results in a single BeforeCGS-BETA DevPlanTicket."* This ticket is BeforeBeta (`main_1-1`), renamed. alpha2beta
+> (`main_1-2`) is merged in: its Part A as §7 and its Part B (FixGoldenVector) as §8. Their decisions are renamed AD1–AD5
+> and BD1–BD5. The short ticket `A2B-frontier` is integrated as §6 (FD1–FD4) and runs as **S10c**. BeforeBeta's sections
+> keep their numbers, so a citation of "BeforeBeta §n" in code, tests or specs reads as this ticket's §n. Beta is
+> CGS-BETA: ComplexGitSync (CGS-ALPHA) as it leaves this ticket.
 
 > **Ticket review — 2026-10-27, owner's decision.** Filed at `main_1-1`.
 > The owner wants it run before the frontier between cgitsync and gx4g is
@@ -116,9 +123,10 @@ memory-format change among it), and makes a fresh user install from `main`. Then
 reports what it finds; the only code it changes is through the tickets it
 runs.
 
-**What this document is.** The order of thirteen steps, S0 to S12 (§1), what
+**What this document is.** The order of the steps, S0 to S12 with S10b and S10c (§1), what
 to watch in each and the constraints that bind them all (§2), the defects
-found (§3), the decisions (§4) and when it is done (§5). Each ticket it runs keeps its own plan and its own worker/orchestrator
+found (§3), the decisions (§4) and when it is done (§5). Since the merge of 2026-10-29 it also holds the
+ALPHA/BETA frontier (§6), the `yyyy-xxx.cgs` compatibility rule (§7) and the CI on three systems (§8). Each ticket it runs keeps its own plan and its own worker/orchestrator
 pair: this ticket is the order, not the content.
 
 **Why now.** gx4g drives `cgitsync` from another process and builds on rules
@@ -155,8 +163,9 @@ graph TD
     S7 --> S8["S8 SrcLayout<br/>(main_1-6)"]
     S8 --> S9["S9 BranchProtection, M5<br/>(done, 8.1.0)"]
     S9 --> S10["S10 IntegrityMount<br/>(done, 8.3.0)"]
-    S10 --> S10b["S10b alpha2beta<br/>(main_1-2)"]
-    S10b --> S11["S11 user install<br/>initialise install.cgs"]
+    S10 --> S10b["S10b §7 yyyy-xxx.cgs, §8 CI on 3 OS<br/>(from alpha2beta)"]
+    S10b --> S10c["S10c §6 ALPHA/BETA frontier<br/>OP: GitRepo-ALPHA == GitRepo-BETA"]
+    S10c --> S11["S11 user install<br/>initialise install.cgs"]
     S11 --> S12["S12 inspect .memory, .omniscience<br/>Omniscience §10 (archived 7.1.1)"]
     S12 --> R["§3 defects<br/>YOU ARE HERE"]
 
@@ -186,7 +195,8 @@ Facts as of 2026-10-27:
 | **S8** | `implement SrcLayout`, on `main`. **Done 2026-10-28, 8.0.4** | It applies Minimalism D6's folder column, `GitRepo/` first with its no-import test. `Merkle/` already holds MerkleRoot. Behaviour, public names and ceilings are unchanged. |
 | **S9** | `implement BranchProtection`, on `main`: M5 only, after its D7 and D9. **Done 2026-10-28, 8.1.0**, archived | Split on 2026-10-27. M5 landed as `tree/branch_findings.py`: `status` and `branch list`, and their `--json`, report `vanished`, `half-closed`, `split`, `orphaned-private` and `closed`; nothing is recorded. The rest is §3c. `require_dev` is kept. M5 finds a dead GitTree-branch and hands it to gx4g, writing nothing to the register. M0–M4 (provider protection and roles) are §9, handed to gx4g. No provider call. |
 | **S10** | `implement IntegrityMount`, on `main`. **Done 2026-10-29, 8.3.0**, archived | **Reopened 2026-10-28.** NestedAgentMaster shipped as 8.2.0 (archived) and the owner rejected its approach: *"La seule mission de cgitsync est de garantir l'intégrité du GitTree […] Je préfère un DENIAL de mount plutôt qu'une structure de type 2."* IntegrityMount undoes 8.2.0's schema 2, aliases and symlinks, and makes the `.gts` deny a requested mount that would break the GitTree, before anything is cloned for it. The State stays schema 1. |
-| **S10b** | `implement alpha2beta` (`main_1-2`), on `main`, after its decisions | From CGS-ALPHA to CGS-BETA: the `yyyy-xxx.cgs` compatibility rule (`project = { name = "yyyy", default_branch = "xxx", fallback_branch = "CGS-BETA" }`), and FixGoldenVector merged in: *"cgitsync must be multi-os before beta."* §3 defect 5. CI's `golden-vectors` has run no test since 8.0.1 and `test` fails since 8.3.0. S11 and S12 start from a green CI. |
+| **S10b** | `implement BeforeCGS-BETA` §7 and §8 (formerly alpha2beta), on `main`, after AD1–AD5 and BD1, BD3–BD5 | From CGS-ALPHA to CGS-BETA: the `yyyy-xxx.cgs` compatibility rule (`project = { name = "yyyy", default_branch = "xxx", fallback_branch = "CGS-BETA" }`), and FixGoldenVector merged in: *"cgitsync must be multi-os before beta."* §3 defect 5. CI's `golden-vectors` has run no test since 8.0.1 and `test` fails since 8.3.0. S11 and S12 start from a green CI. |
+| **S10c** | `implement BeforeCGS-BETA` §6, the ALPHA/BETA frontier, after FD1–FD4 | From the short ticket `A2B-frontier`. `OP` (8.4.0) becomes the operator ALPHA → BETA: it exposes only the GitTree's leaves and verifies `GitRepo-ALPHA == GitRepo-BETA`, a leaf in `.cgitsync` (OPX, DEV) against the same leaf in `.omniscience` (USER, PUB). |
 | **S11** | The user install from `main`: `git clone github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then in it `pixi run cgitsync initialise install.cgs --output-path $CGSPATH` | `initialise` takes one source, plus `--output-path`, which is CGSPATH. CGSHOME is `CGSPATH/ComplexGitSync`, so the owner's `initialise $CGSHOME install.cgs` is spelled this way. `install.cgs` mounts the tool and `docs` only, so the tree is USER: its memory is local and never pushed. |
 | **S12** | The inspection in §2, in three trees: this developer tree, the user tree (S11) and gx4g's DEV tree (S10). It uses the CLI that S7 left and the layout that S8 left | — |
 
@@ -319,7 +329,7 @@ fixed here, unless the ticket a step runs owns it (§5).
 | 2 | known | Robustness P2 and P3 | A failed `push` reports one error and loses what completed; a `tag` retry can never converge | §3 of Robustness | fixed by S4 |
 | 3 | S1 | `cgitsync branch close memory-dev`, 7.0.0 | Refused, nothing renamed: "the ledger does not verify (seq=3 COMMIT_LOG_MISMATCH; …)". `verify repair` heals only a stale HEAD, never a chain, and 6.8.1 said the lost rows are not recovered. So this memory can never verify again, and every `branch close` and `branch delete` in this tree is refused for good. | A loss already recorded as unrecoverable does not refuse forever; a documented way through exists | fixed by S0 (CommitLogLoss, 7.1.0): `verify check` now says `incomplete`, 27 `COMMIT_LOG_LOST` |
 | 4 | S1 | `cgitsync branch close memory-dev`, 7.0.0, refused at 01:35 | Before refusing, it had already kept `ComplexGitSync_memory-dev` on `ComplexGitSync_ancestors` and pushed it (`99c6515`), written a State and ledger entry 69 (`branch_close_keep`). Only then did `_assert_history_holds` run. Its message, "nothing was renamed or deleted", is true but says nothing of the push and the record. | A history already corrupt before the command is refused before anything moves; a refusal after a step says which steps ran | to report (D2); the S1 close itself was then run by the owner at 03:01, under 7.1.0, and succeeded |
-| 5 | after S10 | GitHub CI, 8.0.1 → 8.4.0 (runs `40577139142` … `40886166452`) | `golden-vectors` runs no test on any system since 8.0.1: it names `tests/unit/test_gts_integrity.py`, deleted by MerkleRoot. `test` has 3 failures since 8.3.0, on `examples/gx4g-dev.cgs` and `gx4g-opx.cgs`, which open with notes that are not TOML. | The golden vectors run, and agree, on Ubuntu, macOS and Windows; `test` green | blocks beta: `alpha2beta` (`main_1-2`), Part B |
+| 5 | after S10 | GitHub CI, 8.0.1 → 8.4.0 (runs `40577139142` … `40886166452`) | `golden-vectors` runs no test on any system since 8.0.1: it names `tests/unit/test_gts_integrity.py`, deleted by MerkleRoot. `test` has 3 failures since 8.3.0, on `examples/gx4g-dev.cgs` and `gx4g-opx.cgs`, which open with notes that are not TOML. | The golden vectors run, and agree, on Ubuntu, macOS and Windows; `test` green | blocks beta: §8 (S10b) |
 
 ## 3b. Corrections that will need a MAJOR release
 
@@ -430,11 +440,13 @@ demand (owner, 2026-10-27).
 ## 5. Done when, and what this refuses
 
 **Done when:**
-- S0 to S11 have run, and S12's inspection has its rows.
+- S0 to S11, S10b and S10c included, have run, and S12's inspection has its rows.
+- §6.3, §7.4 and §8.4 are answered, and §6, §7 and §8 are implemented, each with its orchestrator's record.
+- The CI is green on Linux, macOS and Windows (§8.5).
 - CommitLogLoss, WorkingAreaRename, StateLocking, Robustness, Minimalism,
   MerkleRoot, CliReduction, SrcLayout, BranchProtection, NestedAgentMaster and IntegrityMount
   are each archived with their own orchestrator's record.
-- gx4g's DEV tree (`examples/gx4g4dev.cgs`) opens with the command
+- gx4g's DEV tree (`examples/gx4g-dev.cgs`) opens with the command
   IntegrityMount leaves (its denials said by name), and S12 inspects it beside the two others.
 - Every step was quoted against §2.5.
 - ProviderMigration and §3c are handed to gx4g as its
@@ -444,7 +456,7 @@ demand (owner, 2026-10-27).
   §3, even if the row says "holds".
 - Both trees show `cgitsync status` with `errors=0`, or the row in §3 that
   says why not.
-- BeforeBeta is archived with its orchestrator's record. Omniscience was
+- BeforeCGS-BETA is archived with its orchestrator's record. Omniscience was
   archived on its own record on 2026-10-27. Pile 1 is then empty, and the
   frontier with gx4g can be finalised.
 
@@ -454,3 +466,205 @@ demand (owner, 2026-10-27).
 - **To rewrite history.** No reset, rebase or force-push to recover a step
   that went wrong: a failed step is a finding.
 - **To push without the owner's word.**
+
+---
+
+## 6. The ALPHA/BETA frontier (short ticket `A2B-frontier`)
+
+> **The owner's short ticket `A2B-frontier` (2026-10-29), unchanged:**
+>
+> ```text
+> GitRepo are the Frontier between ALPHA and BETA administration spaces.
+>
+> OP Class in ComplexGitSync is the Operator ALPHA --> BETA. It is une UNIVERSAL API .cgs that expose GitTree leaves only in both ComplexGrapSync and ComplexGitSync. A leaf is a GitRepo. OP verify if GitRepo-ALPHA == GitRepo-BETA
+>
+> GitRepo-ALPHA belongs to .cgitsync - OPX, DEV
+>
+> GitRepo-BETA belongs to .omniscience - USER, PUB
+> ```
+
+### 6.1 The model, as read
+
+- **Two administration spaces, one frontier.** ALPHA is administered through `.cgitsync`, the memory: its States,
+  ledger and commit logs. Its levels are `.OPX` and `.DEV`. BETA is administered through `.omniscience`, the
+  register. Its levels are `.USER` and `.PUBLIC`. What crosses between them is a GitRepo, a leaf of the GitTree,
+  and nothing else.
+- **OP is the operator ALPHA → BETA.** The class built in 8.4.0 (`orchestre/op_boundary.py`) becomes a universal
+  API, in the `.cgs` vocabulary, that exposes only the GitTree's leaves. It holds on both sides: in ComplexGitSync,
+  and in "ComplexGrapSync" (§6.3 FD1).
+- **OP verifies `GitRepo-ALPHA == GitRepo-BETA`.** A leaf as ALPHA holds it (a repository's leaf in a State of
+  `.cgitsync`) must be the same leaf as BETA holds it (the leaf a record of `.omniscience` commits to, through its
+  `gittree_root`). The inclusion proof MerkleRoot hands out (`omniscience proof`) is the existing way to show one
+  leaf is in a registered tree.
+
+### 6.2 Steps
+
+- **N6.1. Leaves only.** `OP` exposes the GitTree's leaves and nothing else: no ledger entry, no commit message, no
+  register internals. `OP*` already keeps no branch, message or path (OpBoundary). §6.3 FD2 decides whether a leaf is
+  the schema-1 leaf hash, or the leaf's fields.
+- **N6.2. The verification.** `OP` compares a leaf on the ALPHA side with the same leaf on the BETA side:
+  - ALPHA: the State in `.cgitsync` that the tree's level (`.OPX`, `.DEV`) produced;
+  - BETA: the record in `.omniscience` (`.USER`, `.PUBLIC`), through its inclusion proof.
+
+  The answer is equal, different, or absent on one side. It is read-only, and refuses nothing by itself
+  (IntegrityMount refuses mounts).
+- **N6.3. Which side a level is on.** `.OPX` and `.DEV` trees are ALPHA, `.USER` and `.PUBLIC` are BETA, read from
+  the PoE level OpBoundary already reads (the tree's profile, until MemoryMount records it at install).
+- **N6.4. Documentation.** `AdditionalSpecs.md` (§OP, the boundary of G: the frontier and the verification), and
+  `digest.md`.
+
+### 6.3 Decisions for the owner (§6)
+
+| D | Question | Recommendation |
+|---|---|---|
+| **FD1** | "ComplexGrapSync": gx4g's side of the frontier (the graph-level tool that holds `.omniscience`), or a tool still to be named? | To be answered: the frontier is drawn differently depending on who runs the BETA half of `OP`. |
+| **FD2** | What is compared: the leaf's schema-1 hash (`repo_hash`, what the register commits to), or its fields? | **The leaf hash.** It is what both sides already commit to, and comparing hashes exposes no field. |
+| **FD3** | Is the verification a new client method (one-way mirror, no command), or a field of `OP*`? | **A field of `OP*`**: `OP.is_poe()` says, per leaf, whether ALPHA and BETA agree. No command and no client method are added (Minimalism). |
+| **FD4** | Does a `.USER` tree, which holds no `.omniscience` (§2.4), verify against a remote register, or not at all until gx4g holds the register? | **Not until ProviderMigration**: the BETA side is gx4g's, and a USER tree reads nothing it does not mount. |
+
+---
+
+## 7. The `yyyy-xxx.cgs` compatibility rule (from alpha2beta, Part A)
+
+### 7.1 The rule, as read
+
+- **A file's name is a contract.** `yyyy-xxx.cgs` is `$G.NAME-$G.OP.NAME.cgs` (G.EDGE.NAME): `yyyy` is the project's
+  name, `xxx` the operation's name (`dev`, `opx`, …).
+- **When `cgitsync initialise $exe-path/yyyy-xxx.cgs` writes or reads it,** its project line is
+  `project = { name = "yyyy", default_branch = "xxx", fallback_branch = "CGS-BETA" }`: the project is the one the name
+  says, the tree opens on the branch the name says, and a repository with no such branch falls back to `CGS-BETA`.
+- **`CGS-BETA` is a branch name** here, the fallback every repository of such a tree takes. With ExplDistantLocal's
+  notes, CGS-ALPHA is ComplexGitSync and CGS-BETA what it becomes at beta (MemoryMount Q5).
+- **"Compatibility"**: a file that follows the rule opens the same tree under every build from CGS-ALPHA to CGS-BETA.
+  One that does not is either rewritten by `initialise` or refused by name (AD1).
+
+### 7.2 What exists
+
+- **`project`** takes `name` and `default_branch` (`cgs_format.py`, `_REQUIRED_PROJECT_KEYS`). There is no
+  project-level `fallback_branch`: each repository declares its own, and the chain's default is `main`
+  (`git_branch.py`, FallbackMain).
+- **`initialise`** takes one `.cgs` and `--output-path` (7.0.0). It never reads the file's name.
+- **The examples.** `examples/gx4g-dev.cgs` and `gx4g-opx.cgs` say `project = { name = "gx4g", default_branch = "main" }`.
+  Under the rule they would say `default_branch = "dev"` (or `"opx"`) and `fallback_branch = "CGS-BETA"`.
+  `examples/complexgitsync4dev.cgs`, `install.cgs` and the other examples do not have the `yyyy-xxx` shape, or have it
+  by accident (`molonari-light.cgs`). §7.1 says which are concerned.
+- **No branch named `CGS-BETA`** exists in any repository of this tree.
+
+### 7.3 Steps
+
+- **N1. The name.** Parse `yyyy-xxx` from a `.cgs` file name, as AD2 decides for a name holding more than one `-`. A
+  name without the shape is not concerned.
+- **N2. The project-level `fallback_branch`.** Add it to `project`, as the default every repository's fallback chain
+  takes when it declares none, before `main`. `git_branch.py` stays the chain's one owner. A document without it reads
+  as today.
+- **N3. The rule in `initialise`.** For a concerned file, check the project line against the name, and write or refuse
+  as AD1 decides. It runs before anything is cloned, like IntegrityMount's denials.
+- **N4. The examples.** Bring `gx4g-dev.cgs` and `gx4g-opx.cgs` under the rule, and every other concerned example.
+  Each must stay valid, keeping the golden vectors and the example tests green.
+- **N5. Documentation.** The `.cgs` grammar in the user guide, `AdditionalSpecs.md` (*Format ownership*, the branch
+  chain), `digest.md`.
+
+### 7.4 Decisions for the owner (§7)
+
+Asked through `AskUserQuestion` at `implement`, before the first edit.
+
+| D | Question | Recommendation |
+|---|---|---|
+| **AD1** | A concerned file whose project line disagrees with its name: does `initialise` rewrite it, or refuse by name? | **Refuse by name**, saying the line it expects. `.cgs` is the owner's request (IntegrityMount), and rewriting a request silently is what the `.gts` must never do. "Written by `@cgitsync`" would then mean that cgitsync writes the line itself when it creates such a file (`discover --write`, `initialise --cgs`). |
+| **AD2** | `yyyy-xxx` when the name holds several `-` (`gx4g-dev-old.cgs`, `molonari-light.cgs`). | **Split at the last `-`**: the operation is the last word. `molonari-light.cgs` is then project `molonari`, branch `light`, against its own `name = "lMOLO"`. So a name opts in only when its `yyyy` equals its `project.name`, and every other file is untouched. |
+| **AD3** | `CGS-BETA` as a branch: who creates it, and in which repositories? | **Nobody yet.** It is a fallback only. A repository without it falls back to `main`, after `CGS-BETA`, as the chain already does, and creating the branch is the release step that turns CGS-ALPHA into CGS-BETA. |
+| **AD4** | `$exe-path`: the directory the `cgitsync` that runs sits in, or any path? | **Any path.** The rule reads the file's name, wherever it is. `$exe-path` in the short ticket names where the protocol keeps the files (`$HOME/.cgs/$G-NAME/`, MemoryMount). |
+| **AD5** | Does the rule also bind `bootstrap`? | **Yes.** `bootstrap` opens the `.DEV` and `.OPX` trees with the same files (`bootstrap ../examples/gx4g-dev.cgs`). |
+
+### 7.5 Acceptance
+
+- `initialise` (and `bootstrap`, per AD5) of a concerned `yyyy-xxx.cgs` opens project `yyyy` on branch `xxx`, falls back
+  to `CGS-BETA` and then to `main`, and refuses a mismatching file by name (per AD1) before anything is cloned.
+- A file without the shape behaves exactly as today, and every golden vector is unchanged.
+- The concerned examples follow the rule, and every example test is green.
+
+---
+
+## 8. CI green on three systems (FixGoldenVector, from alpha2beta, Part B)
+
+### 8.1 What the CI says (read with `gh`, 2026-10-29)
+
+| Release | Run | `golden-vectors` (3 OS) | `test` (ubuntu) |
+|---|---|---|---|
+| 7.3.2 and every release before it back to 6.4.0 | `40563307219` … | success | success |
+| 8.0.1 (MerkleRoot, S6) | `40577139142` | **failure × 3** | success |
+| 8.0.2 → 8.2.0 | `40618970436` … `40735863313` | failure × 3 | success |
+| 8.3.0 (IntegrityMount) | `40795035804` | failure × 3 | **failure** |
+| 8.4.0 (OpBoundary) | `40886166452` | failure × 3 | failure |
+
+- **`golden-vectors`.** The job runs `pixi run python -m pytest tests/unit/test_gts_integrity.py tests/unit/test_gts_document.py`.
+  MerkleRoot (8.0.1) deleted `test_gts_integrity.py`, with `gts_integrity.py`, and moved its golden vectors to
+  `tests/unit/test_merkle_state.py` (and `test_merkle_global.py`, `test_merkle_proofs.py`, `test_merkle_root.py`).
+  The log shows `ERROR: file or directory not found: tests/unit/test_gts_integrity.py` and `no tests ran`, exit code 4,
+  on Ubuntu, macOS and Windows alike. So "since the start of BeforeBeta" is exact from S6 on. The three systems never
+  disagreed: they were never asked.
+- **`test`.** It is green through 8.2.0 and has 3 failures since 8.3.0 (`2615 passed, 4 skipped, 3 failed` in run
+  `40795035804`):
+  - `test_cgsi_topology::TestExampleFiles::test_every_example_has_a_semantic_tree_and_toml_round_trip`;
+  - `test_documents::TestCgsDocumentValid::test_all_cgs_examples_use_shorthand_authoring_shape`;
+  - `test_root_repo_identity::test_every_checked_in_example_cgs_resolves_a_root_with_a_declared_owner`.
+
+  All three fail with `tomllib.TOMLDecodeError` on `examples/gx4g-dev.cgs` and `examples/gx4g-opx.cgs`, committed in
+  8.3.0. Both files open with the owner's notes (`CORR: … @dev-agent: …`), which are not TOML.
+- **Not a failure, seen in every job.** `fatal: No url found for submodule path '.agent/.distant/dev-sync' in
+  .gitmodules`, a warning at checkout cleanup. The root repository tracks four gitlinks under `.agent/`
+  (`.agent/.distant/{dev-sync,documentation,ticket}` and `.agent/.local/.dev`), committed on 2026-10-08 (`f12dafe`,
+  "before merge"), although `.gitignore` excludes them and there is no `.gitmodules`. `.agent/` is a plain directory,
+  never a repository (CLAUDE.md).
+- **What "multi-OS" covers today.** Only the golden vectors run on the three systems. The full suite runs on Ubuntu
+  only, and the developer tree is reconstituted on Ubuntu only.
+
+### 8.2 Why nobody saw it
+
+- The eight steps gate a change on **local** lint, tests and `status`. None of them reads the CI, and the owner
+  pushes after the commit, when the worker and the orchestrator are done.
+- MerkleRoot's orchestrator re-ran the golden-vector tests by their new names, locally, on Linux. Nothing checks that
+  the paths `ci.yml` names still exist.
+- A pytest run with no test to run exits 4, which CI shows as a failure like any other, with nothing to tell
+  "no test was found" from "a hash differs".
+
+### 8.3 Steps
+
+- **F1. Run the golden vectors again.** Point the job at the Merkle golden-vector tests and `test_gts_document.py`,
+  as BD1 decides: by file names, or by a pytest marker (`golden`) that the tests carry, so that a rename cannot
+  silence the job again.
+- **F2. A guard.** A unit test that reads `.github/workflows/ci.yml` and fails when a test path it names does not
+  exist, or when the marker it selects collects nothing.
+- **F3. The example files.** `examples/gx4g-dev.cgs` and `examples/gx4g-opx.cgs`, as BD2 decides. They hold the owner's
+  notes for MemoryMount (`.DEV` is `gx4g4dev`, PoE `{1,0,0,0}`; `.OPX` is `gx4g4opx`, PoE `{0,0,0,0}`; G's credentials
+  per CGS-ALPHA and CGS-BETA), which are not the worker's to rewrite without the owner's word.
+- **F4. Run on the three systems, and fix what they say.** Push nothing: the owner pushes (or runs
+  `workflow_dispatch`) and the worker reads the runs with `gh run view`. A real difference between systems (a path
+  separator, a line ending, a locale, a file mode in a leaf) is fixed in `src/`, with a golden vector that names it.
+  If the full suite is to run on macOS and Windows too (BD3), that is where its failures appear.
+- **F5. The gitlinks,** as BD4 decides.
+- **F6. Seeing CI.** As BD5 decides: whether reading the CI after the owner's push becomes part of the eight steps, or
+  a check of BeforeBeta's S12.
+- **F7. Documentation.** `cgitsync-dev.md` (what CI runs and how to read it), `AdditionalSpecs.md` (the cross-platform
+  contract and which tests hold it), `digest.md` if a rule is added.
+
+### 8.4 Decisions for the owner (§8)
+
+Asked through `AskUserQuestion` at `implement`, before the first edit.
+
+| D | Question | Recommendation |
+|---|---|---|
+| **BD1** | How does `golden-vectors` choose its tests? | **A `golden` pytest marker** on the Merkle golden-vector tests and the snapshot-document tests, selected with `-m golden`, plus F2's guard. File names would break again at the next rename. |
+| **BD2** | ~~The two example files with notes.~~ **Resolved 2026-10-29 by `implement "CORR: @agent-dev"`:** each note was applied in its file and removed, and the comments were compressed to 10 lines. The DEV and OPX levels, the PoE, Sigma and G's credentials now stand in the header. Both files are valid `.cgs` again, and the three `test` failures are gone. |
+| **BD3** | "Multi-OS before beta": the golden vectors on three systems, or the full suite too? | **The full suite on the three systems**, as a matrix like `golden-vectors`. Beta promises `cgitsync` works on each platform `pixi.toml` declares, and only the full suite shows that. It costs CI time, and its first runs will surface whatever WindowsCompatibility (6.3.4) did not reach. |
+| **BD4** | The four gitlinks under `.agent/`. | **Remove them from the index** (`git rm --cached`), which leaves the mounts on disk untouched and matches `.gitignore` and "`.agent/` is never a repository". |
+| **BD5** | Seeing CI. | **A ninth line in step 8**: after the owner pushes, the next session starts by reading the last run (`gh run list`). A red run is the first defect of the next ticket. |
+
+### 8.5 Acceptance
+
+- `golden-vectors` runs the golden vectors on Ubuntu, macOS and Windows, and every digest is the same on all three.
+- F2's guard fails when a path `ci.yml` names is missing, or when the selected marker collects nothing.
+- `test` is green, with the example files as BD2 decided.
+- With BD3's matrix, the full suite is green on the three systems, or each red test is a defect fixed in `src/`, never skipped by system.
+- The gitlinks are handled as BD4 decided, and checkout no longer warns.
+- `pixi run lint`, `pixi run test`, `check-ceilings`, `check-oo` and `check-spectree` pass; `bump-build` if `src/` changed; `cgitsync status` shows `errors=0`.
