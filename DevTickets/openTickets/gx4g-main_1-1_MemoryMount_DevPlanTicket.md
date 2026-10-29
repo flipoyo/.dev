@@ -103,6 +103,10 @@ graph LR
 
 ---
 
+> **See BeforeCGS-BETA §7.0 (short ticket `yyyy-xxx`, 2026-10-29):** the levels' commands are now `OPX` →
+> `bootstrap yyyy-opx.gts`, `DEV` → `bootstrap yyyy-dev.cgs`, `USR` → `initialise ../install.cgs`, and the level `XXX`
+> is computed by a GX4G node for CGS-BETA. §2's table is read with it.
+
 ## 1. The model, as read with the owner
 
 - **G is a graph with four parts:** `NAME` (the project's name), `NODE` (its repositories), `EDGE` (how they

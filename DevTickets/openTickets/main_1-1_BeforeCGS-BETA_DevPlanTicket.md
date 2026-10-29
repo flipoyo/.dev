@@ -7,7 +7,8 @@
 > **Merged, 2026-10-29 (owner):** *"Merge BeforeBeta and alpha2beta integrating the shortTicket A2B-frontier.md.
 > The results in a single BeforeCGS-BETA DevPlanTicket."* This ticket is BeforeBeta (`main_1-1`), renamed. alpha2beta
 > (`main_1-2`) is merged in: its Part A as §7 and its Part B (FixGoldenVector) as §8. Their decisions are renamed AD1–AD5
-> and BD1–BD5. The short ticket `A2B-frontier` is integrated as §6 (FD1–FD4) and runs as **S10c**. BeforeBeta's sections
+> and BD1–BD5. The short ticket `A2B-frontier` is integrated as §6 (FD1–FD4) and runs as **S10c**. The short ticket
+> `yyyy-xxx` (the levels' commands and domains) is integrated into §7 as §7.0, with N6–N8 and AD6–AD9. BeforeBeta's sections
 > keep their numbers, so a citation of "BeforeBeta §n" in code, tests or specs reads as this ticket's §n. Beta is
 > CGS-BETA: ComplexGitSync (CGS-ALPHA) as it leaves this ticket.
 
@@ -497,6 +498,9 @@ demand (owner, 2026-10-27).
   `gittree_root`). The inclusion proof MerkleRoot hands out (`omniscience proof`) is the existing way to show one
   leaf is in a registered tree.
 
+- **The domains are in question.** §7.0 (short ticket `yyyy-xxx`) puts `.omniscience` at `OPX` and `.cgitsync` at
+  `DEV`, against this section's `.omniscience` for `USER` and `PUB`. §7.4's AD6 settles which holds, before S10c.
+
 ### 6.2 Steps
 
 - **N6.1. Leaves only.** `OP` exposes the GitTree's leaves and nothing else: no ledger entry, no commit message, no
@@ -526,10 +530,56 @@ demand (owner, 2026-10-27).
 
 ## 7. The `yyyy-xxx.cgs` compatibility rule (from alpha2beta, Part A)
 
+### 7.0 The short ticket `yyyy-xxx` (2026-10-29), integrated
+
+> **The owner's specs, unchanged:**
+>
+> ```text
+> yyyy = NAME.letter
+> xxx = OP.letter
+>
+> ComplexGitSync OP emits a cgitsync CMD on YYYY.node
+>
+> node is a NODE that stangs at the frontier requested by CGS-BETA
+>
+> CGS-BETA calls GX4G-NODE to calculates XXX. It is either OPX,DEV,USR,PUB
+>
+> OPX --> cgitsync bootstrap yyyy-opx.gts | CGS-ALPHA standalone
+> DEV --> cgitsync bootstrap yyyy-dev.cgs | CGS-ALPHA standalone
+> USR --> cgitsync initialise ../install.cgs | CGS-ALPHA nested
+>
+> YYYY Domains are HW - HardWare, DATA - .omniscience, COMPUTO - .cgitsync, TWIN - OperatingSpace = YYYY.NODEi
+>
+> TWIN belongs to USR
+> COMPUTO belongs to DEV
+> DATA belongs to OPX
+> HW belongs to PUB
+> ```
+
+Read as one table (`yyyy` spelled with `NAME`'s letters, `xxx` with `OP`'s):
+
+| `XXX` | Command `OP` emits on `YYYY.node` | ComplexGitSync (CGS-ALPHA) | `YYYY` domain |
+|---|---|---|---|
+| `OPX` | `cgitsync bootstrap yyyy-opx.gts` | standalone | DATA, `.omniscience` |
+| `DEV` | `cgitsync bootstrap yyyy-dev.cgs` | standalone | COMPUTO, `.cgitsync` |
+| `USR` | `cgitsync initialise ../install.cgs` | nested | TWIN, the Operating Space (`YYYY.NODEi`) |
+| `PUB` | none (`.PUBLIC` is `VOID`, ExplDistantLocal) | — | HW, the hardware |
+
+- **Who decides `XXX`.** CGS-BETA asks a GX4G node (`GX4G-NODE`) to compute it. `cgitsync` never chooses its own
+  level: it receives `XXX` and runs the command that level calls for.
+- **What `OP` does with it.** `OP` emits that one `cgitsync` command on `YYYY.node`. A node is a NODE of G that stands
+  at the frontier CGS-BETA asked for (§6: a GitRepo is the frontier). `OP` was built (8.4.0) as the door operations
+  enter through. Here it also sends the install command out, from the BETA request to the ALPHA execution.
+- **The files the levels open** follow §7.1's rule. `yyyy-dev.cgs` is `$G.NAME-$G.OP.NAME.cgs`. `OPX` opens a
+  **`.gts`**, a State `bootstrap` already accepts (`bootstrap <spec.cgs|snapshot.gts>`), not a `.cgs`. `USR` opens
+  the project's `install.cgs`, one directory up, with ComplexGitSync nested in it.
+- **Domains.** `YYYY` (the project) has four domains, one per level. `.omniscience` is DATA, held at `OPX`.
+  `.cgitsync` is COMPUTO, at `DEV`. The Operating Space is TWIN, at `USR`. The hardware is HW, at `PUB`.
+
 ### 7.1 The rule, as read
 
 - **A file's name is a contract.** `yyyy-xxx.cgs` is `$G.NAME-$G.OP.NAME.cgs` (G.EDGE.NAME): `yyyy` is the project's
-  name, `xxx` the operation's name (`dev`, `opx`, …).
+  name, `xxx` the operation's name, one of `opx`, `dev`, `usr`, `pub` (§7.0), computed by a GX4G node for CGS-BETA.
 - **When `cgitsync initialise $exe-path/yyyy-xxx.cgs` writes or reads it,** its project line is
   `project = { name = "yyyy", default_branch = "xxx", fallback_branch = "CGS-BETA" }`: the project is the one the name
   says, the tree opens on the branch the name says, and a repository with no such branch falls back to `CGS-BETA`.
@@ -561,6 +611,13 @@ demand (owner, 2026-10-27).
   as AD1 decides. It runs before anything is cloned, like IntegrityMount's denials.
 - **N4. The examples.** Bring `gx4g-dev.cgs` and `gx4g-opx.cgs` under the rule, and every other concerned example.
   Each must stay valid, keeping the golden vectors and the example tests green.
+- **N6. The levels' commands (§7.0).** Given `XXX`, `OP` builds the one `cgitsync` command the table names, for
+  `YYYY.node`: `bootstrap yyyy-opx.gts`, `bootstrap yyyy-dev.cgs`, or `initialise ../install.cgs`. Whether it
+  runs the command or hands it to the caller is AD7.
+- **N7. `XXX` comes from outside.** `OP` accepts `XXX` from the caller, which is CGS-BETA through a GX4G node, and
+  never computes it. Until GX4G answers, the level stays the tree's profile (OpBoundary).
+- **N8. `USR` for `.USER`.** The short ticket names the level `USR`. One spelling is kept everywhere: `OP`'s levels,
+  file names and PoE (AD8).
 - **N5. Documentation.** The `.cgs` grammar in the user guide, `AdditionalSpecs.md` (*Format ownership*, the branch
   chain), `digest.md`.
 
@@ -575,6 +632,10 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 | **AD3** | `CGS-BETA` as a branch: who creates it, and in which repositories? | **Nobody yet.** It is a fallback only. A repository without it falls back to `main`, after `CGS-BETA`, as the chain already does, and creating the branch is the release step that turns CGS-ALPHA into CGS-BETA. |
 | **AD4** | `$exe-path`: the directory the `cgitsync` that runs sits in, or any path? | **Any path.** The rule reads the file's name, wherever it is. `$exe-path` in the short ticket names where the protocol keeps the files (`$HOME/.cgs/$G-NAME/`, MemoryMount). |
 | **AD5** | Does the rule also bind `bootstrap`? | **Yes.** `bootstrap` opens the `.DEV` and `.OPX` trees with the same files (`bootstrap ../examples/gx4g-dev.cgs`). |
+| **AD6** | The domains contradict §6's `A2B-frontier`. §6 puts `.omniscience` (BETA) at `USER` and `PUB`, and `.cgitsync` (ALPHA) at `OPX` and `DEV`. `yyyy-xxx` puts `.omniscience` (DATA) at `OPX`, `.cgitsync` (COMPUTO) at `DEV`, and the Operating Space (TWIN) at `USR`. Which holds? | To be answered. Both cannot: `GitRepo-BETA`, the side `OP` verifies against, depends on it. |
+| **AD7** | Does `OP` run the command on `YYYY.node`, or only emit it, for CGS-BETA or the node to run? | **Emit it**: `OP` returns the command and runs nothing. A node may be another machine (HW), and `cgitsync` runs no command outside its tree. |
+| **AD8** | `USR` or `USER`: which spelling stays? | **`USER`**, the profile and PoE name already in the code (`TreeProfile.USER`, `op_boundary.USER`). `USR` is read as its abbreviation in the protocol. |
+| **AD9** | `OPX` opens a `.gts` (`yyyy-opx.gts`), not a `.cgs`: is that the State an OPX tree is restored from, and who writes it? | **A State a DEV tree froze** (`release freeze`), handed to the OPX node. `bootstrap` already restores a tree from a `.gts`. |
 
 ### 7.5 Acceptance
 
@@ -582,6 +643,7 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
   to `CGS-BETA` and then to `main`, and refuses a mismatching file by name (per AD1) before anything is cloned.
 - A file without the shape behaves exactly as today, and every golden vector is unchanged.
 - The concerned examples follow the rule, and every example test is green.
+- Given `XXX`, `OP` yields the command §7.0 names for `YYYY.node`, and computes no level of its own.
 
 ---
 
