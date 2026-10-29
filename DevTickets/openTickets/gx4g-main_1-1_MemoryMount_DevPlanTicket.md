@@ -62,7 +62,7 @@
 
 > **`OP` extracted, 2026-10-29 (owner: *"extrait l'implementation de OP comme ticket ComplexGitSync"*).**
 > The boundary class, its routing, `isPoE(OP) → OP*`, `*G`'s derivation and the CGS-ALPHA tests are now
-> `main_2-11_OpBoundary_DevPlanTicket.md`. This ticket keeps the install protocol, the PoE vector recorded at
+> `archive/20261029_OpBoundary_DevPlanTicket.md` (done, 8.4.0). This ticket keeps the install protocol, the PoE vector recorded at
 > install, where `*G` lives and what each level's memory pushes, and depends on OpBoundary.
 
 ## Abstract — read this first
@@ -135,7 +135,7 @@ The more a level operates, the less it exposes.
 
 ## 4. What this ticket takes from OpBoundary
 
-`OP` is built in `main_2-11_OpBoundary_DevPlanTicket.md`: it carries the operation, its origin (G or GX4G) and
+`OP` is built in `archive/20261029_OpBoundary_DevPlanTicket.md` (done, 8.4.0): it carries the operation, its origin (G or GX4G) and
 the level, and answers `run()` and `isPoE(OP) → OP*`. `*G` is derived there from those answers. This ticket only
 supplies the level and its vector (M2), and decides where `*G` is kept and pushed (M4).
 
@@ -181,7 +181,7 @@ Moved to OpBoundary §5: which results are exposable and one door or only writes
   `cgitsync status` shows `errors=0`.
 
 Related:
-- `main_2-11_OpBoundary_DevPlanTicket.md`: `OP`, `isPoE(OP) → OP*`, `*G`, the CGS-ALPHA tests; this ticket depends on it.
+- `archive/20261029_OpBoundary_DevPlanTicket.md` (done, 8.4.0): `OP`, `isPoE(OP) → OP*`, `*G`, the CGS-ALPHA tests; this ticket depends on it.
 - `archive/20261027_EnvConnect_DevPlanTicket.md`: the install frontier, the twin, PoE in the Operating Space.
 - `archive/20260705_CGS.POC.md`: `PoE.state`, `PoE.PUBLIC`.
 - `archive/20261029_IntegrityMount_DevPlanTicket.md`: the `.gts` may refuse.

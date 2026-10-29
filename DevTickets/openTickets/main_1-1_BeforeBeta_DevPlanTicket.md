@@ -379,7 +379,7 @@ The owner's short ticket `ExplDistantLocal` and its final cut, *"\*NAME{NODE,EDG
 add a model this ticket was written without: a project is a graph G; each install level exposes a fixed part of it
 as Proof-of-Existence (`.USER` name and nodes, `.DEV` the name, `.OPX` nothing); every operation passes through one
 boundary class `OP`, whose `isPoE(OP)` is `OP*`; and only the PoE graph `*NAME{NODE, EDGE*}` is registered, with its
-Sigma in `OmniscienceRecord`. It is planned in **OpBoundary** (`main_2-11`) and **MemoryMount** (`gx4g-main_1-1`).
+Sigma in `OmniscienceRecord`. OpBoundary landed as 8.4.0 (archived); it is planned in **MemoryMount** (`gx4g-main_1-1`).
 Where it touches this ticket:
 
 | BeforeBeta item | What the PoE model changes | Re-evaluated |
@@ -422,7 +422,7 @@ demand (owner, 2026-10-27).
 
 | D | Question | Options |
 |---|---|---|
-| **D5** | Do OpBoundary (`main_2-11`) and MemoryMount (`gx4g-main_1-1`) land before beta? If they do, S11 follows the `.USER` protocol and S12 inspects the PoE register. If not, beta ships the install as it stands and §3d's rows stay requirements. | (a) both before beta, as new steps after S10; (b) OpBoundary before, MemoryMount after; (c) both after beta. To be asked. |
+| **D5** | OpBoundary landed as 8.4.0. Does MemoryMount (`gx4g-main_1-1`) land before beta? If it does, S11 follows the `.USER` protocol and S12 inspects the PoE register. If not, beta ships the install as it stands and §3d's rows stay requirements. | (a) MemoryMount before beta, as a new step after S10; (b) after beta. To be asked. |
 
 ## 5. Done when, and what this refuses
 

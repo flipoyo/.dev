@@ -35,6 +35,12 @@
 > starred, that is whether `OP*` is exposed. `*NAME` is a name of its own, and the PoE is not written but
 > signalled, by that `*` (Q8).
 
+> **Owner's answers at `implement`, 2026-10-29:** Q1 `OP` wraps the client; Q2 the operations that write or
+> reach outside the tree go through it; Q4 `OP*` keeps the operation's name, `*NAME` and the State's Merkle-root
+> hash; Q5 the Python API only. Also: the level is read from the tree's profile until MemoryMount records it;
+> `*NAME` is `*` then NAME; O6 adds `sigma` to `OmniscienceRecord` only, without restricting `register`. The raise
+> `cli/_shared.py` 611 → 612 and `omniscience_record.py` 183 → 188 was approved.
+
 ## Abstract — read this first
 
 **The one-line version.** `OP` is the boundary class every operation on G goes through, whether
@@ -184,3 +190,32 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 
 Related: `gx4g-main_1-1_MemoryMount_DevPlanTicket.md` (the protocol and the PoE vector at install, which depends
 on this ticket); `archive/20261029_IntegrityMount_DevPlanTicket.md`; BeforeBeta §3c.
+
+## 7. As delivered (2026-10-29)
+
+- **`orchestre/op_boundary.py`** (ring 3): `PoE` (four bits; `PUBLIC`, `USER`, `DEV`, `OPX`; `of_profile`),
+  `Origin`, `Op` (`run`, `is_poe`), `OpStar` (`poe`, `sigma`), `RoutedClient`, `ROUTED` (`WRITING_METHODS`,
+  `verify`, `fetch`). `run()` refuses an operation outside `ROUTED` and logs `op` (operation, origin).
+- **`OP*`.** `*NAME` (`*` then the project's name), `SHA256(G.MerkleRoot)` (`MerkleRoot.content_digest` of the
+  tree's `gittree_root`), the nodes (repository names), the edges (parent, child) carrying the operation when the
+  `OP` bit is set. `poe` exposes `name`+`merkle_root_sha256` / `nodes` / `edges` by bit; empty at `.OPX`. The origin
+  never enters it.
+- **Routing.** `cli/_shared._run_with_logging` hands every CLI runner a `RoutedClient`: routed methods go through
+  `Op` as `internal`, every other attribute is the client's, and assignments reach the client.
+- **O6.** `OmniscienceRecord.sigma`: shown in `[record]`, committed only when present, read back; `GLOBAL_SCHEMA` 1.
+  `register` is unchanged: it writes no `sigma` and is not restricted to PoE graphs (BeforeBeta §3b, with
+  ProviderMigration).
+- **Tests.** `tests/integration/test_op_boundary.py` (14): the four bits and the invariant, a routed write on a real
+  tree, `OP*`'s content and what it never holds, each level's bound, starred edges at `.PUBLIC`, the profile's
+  level, external never above internal, a non-routed operation refused, a refusal kept, the CLI's routing, `sigma`
+  committed only when present.
+- **Docs.** `AdditionalSpecs.md` §OP, the boundary of G, its module row and the ceiling note; `digest.md`;
+  `api_python.tex` §`Op`, the boundary of a project.
+- **Orchestrator's fixes at quote.** `verify` was routed even without `repair`, so the read `verify check` went
+  through `Op`: `Op.routes` now routes it only with `repair` (Q2), with a test. The specs said every operation that
+  writes or reaches outside the tree enters through `Op`; they now name the routed set, and say that the install,
+  `repo_create`, `unlock`, `memory_init`, `memory_clone` and the `omniscience` methods still go direct.
+- **Not done.** `*G` is not stored anywhere (MemoryMount Q4). No `.OPX` tree exists, so `OPX` is built by hand in
+  the tests. Which repositories an operation actually ran across is not tracked: the edges carry the operation for
+  the whole tree.
+- **Released as 8.4.0 (MINOR)** after the orchestrator's quote; the three suite failures come from the owner's draft notes in `examples/gx4g-dev.cgs` and `examples/gx4g-opx.cgs`, outside this ticket.
