@@ -65,6 +65,11 @@
 > `archive/20261029_OpBoundary_DevPlanTicket.md` (done, 8.4.0). This ticket keeps the install protocol, the PoE vector recorded at
 > install, where `*G` lives and what each level's memory pushes, and depends on OpBoundary.
 
+> **From the owner's corrections in `examples/gx4g-dev.cgs` and `gx4g-opx.cgs` (resolved 2026-10-29):** gx4g's DEV
+> tree is `gx4g-dev` (G.OP.NAME; its file `gx4g-dev.cgs` is G.EDGE.NAME), PoE `{1,0,0,0}`, Sigma 1, G credentials `{DEV for CGS-BETA, USER for CGS-ALPHA}`; its OPX tree
+> is `gx4g-opx` (file `gx4g-opx.cgs`), PoE `{0,0,0,0}`, Sigma 0, G credentials `{DEV for CGS-BETA, DEV for CGS-ALPHA}`. CGS-ALPHA is
+> ComplexGitSync. What CGS-BETA is, and what a "G credential" grants, are this ticket's to settle (Q5).
+
 ## Abstract — read this first
 
 **The one-line version.** A project G is a graph `G{NAME, NODE, EDGE, OP}`. Each of its four install levels
@@ -125,7 +130,7 @@ The more a level operates, the less it exposes.
 
 - **`.USER`.** `initialise install.cgs` is BeforeBeta's S11. The tree is USER, and its memory is local and never pushed.
 - **`.DEV`.** Opened today with `bootstrap examples/complexgitsync4dev.cgs` for ComplexGitSync, and with
-  `examples/gx4g4dev.cgs` for gx4g. The protocol moves the spec to `$HOME/.cgs/$G-NAME/$G-NAME-dev.cgs`, outside both clones.
+  `examples/gx4g-dev.cgs` for gx4g (G.OP.NAME `gx4g-dev`). The protocol moves the spec to `$HOME/.cgs/$G-NAME/$G-NAME-dev.cgs`, outside both clones.
 - **`.OPX`.** No `-opx.cgs` exists. `OperatingSpace` is "the API of OPX, the operating system" (Minimalism D5),
   and the Omniscience register is gx4g's (Minimalism D7).
 - **What a level exposes** is decided today by each command: whether it pushes a memory, whether it writes to
@@ -169,6 +174,7 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 | **Q2** | What is an `.OPX` tree concretely: which repositories does `$G-NAME-opx.cgs` mount, and what does it run that `.DEV` does not? |
 | **Q3** | Where does this ticket, and OpBoundary with it, rank against BeforeBeta: before beta (pile 1), or after it? |
 | **Q4** | Where the `*G` OpBoundary derives lives: computed on demand (`status --json`), written to the memory and pushed when the level allows, or handed to gx4g? |
+| **Q5** | CGS-BETA, and G's credentials per level: what is CGS-BETA, and what does `DEV` or `USER` for CGS-ALPHA and CGS-BETA let a tree do? |
 
 Moved to OpBoundary §5: which results are exposable and one door or only writes. CGS-ALPHA is ComplexGitSync (owner, 2026-10-29).
 
