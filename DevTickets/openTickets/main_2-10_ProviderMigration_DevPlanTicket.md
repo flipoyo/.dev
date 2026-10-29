@@ -38,7 +38,8 @@
 > **Owner's rule, 2026-10-29 (recorded in OpBoundary, `main_2-11`):** only a PoE-typed graph, a `*G`, is
 > entered in the PoE register, as `(Timestamp, NAME, SHA256(G.MerkleRoot))`, and `.omniscience` records its
 > Sigma visibly, as a `sigma` field of `OmniscienceRecord`, committed when present (OpBoundary Q6, Q7). When the
-> register moves to gx4g, it moves with that field.
+> register moves to gx4g, it moves with that field. Final cut (owner, 2026-10-29): what is registered and what gx4g
+> reads is `*NAME{NODE, EDGE*} = G{NAME, NODE, EDGE, OP*}`, never G.
 
 ## Abstract — read this first
 

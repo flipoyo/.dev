@@ -51,6 +51,15 @@
 > register, as `(Timestamp, NAME, SHA256(G.MerkleRoot))`. `.omniscience` records `*G`'s Sigma in the
 > register, visibly. G itself is never registered.
 
+> **Final cut, owner, 2026-10-29:** *"\*NAME{NODE,EDGE\*} = G{NAME,NODE,EDGE,OP\*}"*. The PoE graph is
+> written `*NAME{NODE, EDGE*}`: it is named `*NAME`, keeps G's nodes, and its edges are `EDGE*`, the edges
+> with each operation's `OP*` carried on them. So `OP*` is not a fourth part beside the edges any more: it
+> *is* what makes an edge starred. `*NAME{NODE, EDGE*}` is what gx4g reads and what is registered. Where
+> this ticket writes `*G`, read `*NAME{NODE, EDGE*}`. The PoE vector keeps four bits, because `.PUBLIC = {1,1,1,1}`
+> is an invariant (owner, 2026-10-29), so §2's vectors and M4b's Sigma values (`.USER` 2, `.DEV` 1, `.OPX` 0) stand.
+> `*NAME` is a name of its own; a level's PoE vector is never written, it is signalled by that `*`, and only its
+> Sigma is recorded (OpBoundary Q8).
+
 > **`OP` extracted, 2026-10-29 (owner: *"extrait l'implementation de OP comme ticket ComplexGitSync"*).**
 > The boundary class, its routing, `isPoE(OP) → OP*`, `*G`'s derivation and the CGS-ALPHA tests are now
 > `main_2-11_OpBoundary_DevPlanTicket.md`. This ticket keeps the install protocol, the PoE vector recorded at

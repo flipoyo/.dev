@@ -328,6 +328,7 @@ that do, and each must be released as its own MAJOR, not folded into a patch:
 |---|---|---|---|
 | **Remove `legacy_paths.py`** and the line in `src/ComplexGitSync/__init__.py` that installs it | SrcLayout §8, the release after 8.0.4 (D3: the old import paths last **one** release) | `import ComplexGitSync.memory.store`, `ComplexGitSync.git_runner` and the 40 other old module paths stop working. SrcLayout shipped as a PATCH on the reading that module paths are not public (`Versioning.md`: `src/` is not a public interface). **If the owner counts the paths `api_python.tex` documents as public, this removal is a MAJOR.** | The owner's word on whether module paths are public. The user guide's *What changed* already tells users to move to the new paths now. |
 | **Withdraw `repo create` and the 12 `omniscience *` commands** | ProviderMigration (pile 2), by Minimalism D1 | A command disappears from the CLI. CliReduction was released as a MAJOR for the same reason (`submodules report`). | gx4g offering each provider call and the register. |
+| **Refuse to register a graph that is not PoE-typed** | OpBoundary (`main_2-11`), O6 | `omniscience register` registers any tree today. Refusing a non-PoE graph removes that. | Unless it lands with ProviderMigration, which takes `register` out of `cgitsync` anyway, as part of the same MAJOR. |
 | **Drop the SrcLayout leftovers that touch a documented name** | Not owed today | None is: the stale `GitSyncError` docstring in `git_repo/git_runner.py`, the bare file names in the `.tex` files and the missing private `_SSH_REMOTE_RE` change no exported name. They ride in any later patch. | Nothing. |
 
 Until then the release is 8.0.x, a MAJOR against the last committed 7.3.2 as a whole. Any
@@ -372,6 +373,38 @@ This is a requirement, not work for this ticket, and S12 checks only what `cgits
 - This tree, for S12: `branch list` reports `closed` for `memory-dev` and `alpha-tech`, and two real
   orphans, `ComplexGitSync_multi-branch` in `.claude` and `.localSpec`, for the owner to clean up.
 
+## 3d. The PoE model, re-evaluated (2026-10-29)
+
+The owner's short ticket `ExplDistantLocal` and its final cut, *"\*NAME{NODE,EDGE\*} = G{NAME,NODE,EDGE,OP\*}"*,
+add a model this ticket was written without: a project is a graph G; each install level exposes a fixed part of it
+as Proof-of-Existence (`.USER` name and nodes, `.DEV` the name, `.OPX` nothing); every operation passes through one
+boundary class `OP`, whose `isPoE(OP)` is `OP*`; and only the PoE graph `*NAME{NODE, EDGE*}` is registered, with its
+Sigma in `OmniscienceRecord`. It is planned in **OpBoundary** (`main_2-11`) and **MemoryMount** (`gx4g-main_1-1`).
+Where it touches this ticket:
+
+| BeforeBeta item | What the PoE model changes | Re-evaluated |
+|---|---|---|
+| **S11, the user install** | MemoryMount's `.USER` protocol clones G first, then ComplexGitSync **inside** G, then `initialise install.cgs`. S11 clones ComplexGitSync alone into `$CGSPATH` and runs `initialise install.cgs --output-path $CGSPATH`. | S11 tests the install as it stands. Whether it follows the `.USER` protocol before beta is D5. |
+| **S12, the developer tree** | `.DEV` is opened with `bootstrap $HOME/.cgs/$G-NAME/$G-NAME-dev.cgs`. This tree uses `examples/complexgitsync4dev.cgs`. | Unchanged until MemoryMount Q1 moves the spec. S12 inspects the tree as it is. |
+| **S10/S12, gx4g's DEV tree** | Opened today from `examples/gx4g4dev.cgs`. Under the protocol, from `$HOME/.cgs/gx4g/gx4g-dev.cgs`. IntegrityMount's denials apply either way. | S12 inspects it as it is, denials included. The spec's location is gx4g's to move (below). |
+| **§2.4, `.omniscience`** | Only `*NAME{NODE, EDGE*}` is registered, with `sigma` in the record, committed when present. Today `omniscience register` registers any tree, with no PoE type and no Sigma. | Still holds for S12: records without `sigma` keep verifying byte for byte, and `GLOBAL_SCHEMA` stays 1. That `register` refuses a graph that is not PoE-typed is OpBoundary's, not S12's. |
+| **§2.5 rule 6** (the writer does not grow) | OpBoundary O6 adds one field to the record the existing writer appends. | One field, committed when present, is not a new write path. OpBoundary's orchestrator quotes it against rule 6. |
+| **§3b, MAJOR releases** | Refusing to register a graph that is not PoE-typed takes away something `omniscience register` does today. | A new §3b row: that refusal is a MAJOR unless it waits for ProviderMigration, which removes `register` from `cgitsync` anyway. |
+| **§3c, what gx4g gets** | gx4g reads `*NAME{NODE, EDGE*}`, never G. It sends its requests through `OP` as an external origin. The register it holds keeps `sigma`. | Added to §3c (below). |
+| **Minimalism** | `OP` adds no command: it wraps the client's methods. | Holds by construction. OpBoundary's acceptance says so. |
+
+**What gx4g must take from it.** These are added to the requirements §3c hands over.
+
+- **Read only the PoE graph.** gx4g reads a project as `*NAME{NODE, EDGE*}`, through `OP`'s results, never G's
+  operations themselves.
+- **Request as an external origin.** gx4g's requests to `cgitsync` enter through `OP` as `external`, and are
+  never exposed more than the same internal request (OpBoundary O5). The transport is OpBoundary Q5.
+- **Keep `sigma` in the register.** When the register moves to gx4g (ProviderMigration), only PoE graphs are
+  registered, under `*NAME`, a name of their own; the PoE is never written, the `*` signals it, and their
+  `OmniscienceRecord` keeps `sigma`, visible and committed when present.
+- **Use its own install levels.** gx4g's `.DEV` and `.OPX` trees open from `$HOME/.cgs/gx4g/gx4g-dev.cgs` and
+  `gx4g-opx.cgs` (MemoryMount). gx4g writes those files. Its `examples/gx4g4dev.cgs` is the interim.
+
 ## 4. Decisions for the owner
 
 | D | Question | Recommendation |
@@ -386,6 +419,10 @@ This is a requirement, not work for this ticket, and S12 checks only what `cgits
 
 WorkingAreaRename's D1 is not asked here: it closes on its orchestrator's
 demand (owner, 2026-10-27).
+
+| D | Question | Options |
+|---|---|---|
+| **D5** | Do OpBoundary (`main_2-11`) and MemoryMount (`gx4g-main_1-1`) land before beta? If they do, S11 follows the `.USER` protocol and S12 inspects the PoE register. If not, beta ships the install as it stands and §3d's rows stay requirements. | (a) both before beta, as new steps after S10; (b) OpBoundary before, MemoryMount after; (c) both after beta. To be asked. |
 
 ## 5. Done when, and what this refuses
 

@@ -26,6 +26,15 @@
 > register, as `(Timestamp, NAME, SHA256(G.MerkleRoot))`. `.omniscience` records `*G`'s Sigma in the
 > register, visibly. G itself is never registered.
 
+> **Final cut, owner, 2026-10-29:** *"\*NAME{NODE,EDGE\*} = G{NAME,NODE,EDGE,OP\*}"*. The PoE graph is
+> written `*NAME{NODE, EDGE*}`: it is named `*NAME`, keeps G's nodes, and its edges are `EDGE*`, the edges
+> with each operation's `OP*` carried on them. So `OP*` is not a fourth part beside the edges any more: it
+> *is* what makes an edge starred. `*NAME{NODE, EDGE*}` is what gx4g reads and what is registered. Where
+> this ticket writes `*G`, read `*NAME{NODE, EDGE*}`. The PoE vector keeps **four bits**, `{NAME, NODE, EDGE, OP}`,
+> because `.PUBLIC = {1,1,1,1}` is an invariant (owner, 2026-10-29, Q8): the `OP` bit says whether the edges are
+> starred, that is whether `OP*` is exposed. `*NAME` is a name of its own, and the PoE is not written but
+> signalled, by that `*` (Q8).
+
 ## Abstract — read this first
 
 **The one-line version.** `OP` is the boundary class every operation on G goes through, whether
@@ -107,7 +116,8 @@ graph LR
   - `isPoE(OP)` → `OP*`, the operation's Proof-of-Existence form, bounded by the level's vector (at `.OPX`,
     an `OP*` that proves nothing);
   - `OP*.poe` → the proof `OP*` gives.
-- **What follows from it:** `*G = G{NAME, NODE, EDGE, OP*}`, and `*G.poe = OP*.poe`. gx4g reads `*G`, never `G`.
+- **What follows from it:** `*NAME{NODE, EDGE*} = G{NAME, NODE, EDGE, OP*}` (the final cut): every `OP*` lands on
+  the edge it ran across, and `*G.poe = OP*.poe`. gx4g reads `*NAME{NODE, EDGE*}`, never `G`.
 - **What it never does:**
   - call a provider;
   - write to the Omniscience register;
@@ -140,7 +150,8 @@ graph LR
   - **NAME** is the record's `project`, and `SHA256(G.MerkleRoot)` is what it already commits through
     `gittree_root` and its own `record_hash`.
 
-  A G that is not PoE-typed gets no record. Writing stays `.omniscience`'s: the existing appender until
+  A G that is not PoE-typed gets no record. The PoE itself is never written: the record names `*NAME`, a name of its
+  own, and its `*` is the signal (Q8); `sigma` is the one PoE value the record carries. Writing stays `.omniscience`'s: the existing appender until
   ProviderMigration hands the register to gx4g.
 - **O7. Documentation:** `AdditionalSpecs.md`, `digest.md`, and `api_python.tex` for `OP`'s public surface.
 
@@ -157,6 +168,7 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 | **Q5** | How an external request from GX4G reaches `OP`: through the Python API only, or through a transport (a file, a process) that this ticket defines? |
 | **Q6** | ~~New entry or `OmniscienceRecord`?~~ **Answered 2026-10-29: `*G`'s Sigma is added to `OmniscienceRecord`.** No second entry type. |
 | **Q7** | ~~Sigma inside or outside the hash; the Timestamp's clock?~~ **Answered 2026-10-29: as already done for the environment and memory records, and the same for the Timestamp** (O6 says what that is). |
+| **Q8** | **Answered 2026-10-29.** Four bits, because `.PUBLIC = {1,1,1,1}` is an invariant; the `OP` bit is whether the edges are starred (`OP*` exposed), and Sigma stays out of 4. **`*NAME` is a name of its own** in the register, not `NAME` with a mark. **The PoE is not written, it is signalled:** no field of the record holds the PoE vector or a PoE type; the `*` of `*NAME` is the signal, and Sigma is the one value written, visibly (O6). |
 
 ## 6. Acceptance
 
