@@ -1,16 +1,36 @@
-# BeforeCGS-BETA — everything mandatory before CGS-BETA, landed on main and checked by a user install
+# LinkAtCGS — link ComplexGitSync and @CGS on CGS-ALPHA, checked by a user install
 
 *Created: 2026-10-27*
 
-*Branch: main*
+*Branch: CGS-ALPHA*
+
+> **Re-evaluated with @CGS, 2026-10-31 (owner):** *"Reevaluate BeforeBeta DevPlanTicket commonly with atCGS, both on
+> branch CGS-ALPHA. gx4g-main now aims at atCGS. cgs-alpha is first for both gitrepo."* The ticket moves from `main_1-1`
+> to `CGS-ALPHA_1-1`: its remaining work lands on `CGS-ALPHA`. `@CGS` (ComplexGraphSync, `archive/20260707_@CGS.md`) is
+> the tool §6.3 FD1 called "still to come". `CGS-ALPHA` is the first branch of both project repositories,
+> `ComplexGitSync` and `DocComplexGitSync`, with `main` as their fallback. The re-evaluation is §10, its defects are
+> §3 rows 10–15, and its decisions RD1–RD5, all answered the same day (§10.4). The earlier banners are history.
+>
+> **Owner's answers, the same day:** *"I think you can bump from the latest push, i think it was 8.6.2"* (RD1: 8.6.2
+> comes into `CGS-ALPHA`, and the next release counts from it). *"It doesn't sound good"* (RD3: the doubled memory branch
+> is a defect). Delta and nabla: *"Do not implement delta nabla for now, not the objective. The goal is to link
+> ComplexGitSync and atCGS"* (RD4: not now).
+> *"atCGS is also ALPHA. We don't need ALPHA-->BETA anymore for the POC; it will be for later when I activate GX4G GATE.
+> Not ready yet."* (RD5: §6's frontier is deferred to the GX4G GATE). RD2, once §7's rule was explained: the rule
+> falls back to `CGS-ALPHA`.
+
+> **Renamed LinkAtCGS, 2026-10-31 (owner):** *"For now remove every reference to [the beta branch]. [...] The goal is to link
+> ComplexGitSync and atCGS."* The name of the beta branch is gone from the code, the examples, the specs and the open
+> tickets. The `yyyy-xxx.cgs` rule now falls back to `CGS-ALPHA`, and the molonari OpFrontier targets `@CGS`. The owner's
+> quotations in §7.0 are edited to match. The archive keeps the old name, because it is never edited.
 
 > **Merged, 2026-10-29 (owner):** *"Merge BeforeBeta and alpha2beta integrating the shortTicket A2B-frontier.md.
-> The results in a single BeforeCGS-BETA DevPlanTicket."* This ticket is BeforeBeta (`main_1-1`), renamed. alpha2beta
+> The results in a single LinkAtCGS DevPlanTicket."* This ticket is BeforeBeta (`main_1-1`), renamed. alpha2beta
 > (`main_1-2`) is merged in: its Part A as §7 and its Part B (FixGoldenVector) as §8. Their decisions are renamed AD1–AD5
 > and BD1–BD5. The short ticket `A2B-frontier` is integrated as §6 (FD1–FD4) and runs as **S10c**. The short ticket
 > `yyyy-xxx` (the levels' commands and domains) is integrated into §7 as §7.0, with N6–N8 and AD6–AD9. BeforeBeta's sections
 > keep their numbers, so a citation of "BeforeBeta §n" in code, tests or specs reads as this ticket's §n. Beta is
-> CGS-BETA: ComplexGitSync (CGS-ALPHA) as it leaves this ticket.
+> ComplexGitSync (CGS-ALPHA) as it leaves this ticket.
 >
 > **Every decision answered, 2026-10-29, before implementation** (owner, through `AskUserQuestion`): D2, D5; FD1–FD4;
 > AD1–AD9; BD1–BD5. Each row says its answer. Nothing is left to ask before S10b and S10c.
@@ -152,8 +172,8 @@ that a project nesting ComplexGitSync's developer spec, gx4g first, can open
 its DEV tree at all (S10). The provider's lock and roles are gx4g's (§3c). All of these must hold before gx4g's frontier is closed, and the
 frontier is drawn on Minimalism's map.
 
-**What you need to do with it.** Every decision is answered (banner). Run §1 in order, filling §3 as you go,
-under §2.5: S10b (§7, §8), then S10c (§6).
+**What you need to do with it.** S10b and S10c landed as 8.5.0 (§9). Owner: answer RD1–RD5 (§10.4). Then run S11
+and S12 on `CGS-ALPHA` under §2.5 and §10, filling §3 as you go.
 
 ```mermaid
 graph TD
@@ -167,14 +187,16 @@ graph TD
     S7 --> S8["S8 SrcLayout<br/>(main_1-6)"]
     S8 --> S9["S9 BranchProtection, M5<br/>(done, 8.1.0)"]
     S9 --> S10["S10 IntegrityMount<br/>(done, 8.3.0)"]
-    S10 --> S10b["S10b §7 yyyy-xxx.cgs, §8 CI on 3 OS<br/>(from alpha2beta)"]
-    S10b --> S10c["S10c §6 ALPHA/BETA frontier<br/>OP: GitRepo-ALPHA == GitRepo-BETA"]
-    S10c --> S11["S11 user install<br/>initialise install.cgs"]
+    S10 --> S10b["S10b §7 yyyy-xxx.cgs, §8 CI on 3 OS<br/>(done, 8.5.0)"]
+    S10b --> S10c["S10c §6 ALPHA/BETA frontier<br/>(done, 8.5.0)"]
+    S10c --> RE["§10 re-evaluation with @CGS<br/>on CGS-ALPHA, RD1–RD5<br/>YOU ARE HERE"]
+    AT["@CGS (ComplexGraphSync)<br/>gx4g-main aims at it"] -.->|"BETA side of §6"| RE
+    RE --> S11["S11 user install<br/>initialise install.cgs"]
     S11 --> S12["S12 inspect .memory, .omniscience<br/>Omniscience §10 (archived 7.1.1)"]
-    S12 --> R["§3 defects<br/>YOU ARE HERE"]
+    S12 --> R["§3 defects"]
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
-    class R here;
+    class RE here;
 ```
 
 ---
@@ -199,8 +221,8 @@ Facts as of 2026-10-27:
 | **S8** | `implement SrcLayout`, on `main`. **Done 2026-10-28, 8.0.4** | It applies Minimalism D6's folder column, `GitRepo/` first with its no-import test. `Merkle/` already holds MerkleRoot. Behaviour, public names and ceilings are unchanged. |
 | **S9** | `implement BranchProtection`, on `main`: M5 only, after its D7 and D9. **Done 2026-10-28, 8.1.0**, archived | Split on 2026-10-27. M5 landed as `tree/branch_findings.py`: `status` and `branch list`, and their `--json`, report `vanished`, `half-closed`, `split`, `orphaned-private` and `closed`; nothing is recorded. The rest is §3c. `require_dev` is kept. M5 finds a dead GitTree-branch and hands it to gx4g, writing nothing to the register. M0–M4 (provider protection and roles) are §9, handed to gx4g. No provider call. |
 | **S10** | `implement IntegrityMount`, on `main`. **Done 2026-10-29, 8.3.0**, archived | **Reopened 2026-10-28.** NestedAgentMaster shipped as 8.2.0 (archived) and the owner rejected its approach: *"La seule mission de cgitsync est de garantir l'intégrité du GitTree […] Je préfère un DENIAL de mount plutôt qu'une structure de type 2."* IntegrityMount undoes 8.2.0's schema 2, aliases and symlinks, and makes the `.gts` deny a requested mount that would break the GitTree, before anything is cloned for it. The State stays schema 1. |
-| **S10b** | `implement BeforeCGS-BETA` §7 and §8 (formerly alpha2beta), on `main`, after AD1–AD5 and BD1, BD3–BD5 | From CGS-ALPHA to CGS-BETA: the `yyyy-xxx.cgs` compatibility rule (`project = { name = "yyyy", default_branch = "xxx", fallback_branch = "CGS-BETA" }`), and FixGoldenVector merged in: *"cgitsync must be multi-os before beta."* §3 defect 5. CI's `golden-vectors` has run no test since 8.0.1 and `test` fails since 8.3.0. S11 and S12 start from a green CI. |
-| **S10c** | `implement BeforeCGS-BETA` §6, the ALPHA/BETA frontier, after FD1–FD4 | From the short ticket `A2B-frontier`. `OP` (8.4.0) becomes the operator ALPHA → BETA: it exposes only the GitTree's leaves and verifies `GitRepo-ALPHA == GitRepo-BETA`, a leaf in `.cgitsync` (OPX, DEV) against the same leaf in `.omniscience` (USER, PUB). |
+| **S10b** | `implement LinkAtCGS` §7 and §8 (formerly alpha2beta), on `main`, after AD1–AD5 and BD1, BD3–BD5 | The `yyyy-xxx.cgs` compatibility rule (`project = { name = "yyyy", default_branch = "xxx", fallback_branch = "CGS-ALPHA" }`, owner 2026-10-31), and FixGoldenVector merged in: *"cgitsync must be multi-os before beta."* §3 defect 5. CI's `golden-vectors` has run no test since 8.0.1 and `test` fails since 8.3.0. S11 and S12 start from a green CI. |
+| **S10c** | `implement LinkAtCGS` §6, the ALPHA/BETA frontier, after FD1–FD4 | From the short ticket `A2B-frontier`. `OP` (8.4.0) becomes the operator ALPHA → BETA: it exposes only the GitTree's leaves and verifies `GitRepo-ALPHA == GitRepo-BETA`, a leaf in `.cgitsync` (OPX, DEV) against the same leaf in `.omniscience` (USER, PUB). |
 | **S11** | The user install from `main`: `git clone github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then in it `pixi run cgitsync initialise install.cgs --output-path $CGSPATH` | `initialise` takes one source, plus `--output-path`, which is CGSPATH. CGSHOME is `CGSPATH/ComplexGitSync`, so the owner's `initialise $CGSHOME install.cgs` is spelled this way. `install.cgs` mounts the tool and `docs` only, so the tree is USER: its memory is local and never pushed. |
 | **S12** | The inspection in §2, in three trees: this developer tree, the user tree (S11) and gx4g's DEV tree (S10). It uses the CLI that S7 left and the layout that S8 left | — |
 
@@ -338,6 +360,12 @@ fixed here, unless the ticket a step runs owns it (§5).
 | 7 | S12, the user tree | The tree of row 6 | **Holds.** `branch close` is refused by name ("this tree holds no private repository, so it is a user's tree"); `omniscience mount` and `register` are refused (USER tree); the memory is local (`.cgitsync/.memory` without a remote). | as observed | none |
 | 8 | S12, the developer tree | This tree, 8.4.0, before the commit of this ticket | `verify check`: the 27 historic `COMMIT_LOG_LOST` of 6.7.x, recorded as the loss 6.8.1 named (`incomplete`, not `corrupt`); `status errors=0`; `branch list` reports `closed` for `memory-dev` and `alpha-tech`, and two real orphans, `ComplexGitSync_multi-branch` in `.claude` and `.localSpec`. | `incomplete` with every finding explained | the two orphans are for the owner to clean up |
 | 9 | S12, gx4g's DEV tree | Not run: it needs gx4g's repositories and the owner's credentials | Rehearsed in tests only (`test_mount_guard.py`, 12 tests): `.agent/.local/.dev` denied on the shared key, the Parent's branches on `ComplexGitSync_gx4g`. | the real tree opens with its denials said by name | open: to run with the owner, from `examples/gx4g-dev.cgs` |
+| 10 | §10, re-evaluation | `git log` in the root repository, 2026-10-31 | `CGS-ALPHA` and `main` have diverged. `CGS-ALPHA` holds three commits `main` lacks (`45ceddc`, `a3ffe86`, `49f4dd5`, all labelled 8.5.1). `main` holds 8.6.1 (`015f7dd`, the four `complexgitsync-{opx,dev,usr,pub}.cgs`) and 8.6.2 (`9594d7e`, CGSHOME refusal), which `CGS-ALPHA` lacks. `.dev` and `.localSpec`, on `ComplexGitSync_CGS-ALPHA`, already hold 8.6.2's records. So the tree's specs describe code its root does not run. **Why `cgitsync pull` did not bring 8.6.x:** `CGS-ALPHA` was cut on 2026-10-30 from `8b59e42`, and 8.6.1 and 8.6.2 were pushed to `main` only, in the root and in `docs` alike. `origin/CGS-ALPHA` holds neither, and `pull` follows each repository's own upstream, so it had nothing to bring. The private repositories hold 8.6.2 because `ComplexGitSync_CGS-ALPHA` did not exist on their remotes: the clone chain fell back to `ComplexGitSync`, which already held 8.6.2, and the branch was cut from it. | one line of history: the tree's code and its specs at the same release | **fixed 2026-10-31:** `cgitsync merge main` into `CGS-ALPHA` (root `25fc58a`, `docs` fast-forwarded to `aa42a0c`). It was refused twice first, because the root's `.gitignore` line for the `.omniscience/` clone was staged but not committed (`d83e2d0` commits it). |
+| 11 | §10 | `pixi.toml` on `CGS-ALPHA` | Says `8.5.0`, while three commits are prefixed `cgitsync-8.5.1`. No `bump-version` ran, and the prefix was written by hand. | the prefix is the version `bump-version` wrote | **fixed by the merge:** `pixi.toml` says 8.6.2, and the next release counts from it. |
+| 12 | §10 | `.cgitsync/.memory`, 2026-10-31 | The memory sits on `ComplexGitSync_ComplexGitSync_CGS-ALPHA`. §2.2 says no `ComplexGitSync_ComplexGitSync` may appear. **Cause:** the memory's reflog shows a clone onto `ComplexGitSync_ComplexGitSync`, then a checkout of `ComplexGitSync_ComplexGitSync_CGS-ALPHA`. `git_branch.private_local_branch(twin=True)` prefixes a standalone tree's memory with `ComplexGitSync_`, and for the project ComplexGitSync itself the owner and the project are the same name, so the prefix doubles. The memory became a twin of itself and then took the project branch as a suffix. Its base, `ComplexGitSync_ComplexGitSync`, is a twin memory a bootstrap began on 2026-10-30. This project's real memory, with every record, is on `ComplexGitSync`. It is a new memory (4 States, 4 ledger entries), so `pixi run check-tickets` fails here: 31 archived tickets, CommitLogLoss among them, have no orchestrator's record this tree can see. | `ComplexGitSync_CGS-ALPHA` (nested) or `ComplexGitSync` (one memory, whatever the project branch) | blocks S12: RD3 |
+| 13 | §10 | `examples/complexgitsync-dev.cgs` on `CGS-ALPHA` against `main` | `CGS-ALPHA` says `project = { name = "ComplexGitSync", default_branch = "CGS-ALPHA", fallback_branch = "main" }`, and `main` (8.6.1) says `default_branch = "main"`: a merge conflicts on the project line. Both escape §7.1 only because `NamedCgs` compares `yyyy` case-sensitively (`complexgitsync` is not `ComplexGitSync`). Under §7.1 the line would be `default_branch = "dev"`, `fallback_branch = "CGS-ALPHA"`. The header still says `bootstrap examples/complexgitsync4dev.cgs` and "main is the project branch". | one project line, consistent with §7.1 or with an exception §7.1 names | **fixed 2026-10-31 (RD2):** the merge kept `CGS-ALPHA` first and took `main`'s header. The merged file then failed `cgitsync validate`: with the project on `CGS-ALPHA`, `repos[5..8]` (`.dev`, `.localSpec`, `.claude`, `.memory`) pinned `default_branch = "ComplexGitSync"` against the derived `ComplexGitSync_CGS-ALPHA`. The worker dropped the four pins, as the validator asks, and rewrote the header line ("CGS-ALPHA is the project branch, then main"). A fresh dev bootstrap now puts those four repositories on `ComplexGitSync_CGS-ALPHA`. For `.memory`, that is the name RD3 asks for. |
+| 14 | §10 | `examples/complexgitsync-opx.cgs` on `CGS-ALPHA` | It opens with an unresolved `CORR: @agent-dev`, so it is not TOML. `main` resolved it in 8.6.1. `CLAUDE.md` and 31 other files on this branch still cite `complexgitsync4dev.cgs`, which 8.6.1 replaced. `pixi run check-spectree` fails here with `FileNotFoundError` on `examples/complexgitsync4dev.cgs`. | resolved by RD1's merge, not twice | **fixed:** `CGS-ALPHA` took `main`'s `complexgitsync-opx.cgs` (`3dd85fa`), then the merge brought 8.6.1's citations. |
+| 15 | §10 | the root repository's local branches | A local branch `CGS-ALPHS`, a misspelling of `CGS-ALPHA`, points at `9594d7e` (8.6.2, `main`'s tip): it is where 8.6.x was meant to reach `CGS-ALPHA`. It is not on the remote. | deleted by the owner once RD1's merge holds `9594d7e` | for the owner: `CGS-ALPHS` can be deleted, now that `CGS-ALPHA` holds `9594d7e`. |
 
 ## 3b. Corrections that will need a MAJOR release
 
@@ -443,7 +471,7 @@ demand (owner, 2026-10-27).
 
 | D | Question | Options |
 |---|---|---|
-| **D5** | Does MemoryMount (`gx4g-main_1-1`) land before CGS-BETA? | **Answered 2026-10-29: after CGS-BETA.** S11 keeps the install as it stands; §3d's rows stay requirements, and §7.0 already holds the levels' commands. |
+| **D5** | Does MemoryMount (`gx4g-main_1-1`) land before this ticket? | **Answered 2026-10-29: after it.** S11 keeps the install as it stands; §3d's rows stay requirements, and §7.0 already holds the levels' commands. |
 
 ## 5. Done when, and what this refuses
 
@@ -464,7 +492,7 @@ demand (owner, 2026-10-27).
   §3, even if the row says "holds".
 - Both trees show `cgitsync status` with `errors=0`, or the row in §3 that
   says why not.
-- BeforeCGS-BETA is archived with its orchestrator's record. Omniscience was
+- LinkAtCGS is archived with its orchestrator's record. Omniscience was
   archived on its own record on 2026-10-27. Pile 1 is then empty, and the
   frontier with gx4g can be finalised.
 
@@ -548,9 +576,9 @@ demand (owner, 2026-10-27).
 >
 > ComplexGitSync OP emits a cgitsync CMD on YYYY.node
 >
-> node is a NODE that stangs at the frontier requested by CGS-BETA
+> node is a NODE that stangs at the frontier requested by @CGS
 >
-> CGS-BETA calls GX4G-NODE to calculates XXX. It is either OPX,DEV,USR,PUB
+> @CGS calls GX4G-NODE to calculates XXX. It is either OPX,DEV,USR,PUB
 >
 > OPX --> cgitsync bootstrap yyyy-opx.gts | CGS-ALPHA standalone
 > DEV --> cgitsync bootstrap yyyy-dev.cgs | CGS-ALPHA standalone
@@ -577,10 +605,10 @@ Read as one table (`yyyy` spelled with `NAME`'s letters, `xxx` with `OP`'s):
 | `USR` | `cgitsync initialise ../install.cgs` | nested | `.gts` (AD6) |
 | `PUB` | none (`.PUBLIC` is `VOID`, ExplDistantLocal) | — | `.omniscience` (AD6) |
 
-- **Who decides `XXX`.** CGS-BETA asks a GX4G node (`GX4G-NODE`) to compute it. `cgitsync` never chooses its own
+- **Who decides `XXX`.** `@CGS` asks a GX4G node (`GX4G-NODE`) to compute it. `cgitsync` never chooses its own
   level: it receives `XXX` and runs the command that level calls for.
 - **What `OP` does with it.** `OP` emits that one `cgitsync` command on `YYYY.node`. A node is a NODE of G that stands
-  at the frontier CGS-BETA asked for (§6: a GitRepo is the frontier). `OP` was built (8.4.0) as the door operations
+  at the frontier `@CGS` asked for (§6: a GitRepo is the frontier). `OP` was built (8.4.0) as the door operations
   enter through. Here it also sends the install command out, from the BETA request to the ALPHA execution.
 - **The files the levels open** follow §7.1's rule, and are all `.cgs`: `yyyy-opx.cgs`, `yyyy-dev.cgs`, and for `USR`
   the project's `install.cgs`, one directory up, with ComplexGitSync nested in it. **`.cgs` is the only outer
@@ -607,13 +635,13 @@ Read as one table (`yyyy` spelled with `NAME`'s letters, `xxx` with `OP`'s):
 ### 7.1 The rule, as read
 
 - **A file's name is a contract.** `yyyy-xxx.cgs` is `$G.NAME-$G.OP.NAME.cgs` (G.EDGE.NAME): `yyyy` is the project's
-  name, `xxx` the operation's name, one of `opx`, `dev`, `usr`, `pub` (§7.0), computed by a GX4G node for CGS-BETA.
+  name, `xxx` the operation's name, one of `opx`, `dev`, `usr`, `pub` (§7.0), computed by a GX4G node for `@CGS`.
 - **When `cgitsync initialise $exe-path/yyyy-xxx.cgs` writes or reads it,** its project line is
-  `project = { name = "yyyy", default_branch = "xxx", fallback_branch = "CGS-BETA" }`: the project is the one the name
-  says, the tree opens on the branch the name says, and a repository with no such branch falls back to `CGS-BETA`.
-- **`CGS-BETA` is a branch name** here, the fallback every repository of such a tree takes. With ExplDistantLocal's
-  notes, CGS-ALPHA is ComplexGitSync and CGS-BETA what it becomes at beta (MemoryMount Q5).
-- **"Compatibility"**: a file that follows the rule opens the same tree under every build from CGS-ALPHA to CGS-BETA.
+  `project = { name = "yyyy", default_branch = "xxx", fallback_branch = "CGS-ALPHA" }`: the project is the one the name
+  says, the tree opens on the branch the name says, and a repository with no such branch falls back to `CGS-ALPHA`.
+- **`CGS-ALPHA` is a branch name** here, the fallback every repository of such a tree takes (owner, 2026-10-31).
+  CGS-ALPHA is ComplexGitSync, and `@CGS` stands beside it on the ALPHA side.
+- **"Compatibility"**: a file that follows the rule opens the same tree under every build of CGS-ALPHA.
   One that does not is either rewritten by `initialise` or refused by name (AD1).
 
 ### 7.2 What exists
@@ -623,10 +651,10 @@ Read as one table (`yyyy` spelled with `NAME`'s letters, `xxx` with `OP`'s):
   (`git_branch.py`, FallbackMain).
 - **`initialise`** takes one `.cgs` and `--output-path` (7.0.0). It never reads the file's name.
 - **The examples.** `examples/gx4g-dev.cgs` and `gx4g-opx.cgs` say `project = { name = "gx4g", default_branch = "main" }`.
-  Under the rule they would say `default_branch = "dev"` (or `"opx"`) and `fallback_branch = "CGS-BETA"`.
+  Under the rule they would say `default_branch = "dev"` (or `"opx"`) and `fallback_branch = "CGS-ALPHA"`.
   `examples/complexgitsync4dev.cgs`, `install.cgs` and the other examples do not have the `yyyy-xxx` shape, or have it
   by accident (`molonari-light.cgs`). §7.1 says which are concerned.
-- **No branch named `CGS-BETA`** exists in any repository of this tree.
+- **`CGS-ALPHA`** is the branch of both project repositories (owner, 2026-10-31).
 
 ### 7.3 Steps
 
@@ -642,7 +670,7 @@ Read as one table (`yyyy` spelled with `NAME`'s letters, `xxx` with `OP`'s):
 - **N6. The levels' commands (§7.0).** Given `XXX`, `OP` builds the one `cgitsync` command the table names, for
   `YYYY.node`: `bootstrap yyyy-opx.cgs`, `bootstrap yyyy-dev.cgs`, or `initialise ../install.cgs`. Every one takes a `.cgs`. Whether it
   runs the command or hands it to the caller is AD7.
-- **N7. `XXX` comes from outside.** `OP` accepts `XXX` from the caller, which is CGS-BETA through a GX4G node, and
+- **N7. `XXX` comes from outside.** `OP` accepts `XXX` from the caller, which is a GX4G node, and
   never computes it. Until GX4G answers, the level stays the tree's profile (OpBoundary).
 - **N8. `USR` for `.USER`.** The short ticket names the level `USR`. One spelling is kept everywhere: `OP`'s levels,
   file names and PoE (AD8).
@@ -657,7 +685,7 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 |---|---|---|
 | **AD1** | A concerned file whose project line disagrees with its name. | **Answered 2026-10-29: refused by name**, before anything is cloned, saying the line it expects. cgitsync writes the line itself when it creates such a file. |
 | **AD2** | A name holding several `-`. | **Answered 2026-10-29: cut at the last `-`, opt-in, with `yyyy` of any length and `xxx` always exactly three characters.** A file is concerned when its stem ends in `-` and three characters, and its `yyyy` equals its `project.name`. `molonari-light.cgs` (five characters after the dash) is not concerned. |
-| **AD3** | `CGS-BETA` as a branch. | **Answered 2026-10-29: nobody creates it for now.** It is a fallback: without it the chain falls to `main`. Creating it is the release step that turns CGS-ALPHA into CGS-BETA. |
+| **AD3** | The fallback branch of the rule. | **Answered 2026-10-31: `CGS-ALPHA`.** Without it the chain falls to `main`. |
 | **AD4** | `$exe-path`. | **Answered 2026-10-29: any path.** The rule reads the file's name wherever it is. |
 | **AD5** | Does the rule bind `bootstrap`? | **Answered 2026-10-29: yes.** |
 | **AD6** | ~~The domains contradict §6.~~ **Answered 2026-10-29:** `.omniscience` belongs to `PUB`, `.cgitsync` to `OPX`, `.memory` to `DEV`, and `USR` holds the `.gts` (simplified from `*NAME{CGS,ALPHA,.gts}`). ALPHA is `OPX` and `DEV`, BETA is `USR` and `PUB`. A leading `.` names an EDGE, an `OP-NODE`; `*EDGE` is an `OP*-NODE`. The system analysis holds as is. |
@@ -668,7 +696,7 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 ### 7.5 Acceptance
 
 - `initialise` (and `bootstrap`, per AD5) of a concerned `yyyy-xxx.cgs` opens project `yyyy` on branch `xxx`, falls back
-  to `CGS-BETA` and then to `main`, and refuses a mismatching file by name (per AD1) before anything is cloned.
+  to `CGS-ALPHA` and then to `main`, and refuses a mismatching file by name (per AD1) before anything is cloned.
 - A file without the shape behaves exactly as today, and every golden vector is unchanged.
 - The concerned examples follow the rule, and every example test is green.
 - Given `XXX`, `OP` yields the command §7.0 names for `YYYY.node`, and computes no level of its own.
@@ -727,7 +755,7 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
   exist, or when the marker it selects collects nothing.
 - **F3. The example files.** `examples/gx4g-dev.cgs` and `examples/gx4g-opx.cgs`, as BD2 decides. They hold the owner's
   notes for MemoryMount (`.DEV` is `gx4g4dev`, PoE `{1,0,0,0}`; `.OPX` is `gx4g4opx`, PoE `{0,0,0,0}`; G's credentials
-  per CGS-ALPHA and CGS-BETA), which are not the worker's to rewrite without the owner's word.
+  per CGS-ALPHA and `@CGS`), which are not the worker's to rewrite without the owner's word.
 - **F4. Run on the three systems, and fix what they say.** Push nothing: the owner pushes (or runs
   `workflow_dispatch`) and the worker reads the runs with `gh run view`. A real difference between systems (a path
   separator, a line ending, a locale, a file mode in a leaf) is fixed in `src/`, with a golden vector that names it.
@@ -779,3 +807,60 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
   The clone chain's error also names `main` among the expected branches. Released as 8.5.0 (MINOR).
 - **Not done.** F4 and row 9 (they need the push and gx4g's tree). `omniscience register` is not restricted to PoE graphs
   (§3b).
+
+---
+
+## 10. Re-evaluated with @CGS, on `CGS-ALPHA` (2026-10-31)
+
+### 10.1 What the owner's words change
+
+| Owner's word | Read as | Where it lands in this ticket |
+|---|---|---|
+| *"both on branch CGS-ALPHA"* | This ticket and the @CGS line of work land on `CGS-ALPHA`, not `main`. | The filename prefix and `*Branch:*` line are now `CGS-ALPHA` (TICKETLIFECYCLE §3). `DevTickets/README.md` §2 gains the branch. S11 clones `CGS-ALPHA`, not `main`. |
+| *"gx4g-main now aims at atCGS"* | gx4g's requirements on ComplexGitSync (MemoryMount) are now requirements of `@CGS`, ComplexGraphSync: `@CGS : (Δ, X, ∇) → Δ*`, with Git as its first backend (`git → graph.git`, `cgitsync → cgs`). gx4g implements it (`cgs.rs`, gx4g's tutorial 2). | §6.3 FD1's "ComplexGrapSync, a tool still to come" is `@CGS`. §3c and §3d's gx4g rows hand over to `@CGS` through gx4g. |
+| *"atCGS is also ALPHA"* | `@CGS` stands on the ALPHA side beside ComplexGitSync: `cgitsync` is its Git backend, not a tool across the frontier. | §6's ALPHA → BETA frontier is no longer needed for the POC. It waits for the GX4G GATE (RD5). |
+| *"cgs-alpha is first for both gitrepo"* | `CGS-ALPHA` is the first branch of the clone chain for `ComplexGitSync` and `DocComplexGitSync`, with `main` after it. This is what `examples/complexgitsync-dev.cgs` already says on this branch. | It conflicts with §7.1 (row 13): RD2. |
+
+### 10.2 The model against @CGS
+
+- **`@CGS` is ALPHA** (owner). ComplexGitSync and `@CGS` both stand on the ALPHA side, and `cgitsync` is `@CGS`'s
+  Git backend. `X` (the crossing operator) is `OP`, and `X = sync-compilation` is its first value. It operates *within*
+  ALPHA. The ALPHA → BETA crossing of §6 is deferred to the GX4G GATE (RD5). What 8.5.0 shipped for it (`Op.is_poe(beta=)`)
+  stays as it is, and nothing is added to it.
+- **The formats stay `.cgs`, `.gts`, `.lgr`** (RD4, owner: *"not the objective"*). The objective is to link
+  ComplexGitSync and `@CGS`.
+- **gx4g's open signature question** (its `CorPlanTicket.md` D01: `@CGS(NABLA, DELTA)` against `@CGS(DELTA, NABLA, OP)`)
+  and the @CGS definition (`(Δ, X, ∇)`) do not agree yet. This ticket does not decide it. `OP`'s answer (§6, `OP*`) must
+  stay readable whichever order wins.
+- **Holds unchanged.** §2.5 (the minimalism constraints), §3b, §3c (now read as what `@CGS` gets through gx4g), D2,
+  D5 (MemoryMount after this ticket), FD2–FD4, AD1, AD3–AD9 and BD1–BD5.
+
+### 10.3 Steps, in order
+
+- **R1. One line of history (RD1).** Bring `CGS-ALPHA` and `main` together in the root repository and `docs`, so
+  that the code runs 8.6.2 and the specs that already record it are true again (rows 10, 14 and 15). No rebase or
+  force-push (§5). Then run `bump-version` so that the prefix and `pixi.toml` agree (row 11).
+- **R2. The dev spec's project line (RD2).** Settle row 13, then fix the conflicting file once.
+- **R3. The memory's branch (RD3).** Explain row 12 from the install log. Then either correct the composition through
+  its own ticket, or record the name as intended.
+- **R4. S11 on `CGS-ALPHA`.** `git clone -b CGS-ALPHA github:flipoyo/ComplexGitSync $CGSPATH/ComplexGitSync`, then
+  `pixi run cgitsync initialise install.cgs --output-path $CGSPATH`. Check that `docs` lands on `CGS-ALPHA` too.
+- **R5. S12** as §2 says, plus the rows R1–R3 left. gx4g's DEV tree (row 9) is inspected as the `@CGS` host. §2.4's
+  ALPHA/BETA checks are skipped until the GX4G GATE (RD5).
+
+### 10.4 Decisions for the owner (§10)
+
+Asked through `AskUserQuestion` at `implement`, before the first edit.
+
+| D | Question | Options |
+|---|---|---|
+| **RD1** | How do `CGS-ALPHA` and `main` become one line? | **Answered 2026-10-31: 8.6.2 comes into `CGS-ALPHA`** (`main` merged into it, root and `docs`), and the next release counts from 8.6.2. `examples/complexgitsync-dev.cgs` keeps `CGS-ALPHA` first. The merge waits for the owner's go, because it is a commit. |
+| **RD2** | The rule's fallback branch. | **Answered 2026-10-31: `CGS-ALPHA`.** `NamedCgs` requires `fallback_branch = "CGS-ALPHA"`, so the chain is `xxx`, then `CGS-ALPHA`, then `main`. `gx4g-dev.cgs` and `gx4g-opx.cgs` follow it. `complexgitsync-dev.cgs` keeps `CGS-ALPHA` first: its `yyyy` matches `project.name` only when the case is ignored, and the comparison stays case-sensitive. |
+| **RD3** | `ComplexGitSync_ComplexGitSync_CGS-ALPHA` for the memory. | **Answered 2026-10-31: a defect.** Since row 13's fix, `examples/complexgitsync-dev.cgs` no longer pins the memory, so a fresh dev bootstrap of this nested tree derives `ComplexGitSync_CGS-ALPHA`, **the owner to confirm**. Still open: dropping the twin prefix when the project is ComplexGitSync itself (a code ticket), and moving this tree's memory to `ComplexGitSync_CGS-ALPHA`, cut from `ComplexGitSync` (the real history), with the twin's 4 States and today's 8.7.0 record (`.cgitsync/.self-history/e9f42a6d…`, waiting to be pushed) kept. Until then `check-tickets` fails (row 12). |
+| **RD4** | Does `cgitsync` adopt `@CGS`'s file vocabulary? | **Answered 2026-10-31: not now** (*"not the objective"*). The formats stay `.cgs`, `.gts`, `.lgr`. |
+| **RD5** | Where the ALPHA/BETA verification (§6) reads the BETA side, now that `@CGS` exists. | **Answered 2026-10-31: nowhere yet.** `@CGS` is ALPHA, and ALPHA → BETA waits for the GX4G GATE, which the owner has not activated. |
+
+### 10.5 Done when (added to §5)
+
+- RD1–RD5 are answered, and rows 10–15 each say "fixed", "holds" or where they went.
+- S11 and S12 have run from `CGS-ALPHA`, and both project repositories open on it.

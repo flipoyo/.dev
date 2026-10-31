@@ -4,6 +4,12 @@
 
 *Branch: gx4g-main*
 
+> **Aimed at @CGS, 2026-10-31 (owner):** *"gx4g-main now aims at atCGS."* The requirements below are now those of
+> `@CGS`, ComplexGraphSync (`archive/20260707_@CGS.md`, `@CGS : (Δ, X, ∇) → Δ*`), which gx4g implements. They are no
+> longer only gx4g's install protocol. `@CGS` is ALPHA too, beside ComplexGitSync, its Git backend. The ALPHA → BETA
+> crossing waits for the GX4G GATE (owner, 2026-10-31). D5 of
+> LinkAtCGS still holds: this ticket lands after LinkAtCGS. Its re-evaluation is LinkAtCGS §10.
+
 > **From the owner's short ticket `ExplDistantLocal` (2026-10-29), unchanged:**
 >
 > ```text
@@ -66,9 +72,9 @@
 > install, where `*G` lives and what each level's memory pushes, and depends on OpBoundary.
 
 > **From the owner's corrections in `examples/gx4g-dev.cgs` and `gx4g-opx.cgs` (resolved 2026-10-29):** gx4g's DEV
-> tree is `gx4g-dev` (G.OP.NAME; its file `gx4g-dev.cgs` is G.EDGE.NAME), PoE `{1,0,0,0}`, Sigma 1, G credentials `{DEV for CGS-BETA, USER for CGS-ALPHA}`; its OPX tree
-> is `gx4g-opx` (file `gx4g-opx.cgs`), PoE `{0,0,0,0}`, Sigma 0, G credentials `{DEV for CGS-BETA, DEV for CGS-ALPHA}`. CGS-ALPHA is
-> ComplexGitSync. What CGS-BETA is, and what a "G credential" grants, are this ticket's to settle (Q5).
+> tree is `gx4g-dev` (G.OP.NAME; its file `gx4g-dev.cgs` is G.EDGE.NAME), PoE `{1,0,0,0}`, Sigma 1, G credentials `{DEV for @CGS, USER for CGS-ALPHA}`; its OPX tree
+> is `gx4g-opx` (file `gx4g-opx.cgs`), PoE `{0,0,0,0}`, Sigma 0, G credentials `{DEV for @CGS, DEV for CGS-ALPHA}`. CGS-ALPHA is
+> ComplexGitSync. What a "G credential" grants is this ticket's to settle (Q5).
 
 ## Abstract — read this first
 
@@ -103,9 +109,9 @@ graph LR
 
 ---
 
-> **See BeforeCGS-BETA §7.0 (short ticket `yyyy-xxx`, 2026-10-29):** the levels' commands are now `OPX` →
+> **See LinkAtCGS §7.0 (short ticket `yyyy-xxx`, 2026-10-29):** the levels' commands are now `OPX` →
 > `bootstrap yyyy-opx.cgs` (owner: *"for now"*), `DEV` → `bootstrap yyyy-dev.cgs`, `USR` → `initialise ../install.cgs`, and the level `XXX`
-> is computed by a GX4G node for CGS-BETA. §2's table is read with it.
+> is computed by a GX4G node. §2's table is read with it.
 
 ## 1. The model, as read with the owner
 
@@ -132,7 +138,7 @@ The more a level operates, the less it exposes.
 
 ## 3. What exists today
 
-- **`.USER`.** `initialise install.cgs` is BeforeCGS-BETA's S11. The tree is USER, and its memory is local and never pushed.
+- **`.USER`.** `initialise install.cgs` is LinkAtCGS's S11. The tree is USER, and its memory is local and never pushed.
 - **`.DEV`.** Opened today with `bootstrap examples/complexgitsync4dev.cgs` for ComplexGitSync, and with
   `examples/gx4g-dev.cgs` for gx4g (G.OP.NAME `gx4g-dev`). The protocol moves the spec to `$HOME/.cgs/$G-NAME/$G-NAME-dev.cgs`, outside both clones.
 - **`.OPX`.** No `-opx.cgs` exists. `OperatingSpace` is "the API of OPX, the operating system" (Minimalism D5),
@@ -176,9 +182,9 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 |---|---|
 | **Q1** | Does the developer spec move from `examples/<project>4dev.cgs` to `$HOME/.cgs/$G-NAME/$G-NAME-dev.cgs` for every project, ComplexGitSync included? And who writes that file, the owner or `initialise`? |
 | **Q2** | What is an `.OPX` tree concretely: which repositories does `$G-NAME-opx.cgs` mount, and what does it run that `.DEV` does not? |
-| **Q3** | Where does this ticket, and OpBoundary with it, rank against BeforeCGS-BETA: before beta (pile 1), or after it? |
+| **Q3** | Where does this ticket, and OpBoundary with it, rank against LinkAtCGS: before beta (pile 1), or after it? |
 | **Q4** | Where the `*G` OpBoundary derives lives: computed on demand (`status --json`), written to the memory and pushed when the level allows, or handed to gx4g? |
-| **Q5** | CGS-BETA, and G's credentials per level: what is CGS-BETA, and what does `DEV` or `USER` for CGS-ALPHA and CGS-BETA let a tree do? |
+| **Q5** | G's credentials per level: what does `DEV` or `USER` for CGS-ALPHA and for `@CGS` let a tree do? |
 
 Moved to OpBoundary §5: which results are exposable and one door or only writes. CGS-ALPHA is ComplexGitSync (owner, 2026-10-29).
 
@@ -195,4 +201,4 @@ Related:
 - `archive/20261027_EnvConnect_DevPlanTicket.md`: the install frontier, the twin, PoE in the Operating Space.
 - `archive/20260705_CGS.POC.md`: `PoE.state`, `PoE.PUBLIC`.
 - `archive/20261029_IntegrityMount_DevPlanTicket.md`: the `.gts` may refuse.
-- BeforeCGS-BETA §3c and `main_2-10_ProviderMigration_DevPlanTicket.md`: what is gx4g's.
+- LinkAtCGS §3c and `main_2-10_ProviderMigration_DevPlanTicket.md`: what is gx4g's.
