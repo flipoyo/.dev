@@ -4,7 +4,7 @@
 `.agent/.local/release`), not in the public `ComplexGitSync`
 repository.** A checkout of the public repository alone has no release
 tooling and cannot cut a release by accident — only a bootstrapped
-developer checkout (`examples/complexgitsync4dev.cgs`), which mounts
+developer checkout (`examples/cgitsync-alpha.cgs`), which mounts
 `release`, can. See `AgentSkillsSplit` and this skill's own
 `Versioning.md`. It is not in a shared, project-agnostic skill either:
 every path target below (`pyproject.toml`,
@@ -51,7 +51,7 @@ a bump needs to be visible in the published PDFs.
 
 ``docs/`` itself now lives in a separate repo (``DocComplexGitSync``); if
 either ``.tex`` file above is missing when this runs, :func:`apply_version`
-dogfoods ``cgitsync initialise`` against ``examples/complexgitsync4dev.cgs``
+dogfoods ``cgitsync initialise`` against ``examples/cgitsync-alpha.cgs``
 --- the developer spec, the one that declares ``docs/`` --- to clone it into
 place first (see :func:`_reconstitute_docs`).
 

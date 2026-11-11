@@ -65,7 +65,7 @@ nothing. Run lint and test locally before pushing; the owner pushes, and `gh run
 
 ComplexGitSync manages itself as a multi-repo tree: a fresh `git clone`
 alone gets you the code but not `docs/` or any of the agentic mounts under
-`.agent/`. Use `bootstrap` pointed at **`examples/complexgitsync4dev.cgs`**
+`.agent/`. Use `bootstrap` pointed at **`examples/cgitsync-alpha.cgs`**
 — the developer spec — to get a fully populated, independently
 live-editable checkout. (The root `install.cgs` is the *user* install: the
 tool and its documentation only. Bootstrapping that one leaves you without
@@ -77,7 +77,7 @@ git clone https://github.com/flipoyo/ComplexGitSync.git
 cd ComplexGitSync
 pixi install
 
-pixi run cgitsync bootstrap examples/complexgitsync4dev.cgs
+pixi run cgitsync bootstrap examples/cgitsync-alpha.cgs
 # Copy the export command from bootstrap's own output, or use:
 export CGSHOME=/home/user/.cgs/ComplexGitSync-20260831131233
 

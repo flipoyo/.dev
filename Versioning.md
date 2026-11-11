@@ -130,7 +130,7 @@ cannot find stops the whole bump with nothing changed.
 The last two targets live in `docs/`, a separate repository
 (`DocComplexGitSync`). When they are absent — a checkout of
 `ComplexGitSync` alone — the script runs
-`cgitsync initialise examples/complexgitsync4dev.cgs` to clone them into
+`cgitsync initialise examples/cgitsync-alpha.cgs` to clone them into
 place, *before* the first write rather than after three of them. Working on
 this repository from a standalone checkout is legitimate; releasing from
 one is not, which is why `tests/unit/test_bump_version.py` skips its two
