@@ -96,6 +96,8 @@ derived source is missing, and `merge_into_tree` only warns about it. For the me
 5. `pull --private` (`tree/operations/restart.py`) is not affected: it already resolves its base through
    `GitTreeBranches.target` (checked 2026-11-11). A test pins that for a twin memory, so it cannot regress.
 
+**As delivered (2026-11-11):** the refusal wording lives in `tree/operations/merge_target.py` (`MergeTarget.stranded_memory`, status `memory-cannot-follow`), and `tree_status(..., fast_forward=True)` is asked by the merge family only, so `pull --private` keeps its own side. `.self-history` is not `MemoryMergeOperation.is_memory`, so a diverged one merges as an ordinary repository; its records are named by their own hash. `MountGuard.base` is no longer used by `src/` (left for a cleanup).
+
 No new command, option or client method, so no Minimalism row. The user guide's `merge` section and tutorial 7 §5 (*the
 memory is kept, not merged*) gain the twin case.
 
