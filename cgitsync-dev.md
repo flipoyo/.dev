@@ -126,11 +126,14 @@ Do all of these as part of the change, not as a follow-up. The shape is
    task). The rule, who decides the level and the three cases agents got
    wrong are the shared [Versioning.md](../../.distant/dev-sync/Versioning.md);
    which files the command writes, `--pre`/`--release` and `--dry-run` are
-   [Versioning.md](Versioning.md). Never hand-edit a version field.
-5. **Rebuild the docs PDFs after every `bump-version`, and after any change
-   to the docs.** `bump-version` rewrites `.tex` sources but does *not*
-   regenerate the tracked PDFs, and every title page shows the version, so
-   all of them are stale after a bump. The command and the reason are in
+   [Versioning.md](Versioning.md). `cgitsync version bump [level]` does the
+   same across every versioned repository of the tree, leaf first and the root
+   last, and `pixi run bump-version` is the task it runs in this one. Never
+   hand-edit a version field.
+5. **Rebuild the docs PDFs after any change to the docs.** `bump-version`
+   rebuilds them itself, so after a bump they are current, and every title page
+   shows the version; a docs change with no bump needs the same `latexmk`
+   command by hand. The command and the reason are in
    [Versioning.md](Versioning.md), `bump-version`.
 6. **Update `.agent/.local/.localSpec/AdditionalSpecs.md`'s architecture
    section** if module responsibility moved: its responsibility table and

@@ -139,19 +139,42 @@ docs checks there instead of failing. Those checks assert both that each
 value equals `pyproject.toml`'s — matchability alone let 2.49 ship with its
 documentation left on 2.48.
 
-**Rebuild the PDFs.** `bump-version` rewrites `.tex` sources only. The
-tracked PDFs in `docs/` embed the version on their title pages, so after
-every `bump-version` rebuild `MASTER.tex` and **every** `c_*.tex`
-(`cd docs && latexmk -pdf MASTER.tex c_api_python.tex c_architecture.tex
-c_getting_started.tex c_user_guide.tex`), not only the ones whose text you
-changed, and commit the result in the same change. This paragraph is the one
-statement of the rule; [cgitsync-dev.md](cgitsync-dev.md) step 5 points
-here.
+**The PDFs.** The tracked PDFs in `docs/` embed the version on their title
+pages, so after the five sources are written `bump-version` rebuilds
+`MASTER.tex` and **every** `c_*.tex` itself (`latexmk -pdf MASTER.tex
+c_api_python.tex c_architecture.tex c_getting_started.tex c_user_guide.tex`,
+from `docs/`), not only the ones whose text you changed, and the result is
+committed in the same change (TreeVersion, Q9: the task is what keeps the
+documents true, so `cgitsync version bump` knows nothing about LaTeX).
+`latexmk` is looked for *before* anything is written, on a `--dry-run` too: a
+missing one stops the bump with nothing changed, and `--no-pdf` skips the
+rebuild. A docs change with no bump still needs its PDFs rebuilt by hand, with
+that same command. This paragraph is the one statement of the rule;
+[cgitsync-dev.md](cgitsync-dev.md) step 5 points here.
 
 `bump_version.py` lives in this private mount, not in the public
 `ComplexGitSync` repository, so a public-only checkout structurally cannot
 cut a release. Every target path it touches is specific to this project,
 which is also why it is not in the shared `DevSpec`.
+
+## `cgitsync version` — the same bump, across the tree
+
+`cgitsync version diagnose | init | bump [patch|minor|major]` (TreeVersion)
+bumps every repository of a DEV or OPX tree that is versioned, without an
+agent. `diagnose` reads each repository's `pixi.toml`; `init` installs a
+version with Pixi where there is none, asking first; `bump` runs each
+modified repository's own `bump-version` task (Pixi's own bump only for
+plain SemVer that nothing else copies), leaf first and the root last, checks
+the root moved by exactly the level asked, and commits, pushes and tags
+nothing. This project's own task is `pixi run bump-version`, above, so
+`cgitsync version bump` from this tree's root runs it, and the PDFs with it.
+The level is still a person's judgement (shared `Versioning.md` §2): the
+owner types it, or the orchestrator does, and under `implement` the
+orchestrator runs `cgitsync version bump` in place of `pixi run bump-version`.
+Another project's tool mounted in a tree (ComplexGitSync in atCGS's) is listed
+`other project` and never bumped there: bump it from its own tree. CI never
+calls it. The contract a `bump-version` task meets and the verdicts are the
+user guide's (`docs/Text/user_guide.tex`).
 
 ## `bump-build`
 

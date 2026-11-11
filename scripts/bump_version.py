@@ -44,10 +44,13 @@ which still exist under those names after the docs were restructured into
 correct if that build is ever repaired; it is cheap and cannot go stale
 silently.
 
-This script only rewrites sources. The tracked PDFs in ``docs/`` embed the
-version on their title pages, so rebuild them (``latexmk -pdf MASTER.tex``
-and each ``c_*.tex``, from within ``docs/``) and commit the result whenever
-a bump needs to be visible in the published PDFs.
+The tracked PDFs in ``docs/`` embed the version on their title pages, so after
+the sources are written this rebuilds them (``latexmk -pdf MASTER.tex`` and
+every ``c_*.tex``, from within ``docs/``, :func:`rebuild_pdfs`); commit the
+result in the same change. ``latexmk`` is looked for *before* anything is
+written, so a missing one stops the bump with nothing changed; ``--no-pdf``
+skips the rebuild (TreeVersion, Q9: the task is where the documents are kept
+true, so ``cgitsync version bump`` needs to know nothing about LaTeX).
 
 ``docs/`` itself now lives in a separate repo (``DocComplexGitSync``); if
 either ``.tex`` file above is missing when this runs, :func:`apply_version`
@@ -67,6 +70,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tomllib
@@ -82,7 +86,10 @@ README_PATH = REPO_ROOT / "README.md"
 DOCS_SHORTCUTS_PATH = REPO_ROOT / "docs" / "Setup" / "Shortcuts.tex"
 DOCS_PREAMBLE_PATH = REPO_ROOT / "docs" / "preamble.tex"
 DOCS_TEX_PATHS = (DOCS_SHORTCUTS_PATH, DOCS_PREAMBLE_PATH)
-BOOTSTRAP_CGS_PATH = REPO_ROOT / "examples" / "complexgitsync4dev.cgs"
+DOCS_DIR = REPO_ROOT / "docs"
+#: The documents whose PDFs are tracked and embed the version on their title pages.
+PDF_SOURCES = ("MASTER.tex", "c_api_python.tex", "c_architecture.tex", "c_getting_started.tex", "c_user_guide.tex")
+BOOTSTRAP_CGS_PATH = REPO_ROOT / "examples" / "cgitsync-alpha.cgs"
 
 PRE_RELEASE_STAGES = ("alpha", "beta", "rc")
 
@@ -283,6 +290,14 @@ def apply_version(
         path.write_text(new_text, encoding="utf-8")
 
 
+def rebuild_pdfs(docs_dir: Path = DOCS_DIR) -> None:
+    """Rebuild every tracked PDF from *docs_dir*, so each title page carries the version just written."""
+    try:
+        subprocess.run(["latexmk", "-pdf", *PDF_SOURCES], cwd=docs_dir, check=True)
+    except subprocess.CalledProcessError as exc:
+        raise VersionSyncError(f"the sources carry the new version, but latexmk failed (exit {exc.returncode}); rebuild the PDFs by hand in docs/.") from exc
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -309,6 +324,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="print the version change without writing any files",
     )
+    parser.add_argument(
+        "--no-pdf",
+        action="store_true",
+        help="write the sources only; the docs PDFs are not rebuilt",
+    )
     args = parser.parse_args(argv)
 
     if args.release and args.pre:
@@ -321,8 +341,13 @@ def main(argv: list[str] | None = None) -> int:
     current = read_current_version()
     new = next_version(current, level=args.level, pre=args.pre, release=args.release)
 
+    # Asked on a dry run too: a dry run exits non-zero when the real run would fail (TreeVersion, the task's contract).
+    if not args.no_pdf and not shutil.which("latexmk"):
+        raise VersionSyncError("latexmk is not on PATH, so the docs PDFs cannot be rebuilt; install it, or pass --no-pdf. Nothing was changed.")
     if not args.dry_run:
         apply_version(new)
+        if not args.no_pdf:
+            rebuild_pdfs()
 
     print(f"{current} -> {new}")
     return 0
