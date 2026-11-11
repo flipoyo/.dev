@@ -2,7 +2,9 @@
 
 *Created: 2026-10-27*
 
-*Branch: main*
+*Branch: CGS-ALPHA*
+
+> **Ticket review — 2026-11-11, owner's decision.** Renumbered `main_2-8` → `CGS-ALPHA_2-5`: ranked fifth: nothing is waiting on it. Its branch is now `CGS-ALPHA`: one branch for the whole alpha series, `main` being the mirror it is merged into at a release. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
 > **Ticket review — 2026-10-27, sixth pass (short ticket `minimalism`).**
 > Rank unchanged. There are two consequences. A killed command now also leaves

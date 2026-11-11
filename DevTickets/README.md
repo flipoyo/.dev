@@ -78,24 +78,22 @@ the cost of never editing them.
 
 ## 2. Branches and ticket topics
 
-`main` is where ComplexGitSync's work lands, with three exceptions.
+**`CGS-ALPHA` is where ComplexGitSync's work lands** since 2026-10-31, and since 2026-11-11 for every ticket that
+is not one of the three workstreams below (owner): one branch for the whole alpha series, shared with atCGS. `main` is
+its mirror: a release merges `CGS-ALPHA` into it, a fast-forward while `main` has nothing of its own, and no ticket
+lands on it. A ticket filed as `main_` before that date was renamed `CGS-ALPHA_` at the review of 2026-11-11.
 
 | Workstream | Branch | Ticket filename prefix |
 |---|---|---|
-| Everything else | `main` | `main_` |
+| Everything else, and linking ComplexGitSync and `@CGS`, both ALPHA — LinkAtCGS (owner, 2026-10-31) | `CGS-ALPHA` | `CGS-ALPHA_` |
 | Memory — a change that **migrates a stored memory format**: the state area's layout, the ledger schema, or the distant reference ledger | `memory-dev` — **closed 2026-10-27**, see below | `memory-dev_` (no open ticket) |
 | Data — the `DataManager` layer, the DVC backend, `data_backend`/`data_paths`, and data materialisation and publication | `data-repo` | `data-repo_` |
 | Packaging awaiting the owner's review — UserInstallPath, held off `main` until the owner merges or drops it (owner, 2026-10-01) | `tmpPyPi` | `tmpPyPi_` |
 | gx4g's requirements on ComplexGitSync — the install protocol by PoE level and the `OP` boundary class gx4g drives (owner, 2026-10-29, short ticket `ExplDistantLocal`). **Aimed at `@CGS`, ComplexGraphSync, since 2026-10-31 (owner)** | `gx4g-main` | `gx4g-main_` |
-| Linking ComplexGitSync and `@CGS`, both ALPHA — LinkAtCGS. `CGS-ALPHA` is the first branch of `ComplexGitSync` and `DocComplexGitSync`, with `main` after it (owner, 2026-10-31) | `CGS-ALPHA` | `CGS-ALPHA_` |
 
-Those six are the only ticket filename prefixes this project has. An open
-memory ticket is named
-`memory-dev_<priority>-<rank>_<Name>_DevPlanTicket.md` and carries
-`*Branch: memory-dev*` under its `*Created:*` line; every other open ticket
-is `main_<priority>-<rank>_<Name>_DevPlanTicket.md` and carries
-`*Branch: main*`. The prefix is written out in both cases — `main_` is not
-implied by its absence. Both conventions are defined in TICKETLIFECYCLE.md
+Those are the only ticket filename prefixes this project has (`main_` and `memory-dev_` are history: no ticket is open
+under either). An open ticket is named `<branch>_<priority>-<rank>_<Name>_DevPlanTicket.md` and carries
+`*Branch: <branch>*` under its `*Created:*` line. The prefix is written out, never implied by its absence. Both conventions are defined in TICKETLIFECYCLE.md
 §2.3 and §3; this section only says which branches exist here.
 
 **`memory-dev` is closed (owner, 2026-10-27).** It was 30 commits behind

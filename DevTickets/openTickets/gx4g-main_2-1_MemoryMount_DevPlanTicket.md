@@ -4,6 +4,8 @@
 
 *Branch: gx4g-main*
 
+> **Ticket review — 2026-11-11, owner's decision.** Renumbered `gx4g-main_1-1` → `gx4g-main_2-1`: moved from pile 1 to pile 2: the GX4G gate comes after the MOLONARI achievement and after atCGS runs (owner: from next week on). It is the first of the gate's tickets, so it heads pile 2. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
+
 > **Aimed at @CGS, 2026-10-31 (owner):** *"gx4g-main now aims at atCGS."* The requirements below are now those of
 > `@CGS`, ComplexGraphSync (`archive/20260707_@CGS.md`, `@CGS : (Δ, X, ∇) → Δ*`), which gx4g implements. They are no
 > longer only gx4g's install protocol. `@CGS` is ALPHA too, beside ComplexGitSync, its Git backend. The ALPHA → BETA
@@ -201,4 +203,4 @@ Related:
 - `archive/20261027_EnvConnect_DevPlanTicket.md`: the install frontier, the twin, PoE in the Operating Space.
 - `archive/20260705_CGS.POC.md`: `PoE.state`, `PoE.PUBLIC`.
 - `archive/20261029_IntegrityMount_DevPlanTicket.md`: the `.gts` may refuse.
-- LinkAtCGS §3c and `main_2-10_ProviderMigration_DevPlanTicket.md`: what is gx4g's.
+- LinkAtCGS §3c and `CGS-ALPHA_2-2_ProviderMigration_DevPlanTicket.md`: what is gx4g's.

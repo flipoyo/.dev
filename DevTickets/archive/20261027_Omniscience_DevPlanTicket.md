@@ -63,7 +63,7 @@
 > but confirmed last in reading order across the whole backlog, on the
 > owner's request to reorganise it as: finalize the agentic, then what's
 > important before data-repo, then
-> [data-repo](data-repo_2-1_DataArchitecture_DevPlanTicket.md), then
+> [data-repo](data-repo_2-6_DataArchitecture_DevPlanTicket.md), then
 > Omniscience. It stays behind data-repo because that workstream is
 > further along (seven analysed tickets against an owner-approved
 > architecture) and because Omniscience's own §1.1 already ties its first

@@ -442,7 +442,7 @@ Two sub-questions remain open, and M3 needs them:
   per command and the answer reused, and a data backend is asked only when
   the command actually touched a repository that uses it. A Git-only
   workspace never pays to record that it has no DVC. The data workstream's
-  [DataBackendContract](../openTickets/data-repo_2-3_DataBackendContract_DevPlanTicket.md)
+  [DataBackendContract](../openTickets/data-repo_2-8_DataBackendContract_DevPlanTicket.md)
   owns the discovery itself.
 
 With those two settled, D6 is closed.

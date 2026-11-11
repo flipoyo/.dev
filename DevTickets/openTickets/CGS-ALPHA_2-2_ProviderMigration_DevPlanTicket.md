@@ -2,7 +2,9 @@
 
 *Created: 2026-10-27*
 
-*Branch: main*
+*Branch: CGS-ALPHA*
+
+> **Ticket review — 2026-11-11, owner's decision.** Renumbered `main_2-10` → `CGS-ALPHA_2-2`: ranked second in pile 2, behind MemoryMount: it is the gate's next step, when gx4g offers each call. Its branch is now `CGS-ALPHA`: one branch for the whole alpha series, `main` being the mirror it is merged into at a release. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
 > **Owner's answers, 2026-10-27 (Minimalism D1, D7).** *"La gate ne possède que
 > Omniscience. Les autres registres restent dans le projet protégé. cgitsync doit

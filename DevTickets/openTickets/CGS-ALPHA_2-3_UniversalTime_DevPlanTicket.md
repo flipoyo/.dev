@@ -2,7 +2,9 @@
 
 *Created: 2026-10-27*
 
-*Branch: main*
+*Branch: CGS-ALPHA*
+
+> **Ticket review — 2026-11-11, owner's decision.** Renumbered `main_2-9` → `CGS-ALPHA_2-3`: ranked third, with the gate's tickets: the lag fields are filled by the register gx4g holds. Its branch is now `CGS-ALPHA`: one branch for the whole alpha series, `main` being the mirror it is merged into at a release. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
 > **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
 > Rank unchanged. The lag fields are filled when a record is written to the

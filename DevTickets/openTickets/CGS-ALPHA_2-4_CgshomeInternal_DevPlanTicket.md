@@ -2,7 +2,9 @@
 
 *Created: 2026-10-30*
 
-*Branch: main*
+*Branch: CGS-ALPHA*
+
+> **Ticket review — 2026-11-11, owner's decision.** Renumbered `main_2-11` → `CGS-ALPHA_2-4`: ranked fourth: not gate work, but the first to bring forward if two MOLONARI workspaces get mixed up by a shell variable. Its branch is now `CGS-ALPHA`: one branch for the whole alpha series, `main` being the mirror it is merged into at a release. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
 > **From the owner's answer of 2026-10-30 to CgshomeMismatch Q2** ("unset
 > CGSHOME … it would even be better to have an internal $CGSHOME and not a

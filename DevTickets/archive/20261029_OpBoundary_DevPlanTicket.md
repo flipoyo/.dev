@@ -188,7 +188,7 @@ Asked through `AskUserQuestion` at `implement`, before the first edit.
 - `pixi run lint`, `pixi run test`, `bump-build`, `check-ceilings`, `check-oo` and `check-spectree` pass, and
   `cgitsync status` shows `errors=0`.
 
-Related: `gx4g-main_1-1_MemoryMount_DevPlanTicket.md` (the protocol and the PoE vector at install, which depends
+Related: `gx4g-main_2-1_MemoryMount_DevPlanTicket.md` (the protocol and the PoE vector at install, which depends
 on this ticket); `archive/20261029_IntegrityMount_DevPlanTicket.md`; BeforeBeta §3c.
 
 ## 7. As delivered (2026-10-29)
