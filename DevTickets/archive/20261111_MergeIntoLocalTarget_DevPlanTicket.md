@@ -101,9 +101,12 @@ commit would land on no branch. The user always types `main`, and the tool makes
 4. **`tree_status` resolves its target too**, through `resolve_merge_ref`, as it already does the source. With step 1
    the target reaching it is always local, so this changes no answer today. It keeps the one function that decides
    "unrelated" from ever reading a missing ref as a missing history again, for any caller.
-5. **A target typed with its remote's prefix** (`--into origin/main`) is refused by name, before any plan, when
-   `<remote>/<rest>` is a remote-tracking ref in the root and `<rest>` is not a local branch: *"merge --into takes a
-   project branch: type main, not origin/main"* (Q3).
+5. **A target typed with its remote's prefix** (`--into origin/main`) is refused by name, when `<rest>` is a branch
+   the repository knows: *"--into takes a project branch: type 'main', not 'origin/main'"* (Q3). **As delivered
+   (2026-11-11):** it is the existing `no-target` plan carrying that hint, so the dry run and the real merge say the
+   same thing; nothing is written either way. The new logic lives in `tree/operations/merge_target.py`
+   (`MergeTarget`), because `merge.py` is held to its baseline. **Known, and not covered by a test:** a memory whose
+   target only the remote holds is now refused as `no-local-target`, where it used to take the `kept` path.
 
 No new command, option or client method, so no Minimalism row. The user guide's `merge --into` section and tutorial 7
 §3 gain one line on the refusal.
