@@ -43,15 +43,20 @@ graph TD
 
 ## Commands
 
-This project uses Pixi, not bare `pip`/`venv`.
+This project is laid out as ComplexGitSync is (owner, 2026-11-19): a root
+`pixi.toml`, the Pixi manifest that holds the version, beside a
+`pyproject.toml` kept for the Python build and the coming `htas` console
+script *(SemVerPixi)*. Never bare `pip`/`venv`.
 
 ```bash
-pixi install            # create/update the environment
-pixi run test           # pytest, tests/unit + tests/integration
-pixi run lint           # ruff check src tests
-pixi run run            # smoke test of the package entry point
-pixi run bump-build     # worker: bump __build__                       (SemVerPixi)
-pixi run bump-version   # orchestrator: bump SemVer, sync every target (SemVerPixi)
+pixi install                         # create/update the environment
+pixi run test                        # pytest, tests/unit + tests/integration
+pixi run lint                        # ruff check src tests
+pixi run run                         # smoke test of the package entry point
+cgitsync version diagnose            # how the tree is versioned; reads only
+cgitsync version bump <level>        # orchestrator: runs pixi run bump-version     (SemVerPixi)
+pixi run bump-version <level>        # writes pixi.toml, pyproject.toml, the guide   (SemVerPixi)
+pixi run bump-build                  # worker: bumps __build__                       (SemVerPixi)
 ```
 
 CI (`.github/workflows/ci.yml`) runs on every push and pull request, on
@@ -88,18 +93,20 @@ Do all of these as part of the change, not as a follow-up. The shape is
    guard with them: no `qgis`, `qgis.PyQt`, `PyQt5` import anywhere under
    `src/`. Tests needing the CaWaQS fixture skip without
    `CWAQS_FIXTURE_ROOT`; say so in the report when they did.
-2. **`pixi run bump-build` for any change under `src/`** *(SemVerPixi)*.
-   It is never the last versioning step: see step 4.
+2. **`pixi run bump-build` for any change under `src/`** *(SemVerPixi)*,
+   the worker's step. It is never the last versioning step: see step 4.
 3. **`cgitsync status`, run from this tree's own root, must show
    `errors=0`.** Fix a repository the change left unreadable before calling
    the task finished.
-4. **`pixi run bump-version {major,minor,patch}` after every `bump-build`,
-   `patch` at least** *(SemVerPixi)*, or `cgitsync version bump <level>`
-   across the tree. The level is the orchestrator's call
-   ([Versioning.md](Versioning.md)). Never hand-edit a version field, and
-   never let CI write one.
-5. **Rebuild the user guide PDF** after every `bump-version` and every
-   change to `docs/hydrological_twin`, if the PDF is tracked (SemVerPixi D4).
+4. **`cgitsync version bump {patch,minor,major}`, from the tree's root,
+   for every change under `src/`** and every change to what a task does,
+   `patch` at least *(SemVerPixi)*. Run it with `--dry-run` first. The
+   level is the orchestrator's call ([Versioning.md](Versioning.md)). Never
+   hand-edit a version field: `bump-version` writes every copy, all or
+   none. Never let CI write one.
+5. **Rebuild the user guide** after every bump and every change to
+   `docs/hydrological_twin` (its version is a `bump-version` target,
+   SemVerPixi D5).
 6. **Update [AdditionalSpecs.md](../.localSpec/AdditionalSpecs.md)** if a
    module's responsibility moved between layers: its layer table and
    diagram, in the same change. A deferred clean-up goes in
@@ -111,15 +118,16 @@ Do all of these as part of the change, not as a follow-up. The shape is
 8. **Deliver one commit message** and use it unchanged in every repository
    the change touched: `HydrologicalTwinAlphaSeries-<version>`, plain
    English, three lines at most, the version read from `pixi.toml` after
-   step 4. Until SemVerPixi lands, the version is the one `pyproject.toml`
-   holds. Deliver it as text; committing and pushing are the owner's call.
+   step 4 (`cgitsync commit` checks it). Until SemVerPixi lands, the
+   version is the one `pyproject.toml` holds. Deliver it as text; committing and pushing are the owner's call.
 
 ## The pair rule — this project's fill-in
 
 The rule in full is [AgentConduct.md](../../.distant/dev-sync/AgentConduct.md)
 §4. Implementing a ticket from [DevTickets/openTickets/](DevTickets/openTickets/)
 takes a worker agent that makes the change and an independent orchestrator
-agent that quotes it against this checklist, runs step 4, and writes the
+agent that quotes it against this checklist, runs step 4
+(`cgitsync version bump`), and writes the
 record with `cgitsync self-history add` once `self-history adopt` has been
 run. Drafting, ranking or closing a ticket is orchestration already. **The
 orders are in [CLAUDE.md](../.claude/CLAUDE.md)**, *When the owner says
