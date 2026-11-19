@@ -30,8 +30,7 @@ chooses the release level, and the owner.
 
 **What you need to do with it.** Before calling a change done, the
 orchestrator runs `cgitsync version bump <level>`, and the commit message
-carries the new version ([htas-dev.md](htas-dev.md), steps 4 and 8). Until
-the SemVerPixi ticket lands, read *Status* first.
+carries the new version ([htas-dev.md](htas-dev.md), steps 4 and 8).
 
 ```mermaid
 graph LR
@@ -48,25 +47,6 @@ graph LR
 ```
 
 ---
-
-## Status — what exists today and what SemVerPixi builds
-
-This file states the target. The planning ticket SemVerPixi
-([openTickets/](DevTickets/openTickets/)) builds it. Until it is archived:
-
-| Today | After SemVerPixi |
-|---|---|
-| Pixi configured inside `pyproject.toml` (`[tool.pixi.*]`) | A root `pixi.toml`; `pyproject.toml` keeps the build and the tool settings |
-| `[project].version = "000.alpha.40"`, `III.alpha.NN` | SemVer in `pixi.toml` `[workspace].version`, copied to `pyproject.toml` |
-| `cgitsync version diagnose`: `not versioned` | `ready`, `BUMP task` |
-| `bump-version.yml` bumps on every push to `main` | Workflow removed; CI only reads |
-| No `bump-version` task | `bump-version` (`.agent/.local/.dev/scripts/`) and `bump-build` (`scripts/`) |
-| `requires-python >= 3.10` | `>= 3.11`, as Pixi pins (D4) |
-| `HTAS_user_guide.tex` hand-synced, stuck at `000.alpha.18` | Written by `bump-version` |
-| `000.alpha.40` | `1.0.0`; the last alpha tagged |
-
-Until then, **do not bump the version by hand**, and do not push to `main`
-without the owner: each push there still fires the old workflow.
 
 ## The scheme, and the public interface
 

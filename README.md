@@ -4,8 +4,7 @@
 
 How HydrologicalTwinAlphaSeries's work gets done: the before-committing
 checklist with this project's commands (`htas-dev.md`), how it numbers and
-releases (`Versioning.md`, with the release script in `scripts/`, added by
-the SemVerPixi ticket), and the planning surface (`DevTickets/`, with its
+releases (`Versioning.md`, with the release script in `.agent/.local/.dev/scripts/bump_version.py`), and the planning surface (`DevTickets/`, with its
 own `README.md`).
 
 This branch, `HydrologicalTwinAlphaSeries_HT-BETA`, was seeded from
