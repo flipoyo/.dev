@@ -184,7 +184,8 @@ milestone a user can run an operation with, and PATCH after that.
    `kind` in `dispatch.py` has a subcommand; each runs on the fixture, or
    is marked as needing a prior step.
 4. **M4 — tutorials and documentation.** It may land in pieces alongside
-   M2 and M3, but it closes the ticket.
+   M2 and M3, but it closes the ticket. DocsOnTheFly overlaps this
+   milestone: its D1 decides which of the items below stay here.
    - `tutorials/`, at the repository root, with an index as in
      ComplexGitSync. Each tutorial opens with *Getting started*, about
      twenty lines of commands on the CaWaQS test case. Proposed set:
