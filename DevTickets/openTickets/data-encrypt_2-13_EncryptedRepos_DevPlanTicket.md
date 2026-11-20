@@ -18,8 +18,9 @@ encrypted path is committed **in clear**. It also makes the locked or unlocked
 state visible, and settles how `merge` treats encrypted files.
 
 **What this document is.** A three-step plan: E1 a refusal, E2 a status
-column, E3 a merge investigation. It comes with a test tree,
-`.config/cgitsync-encrypt.cgs`.
+column, E3 a merge investigation. It comes with a test tree at two levels:
+`.config/cgitsync-encrypt.cgs` (USER) and `.config/cgitsync-encrypt-devel.cgs`
+(DEV), unlocked with the unsafe keys in `.keys/`.
 
 **Why it exists.** A project can keep its data in repositories encrypted with
 git-crypt (`filter=git-crypt` in `.gitattributes`). The data is in clear on
@@ -87,11 +88,16 @@ to collide with `cgitsync unlock`.
 ## 3. Steps
 
 0. **Test tree.** On the owner's word:
-   - create `github:flipoyo/CGSenc`, `CGSenc-data` and `CGSenc-space` (private,
-     synthetic data, test keys kept with the fixtures);
+   - create `github:flipoyo/CGSenc`, `CGSenc-data`, `CGSenc-space` and
+     `CGSenc-memory` (private, synthetic data, on `main`);
+   - give `CGSenc-data` the key `.keys/unsafe-key-1` and `CGSenc-space` the key
+     `.keys/unsafe-key-2` (`git-crypt unlock <key>` before the first encrypted
+     file; `.keys/README.md`);
    - copy `.config/CGSenc-space.cgs` to the root of `CGSenc-space`;
-   - check that `cgitsync bootstrap .config/cgitsync-encrypt.cgs CGSenc` gives a
-     READY tree.
+   - check that both `.config/cgitsync-encrypt.cgs` (USER: the three CGSenc
+     repositories, driven by the bootstrapping checkout) and
+     `.config/cgitsync-encrypt-devel.cgs` (DEV: plus ComplexGitSync on
+     `data-encrypt` as `environment_root`, and `CGSenc-memory`) bootstrap READY.
 
    The integration tests do **not** depend on these repositories. They build
    the same shape on local bare remotes and skip when `git-crypt` is not on
@@ -162,3 +168,14 @@ to collide with `cgitsync unlock`.
   **Answered by the owner, 2026-11-21: GitHub.** `.config/cgitsync-encrypt.cgs`
   and `.config/CGSenc-space.cgs` already say `github:flipoyo/…`, so nothing
   changes there.
+- **Q4: test tree level and keys.** **Answered by the owner, 2026-11-21:**
+  both levels, two `.cgs` (USER `.config/cgitsync-encrypt.cgs`, DEV
+  `.config/cgitsync-encrypt-devel.cgs`). Keys: *"for the prototyping phase, i
+  don't want to use bw and real keys, they should be living in the branch
+  under .keys/unsafe-key-i. Once demonstrated, we'll use real keys, this is
+  the equivalent of a --dry-run"*. `.keys/unsafe-key-1` and `-2` are made with
+  `git-crypt keygen` and serve the prototype only, on the synthetic CGSenc
+  repositories. Real keys are the owner's, made when the feature is used for
+  real, in a real project and outside this repository (§2: cgitsync never
+  handles a key). The DEV memory is a test repository of its own,
+  `CGSenc-memory`, so no test writes into `github:flipoyo/.memory`.
