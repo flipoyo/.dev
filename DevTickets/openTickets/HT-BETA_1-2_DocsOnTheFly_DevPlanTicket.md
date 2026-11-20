@@ -239,6 +239,13 @@ they bump no version unless D2 (b) adds a script under `src/`.
 - **The README** (owner, during M1): user-oriented only, about 250 lines at
   most, to the standard of ComplexGitSync's README.
 
+- **The framework's definition** (owner, short ticket `ontology`,
+  2026-11-20): HydrologicalTwin is a systemic framework for socio-hydrological
+  systems; HTAS is its first implementation, the scientific backend for
+  CaWaQS; the Beta series adds model orchestration. The README, the user
+  guide, the architecture notes and the White Book carry it; the tutorials
+  open with it (M2).
+
 ### What M1 did (2026-11-20)
 
 - `tests/unit/test_docs_sync.py`: inline code, code blocks, kinds, verb
