@@ -4,7 +4,7 @@
 
 *Branch: data-encrypt*
 
-> **From the owner's short ticket** [git-crypt-encryption](../shortTickets/git-crypt-encryption.md)
+> **From the owner's short ticket** [git-crypt-encryption](../archive/.closedUserTicket/20261121_git-crypt-encryption.md)
 > (2026-11-21): use encryption if ComplexGitSync is compatible, say whether
 > cgitsync must evolve, write the evolutions as tickets, work on
 > `data-encrypt`, and add `.config/` with the test topology. Ranked 2-13 at
