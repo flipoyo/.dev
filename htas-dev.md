@@ -135,7 +135,8 @@ document on its right.
 |---|---|
 | `ht/client/`: a method, a `*Result` | `docs/api_capabilities.md` (*Client operations*), `docs/api_examples.md`, the user guide (`HTAS_user_guide.tex`, *The client*), the README *Use cases* row that uses it |
 | `ht/developer/`: a verb, a `kind`, a `*Request` field | `docs/api_capabilities.md` (its verb's section lists every kind), `docs/api_examples.md`, the user guide (*The façade*), `docs/canonical_monolith.md` and White Book chapter 5 when a verb is added or removed |
-| `cli/`: a command, an option, an exit code | `docs/api_capabilities.md` (*Command line*), the user guide (*The command line*), README *Getting help* |
+| `cli/`: a command, an option, an exit code | `docs/api_capabilities.md` (*Command line*), the user guide (*The command line*, whose *Command reference* `test_user_guide_cli.py` holds to the parsers: a command or an option it does not name fails), README *Getting help*, the tutorial that uses it |
+| `ht/developer/kinds.py`: a kind | `docs/api_capabilities.md`, the user guide's table of `htas-dev` kinds (`test_user_guide_cli.py` fails without it) |
 | `domain/` | `docs/domain_model.md` |
 | A package or module added, moved or removed | `docs/developer_guide.md` §2–§3, `AdditionalSpecs.md` §2 (step 6), White Book chapter 5 (*Package layout*) |
 | `services/private/` or what reaches it | `src/HydrologicalTwinAlphaSeries/services/SECURITY.md` |

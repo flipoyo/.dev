@@ -316,7 +316,29 @@ milestone a user can run an operation with, and PATCH after that.
   an option, the options reach the request); no `htas-dev` test runs a real
   twin, none ran on the fixture.
 
-M4 (CLI tutorials, the user guide's registry test) remains.
+### The owner's answers (2026-11-20, before M4, "HtasCli finalize")
+
+- **Tutorials:** the user guide's CLI chapter and its registry test now;
+  the CLI tutorials move to DocsOnTheFly (its M3), where `tutorials/` and the
+  test case live.
+- **Fixture:** close the ticket, with the fixture tests recorded as unrun
+  (`audit.md` #16).
+
+### What M4 did (2026-11-20)
+
+- The user guide gained a *Command reference* (every `htas` command with its
+  required and optional options) and a table of the `htas-dev` verbs and
+  kinds; the yes/no pairs (`--no-weighted`, ...) are named.
+  `tests/unit/test_user_guide_cli.py` fails when the guide does not name a
+  command, a subcommand, an option, a verb or a kind.
+- Specs: `htas-dev.md` (the doc-impact map), `CLAUDE.md` step 7, `AGENT.md`
+  (the Editing role's tutorial scope), `digest.md`.
+- The DocsOnTheFly ticket now carries the CLI tutorials (its M3).
+
+HtasCli is finished, with two §6 bullets open at close, by the owner's
+decision: the fixture bullet (the commands on the CaWaQS test case: written,
+never run, `audit.md` #16) and the tutorials and README bullet (the CLI
+tutorials moved to DocsOnTheFly M3, where `tutorials/` will exist).
 
 ## 6. Acceptance
 

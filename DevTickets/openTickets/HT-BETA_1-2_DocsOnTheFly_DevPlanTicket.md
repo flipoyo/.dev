@@ -155,8 +155,14 @@ they bump no version unless D2 (b) adds a script under `src/`.
    `tests/README.md`'s fixture recipe, shared by the tutorials and not
    repeated in each one.
 3. **M3 — the remaining tutorials** (2 to 6), each one checked by the M2
-   tests. When D7 says so, also bring each public `docs/*.md` the tutorials
-   link to up to DOCSTYLE.
+   tests. **The CLI tutorials of HtasCli's M4 land here too** (owner,
+   2026-11-20, HtasCli finalize): the `htas` and `htas-dev` spelling of each
+   tutorial (first run, maps and regime, simulation against observations,
+   masks, the DEV surface, scripting with `--json` and the exit codes),
+   written as *Getting started* blocks whose commands the tutorial test
+   parses against `HydrologicalTwinAlphaSeries.cli.COMMANDS` and
+   `HydrologicalTwinAlphaSeries.cli.dev.COMMANDS`. When D7 says so, also
+   bring each public `docs/*.md` the tutorials link to up to DOCSTYLE.
 
 ## 5. Decisions for the owner
 
