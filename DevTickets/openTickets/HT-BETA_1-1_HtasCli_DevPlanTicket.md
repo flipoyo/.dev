@@ -261,6 +261,40 @@ milestone a user can run an operation with, and PATCH after that.
   registry (fast, partial). *There is no CI since DocsOnTheFly M1 (owner,
   2026-11-20): read "in CI" as "in `pixi run test`", the local gate.*
 
+### The owner's answers (2026-11-20, before M2)
+
+- **Scope of this `implement`:** M2 only.
+- **D1: (a)**, a second console script, `htas-dev <verb> <kind>`, for the DEV
+  surface (M3). Not built in M2.
+- **D2:** settled by M1 (`htas.toml`, options override it, `detect run`
+  writes it). **D5:** settled by M1 (the three exit codes, `--json`).
+- **D4: both.** `--spec COMPARTMENT:OUTTYPE:PARAM:UNIT` (repeatable) and
+  `--specs-file` JSON; `--mode KEY=VALUE` (repeatable) and `--mode-file` JSON.
+- **D6:** keep Python 3.11.
+- **D7:** moot, there is no CI (DocsOnTheFly D4): a test in `pixi run test`.
+
+### What M2 did (2026-11-20)
+
+- `cli/operations.py`: one command per client operation (nine, not the ten
+  this ticket counted), from one table of options. Spelled with plain-word
+  subcommands, as the grammar test requires: `budget barplot`, `regime show`,
+  `map watbal`, `map aq`, `compare simobs`, `criteria compute`,
+  `mask internal`, `mask hyd`, `mask aq` (the proposal's `sim-obs`,
+  `internal-values` and the like carried hyphens).
+- `audit.md` #15 fixed: `build_client` puts `start_year` and `end_year` in
+  the client's metadata.
+- The mask commands read their polygon from `--polygon FILE` (a vector file,
+  features merged) and the years from the project file. The map commands
+  return a layer in memory: `--output GPKG` saves it; `compare simobs
+  --mode csv` likewise with `--csv-file`.
+- Tests: `tests/unit/test_cli_operations.py` (every operation has a command;
+  the keywords each command passes; `--json`; the errors); and
+  `tests/integration/test_cli_fixture.py`, `describe` then `budget barplot`
+  on the CaWaQS test case, skipped without `CWAQS_FIXTURE_ROOT`.
+
+M3 (the DEV surface) and M4 (CLI tutorials, the user guide's registry test)
+remain.
+
 ## 6. Acceptance
 
 - `pixi run htas --help`, `pixi run htas --version` (version and build),
