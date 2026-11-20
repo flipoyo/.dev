@@ -177,15 +177,23 @@ milestone a user can run an operation with, and PATCH after that.
    command against the CaWaQS test case (`CWAQS_FIXTURE_ROOT`, skipped
    when absent) writes the files its `*Result` names, and its `--json`
    parses; a test fails when a `HydrologicalTwinClient` operation has no
-   command. Release `1.1.0`.
+   command. Release `1.1.0`. Before the first command, fix `audit.md` #15:
+   `build_client` must put `start_year` and `end_year` in the client's
+   metadata, which every operation reads.
 3. **M3 — the DEV surface.** One command per verb and one subcommand per
    `kind`, generated from the dispatch table instead of hand-copied, so a
    new `kind` gets its command in the same change (D3). Tests: every
    `kind` in `dispatch.py` has a subcommand; each runs on the fixture, or
    is marked as needing a prior step.
 4. **M4 — tutorials and documentation.** It may land in pieces alongside
-   M2 and M3, but it closes the ticket. DocsOnTheFly overlaps this
-   milestone: its D1 decides which of the items below stay here.
+   M2 and M3, but it closes the ticket. **DocsOnTheFly D1 is (b)** (owner,
+   2026-11-20): DocsOnTheFly owns the tutorial section, its index and
+   tests, the Python tutorials, the README, `audit.md` #4 and step 7, all
+   landed or planned there. M4 keeps only two items: the CLI tutorials,
+   written inside DocsOnTheFly's `tutorials/`, and the user guide's CLI
+   chapter with its registry test. The guide already has a *command line*
+   section (DocsOnTheFly M1) that M4 grows into that chapter. The items
+   below that DocsOnTheFly now owns are kept for the record.
    - `tutorials/`, at the repository root, with an index as in
      ComplexGitSync. Each tutorial opens with *Getting started*, about
      twenty lines of commands on the CaWaQS test case. Proposed set:
@@ -250,7 +258,8 @@ milestone a user can run an operation with, and PATCH after that.
   then `tomllib` cannot be used in `src/`.
 - **D7. Tutorials in CI.** Run every *Getting started* block on the
   fixture in CI (slower, true), or only parse its commands against the
-  registry (fast, partial).
+  registry (fast, partial). *There is no CI since DocsOnTheFly M1 (owner,
+  2026-11-20): read "in CI" as "in `pixi run test`", the local gate.*
 
 ## 6. Acceptance
 

@@ -23,9 +23,9 @@ Nothing caught either one. Step 7 of the checklist names two API documents
 and nothing else. HTAS also has no tutorial: a new user meets either a
 notebook in CaWaQS-ViZ or the API reference.
 
-**What you need to do with it.** Pile 1, rank 2. Ask §5 before the first
-edit. D1 decides what this ticket takes from HtasCli's M4; settle it first,
-because it changes both tickets.
+**What you need to do with it.** Pile 1, rank 2. §5 is decided (owner,
+2026-11-20): read *The owner's answers* before §3, because they change the
+design. M1 is implemented; M2 and M3 are open.
 
 ```mermaid
 graph TD
@@ -34,7 +34,7 @@ graph TD
     DOCS --> Q["orchestrator quote<br/>'docs touched' line"]
     T --> OK["same commit<br/>code + docs"]
     Q --> OK
-    TUT["tutorials/<br/>YOU ARE HERE"] -->|"Getting started<br/>checked in CI"| T
+    TUT["tutorials/<br/>YOU ARE HERE"] -->|"Getting started<br/>checked by pixi run test"| T
     FIX["cwv-gis-testcase<br/>public fixture"] --> TUT
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
@@ -201,6 +201,61 @@ they bump no version unless D2 (b) adds a script under `src/`.
 - **D8. The README's *Developer Workflow*.** Move it (the CaWaQS-ViZ
   submodule recipes) to a `docs/` page for developers and keep the README for
   users. Or leave it where it is.
+
+### The owner's answers (2026-11-20, before M1)
+
+- **Scope of this `implement`:** M1 only.
+- **D1: (b).** This ticket takes the rule, the tests, the tutorial section
+  and the Python tutorials; HtasCli M4 keeps its CLI tutorials and the user
+  guide's CLI chapter, written inside the section this ticket builds.
+- **D2: neither (a), (b) nor (c) as written.** *The LaTeX files are not up
+  to date and were not human written. You must check the compatibility
+  between src and docs. The ref are the src. Nothing more than src lands in
+  docs.* Follow-up: drift tests **and** a full fix now, the LaTeX guide
+  included. Hand-written documents, held to `src/` by tests: no generated
+  blocks.
+- **White Book scope** (follow-up to D2): *code claims only*. Every
+  passage that describes HTAS's code is rewritten to match `src/`; the
+  chapters on the HydrologicalTwin target stay, labelled `\htastarget`.
+- **D3:** a synthetic case, built on `gitlab.com/cawaqs/gtest/testcases`,
+  which will come later with its own ad hoc twin. Nothing artificial is
+  added before it.
+- **D4:** *CI should be removed; the unit and integration tests are run by
+  the local agent before commit and push with cgitsync.* Follow-up: delete
+  `ci.yml` in M1, and make the local gate the only gate.
+- **D5:** Python first; each tutorial gets its CLI spelling when HtasCli M2
+  and M3 land.
+- **D6:** rewrite *Status* for SemVer.
+- **D7:** bring the four public `docs/*.md` up to DOCSTYLE in M3. (M1
+  rewrote all four against `src/`, and under CLAUDE.md's rule a document a
+  change rewrites is brought to DOCSTYLE: they already are.)
+- **D8:** move *Developer Workflow* to `docs/` (`docs/developer_guide.md`).
+- **The README** (owner, during M1): user-oriented only, about 250 lines at
+  most, to the standard of ComplexGitSync's README.
+
+### What M1 did (2026-11-20)
+
+- `tests/unit/test_docs_sync.py`: inline code, code blocks, kinds, verb
+  counts and links of every Markdown document, `services/SECURITY.md`, the
+  LaTeX and the Slidev deck, held to `src/`; `api_capabilities.md` lists
+  every client method, verb and kind; the README stays short and has no
+  method table. `tests/unit/test_qgis_free.py` replaces CI's `grep`.
+- `.github/workflows/ci.yml` deleted.
+- Rewritten against `src/`: `README.md` (159 lines), `docs/api_capabilities.md`,
+  `docs/api_examples.md`, `docs/canonical_monolith.md`,
+  `docs/domain_model.md`, `docs/whitepaper.md`, `tests/README.md`,
+  `services/SECURITY.md`; new `docs/developer_guide.md`. In the guide:
+  `HTAS_user_guide.tex`, White Book chapter 5, *Current Development*, the
+  *Structure* appendix; the HTAS passages of the Abstract, the Résumé, the
+  White Paper and `HTAS_FR.tex`; chapter 3 cut down to its target
+  self-fitting specification; `\htastarget` defined and placed.
+- Specs: the doc-impact map and step 7 (`htas-dev.md`), no CI
+  (`htas-dev.md`, `AGENT.md`, `AdditionalSpecs.md` §5, `Versioning.md`),
+  nine macro-verbs (`AdditionalSpecs.md`, `Versioning.md`, `CLAUDE.md`),
+  the *Docs touched* line (`AGENT.md`, `CLAUDE.md`), `digest.md`;
+  `audit.md` #4 closed, #10–#14 opened.
+
+M2 (the tutorial section) waits for D3's test case.
 
 ## 6. Acceptance
 

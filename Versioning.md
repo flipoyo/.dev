@@ -8,8 +8,8 @@
 
 **The one-line version.** HydrologicalTwinAlphaSeries uses real SemVer,
 read from `pixi.toml` and copied to `pyproject.toml`, both written by
-`pixi run bump-version`, which `cgitsync version bump` runs. CI never
-writes it. The rule itself is
+`pixi run bump-version`, which `cgitsync version bump` runs. Nothing
+automatic writes it: there is no CI. The rule itself is
 [Versioning.md](../../.distant/dev-sync/Versioning.md) in `DevSpec`.
 
 **What this document is.** The fill-in of the shared versioning rule: the
@@ -53,10 +53,10 @@ graph LR
 **Real SemVer** (`MAJOR.MINOR.PATCH`, with an optional `-<stage>.<N>`
 pre-release suffix). SemVer's positions are measured against the public
 API that [AdditionalSpecs.md](../.localSpec/AdditionalSpecs.md) §4 names:
-the `HydrologicalTwin` facade and its eight macro-verbs, the
+the `HydrologicalTwin` facade and its nine macro-verbs, the
 `HydrologicalTwinClient` methods, the Request / Response / Result
-dataclasses they exchange, and, once it exists, the `htas` CLI's commands,
-options and exit codes.
+dataclasses they exchange, and the `htas` CLI's commands, options, exit
+codes and `--json` output.
 
 | Position | Increments when | For example |
 |---|---|---|
@@ -88,7 +88,7 @@ holds no literal version at all.
 |---|---|---|
 | **Orchestrator** | Decides MAJOR/MINOR/PATCH and bumps; under `implement`, after quoting the work | `cgitsync version bump {patch,minor,major}` from the tree's root (`--dry-run` first), or `pixi run bump-version {major,minor,patch} [--pre <stage>] [--release]` |
 | **Worker** | Bumps `__build__` for every change to `src/`; never bumps the version under `implement`; for a fix the owner asks for directly, `patch` | `pixi run bump-build` |
-| **CI** | Lints and tests | Never writes a version |
+| **CI** | There is none (owner, 2026-11-20): the local gate, `pixi run lint` and `pixi run test`, replaces it | Never writes a version |
 
 ## `bump-version`
 

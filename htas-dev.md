@@ -18,7 +18,8 @@ the step titles. It was seeded from ComplexGitSync's `cgitsync-dev.md` and
 cut down to what HydrologicalTwinAlphaSeries actually has.
 
 **What you will find.** The Pixi commands, how to bootstrap a working
-checkout, the eight checklist steps with this project's commands, the pair
+checkout, the eight checklist steps with this project's commands, the
+doc-impact map that step 7 reads, the pair
 rule's fill-in, the attribution fill-ins, and the testing layout.
 
 **Who it is for.** Anyone — human or agent — changing code or docs in this
@@ -43,8 +44,7 @@ graph TD
 
 This project is laid out as ComplexGitSync is (owner, 2026-11-19): a root
 `pixi.toml`, the Pixi manifest that holds the version, beside a
-`pyproject.toml` kept for the Python build and the coming `htas` console
-script. Never bare `pip`/`venv`.
+`pyproject.toml` kept for the Python build and the `htas` console script. Never bare `pip`/`venv`.
 
 ```bash
 pixi install                         # create/update the environment
@@ -57,12 +57,14 @@ pixi run bump-version <level>        # writes pixi.toml, pyproject.toml, the gui
 pixi run bump-build                  # worker: bumps __build__
 ```
 
-CI (`.github/workflows/ci.yml`) runs on every push and pull request, on
-Linux: `pixi install`, the QGIS-free guard (no `qgis`/`PyQt` import under
-`src/`), a sparse clone of the CaWaQS test case
-(`gitlab.com/cawaqs/gtest/testcases`, tag `v0.1-cwv-gis-smoke-CI`, exported
-as `CWAQS_FIXTURE_ROOT`), `pixi run test`, and `pixi run run`. It never
-writes a version.
+**There is no CI** (owner, 2026-11-20, DocsOnTheFly D4): the agent runs
+the gate on its own machine before every commit and push with `cgitsync`.
+The gate is `pixi run lint`, `pixi run test` (which holds the QGIS-free
+guard, `tests/unit/test_qgis_free.py`, and the documentation drift tests,
+`tests/unit/test_docs_sync.py`) and `pixi run run`. The smoke test on the
+CaWaQS test case runs when `CWAQS_FIXTURE_ROOT` points to a sparse clone of
+`gitlab.com/cawaqs/gtest/testcases` (tag `v0.1-cwv-gis-smoke-CI`; the
+recipe is in `tests/README.md`), and skips otherwise.
 
 ### Bootstrapping a working checkout
 
@@ -87,10 +89,13 @@ the distant ones stay on `main`; ComplexGitSync, the tool, stays on
 Do all of these as part of the change, not as a follow-up. The shape is
 [AgentConduct.md](../../.distant/dev-sync/AgentConduct.md) §1.
 
-1. **`pixi run lint` and `pixi run test` must both pass**, and the QGIS-free
-   guard with them: no `qgis`, `qgis.PyQt`, `PyQt5` import anywhere under
-   `src/`. Tests needing the CaWaQS fixture skip without
-   `CWAQS_FIXTURE_ROOT`; say so in the report when they did.
+1. **`pixi run lint` and `pixi run test` must both pass**, with the
+   QGIS-free guard (`test_qgis_free.py`: no `qgis`, `qgis.PyQt`, `PyQt5`
+   import anywhere under `src/`) and the drift tests (`test_docs_sync.py`)
+   inside the test run. Lint shows no new error: the errors it reported
+   before the change are listed in the report, not hidden. Tests needing the
+   CaWaQS fixture skip without `CWAQS_FIXTURE_ROOT`; say so in the report
+   when they did.
 2. **`pixi run bump-build` for any change under `src/`**,
    the worker's step. It is never the last versioning step: see step 4.
 3. **`cgitsync status`, run from this tree's own root, must show
@@ -101,21 +106,48 @@ Do all of these as part of the change, not as a follow-up. The shape is
    `patch` at least. Run it with `--dry-run` first. The
    level is the orchestrator's call ([Versioning.md](Versioning.md)). Never
    hand-edit a version field: `bump-version` writes every copy, all or
-   none. Never let CI write one.
+   none. Nothing automatic writes one.
 5. **Rebuild the user guide** after every bump and every change to
    `docs/hydrological_twin` (its version is a `bump-version` target).
 6. **Update [AdditionalSpecs.md](../.localSpec/AdditionalSpecs.md)** if a
    module's responsibility moved between layers: its layer table and
    diagram, in the same change. A deferred clean-up goes in
    `docs/TODO.md` or a ticket, never only in a commit message.
-7. **Document a new public method** (`HydrologicalTwinClient`, a
-   macro-verb, a new `kind`) in `docs/api_capabilities.md` and
-   `docs/api_examples.md`, and in the user guide when a user sees it. The
-   root `README.md` is the front page: no method table there.
+7. **Update every document the doc-impact map names for the change**
+   (below), in the same change. `src/` is the reference: a document names
+   no path, module, class, method, keyword, verb, `kind`, task or command
+   that `src/` does not have (owner, 2026-11-20). `test_docs_sync.py`
+   catches a name that drifted; the map catches a document left silent. The
+   root `README.md` is the user's front page, at most 250 lines, on
+   ComplexGitSync's model: no method or command table, no developer
+   material (that is `docs/developer_guide.md`).
 8. **Deliver one commit message** and use it unchanged in every repository
    the change touched: `HydrologicalTwinAlphaSeries-<version>`, plain
    English, three lines at most, the version read from `pixi.toml` after
    step 4 (`cgitsync commit` checks it). Deliver it as text; committing and pushing are the owner's call.
+
+## The doc-impact map — step 7
+
+A change to the left-hand column updates, in the same change, every
+document on its right.
+
+| A change to | Updates |
+|---|---|
+| `ht/client/`: a method, a `*Result` | `docs/api_capabilities.md` (*Client operations*), `docs/api_examples.md`, the user guide (`HTAS_user_guide.tex`, *The client*), the README *Use cases* row that uses it |
+| `ht/developer/`: a verb, a `kind`, a `*Request` field | `docs/api_capabilities.md` (its verb's section lists every kind), `docs/api_examples.md`, the user guide (*The façade*), `docs/canonical_monolith.md` and White Book chapter 5 when a verb is added or removed |
+| `cli/`: a command, an option, an exit code | `docs/api_capabilities.md` (*Command line*), the user guide (*The command line*), README *Getting help* |
+| `domain/` | `docs/domain_model.md` |
+| A package or module added, moved or removed | `docs/developer_guide.md` §2–§3, `AdditionalSpecs.md` §2 (step 6), White Book chapter 5 (*Package layout*) |
+| `services/private/` or what reaches it | `src/HydrologicalTwinAlphaSeries/services/SECURITY.md` |
+| A new use case | A README *Use cases* row |
+| `pixi.toml` tasks, the install | README *Installation*, `docs/developer_guide.md` §1, `tests/README.md` |
+| `tests/` layout, the fixture | `tests/README.md` |
+| What HTAS implements of the White Book's target | White Book chapters 5 and *Current Development*, and the chapter that described it as target |
+
+A chapter of the White Book that describes the HydrologicalTwin target,
+which HTAS does not implement, opens with `\htastarget`; only there may it
+use the target's vocabulary, listed in `test_docs_sync.py`'s `TARGET_NAMES`.
+Everything it says about HTAS itself is held to `src/`.
 
 ## The pair rule — this project's fill-in
 
