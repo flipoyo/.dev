@@ -8,7 +8,15 @@ and written to every target, all or none:
 
 - ``pixi.toml``: ``[workspace].version``;
 - ``pyproject.toml``: ``[project].version``, the build's copy;
-- ``docs/hydrological_twin/HTAS_user_guide.tex``: ``\\def\\version{...}``.
+- ``docs/hydrological_twin/HTAS_user_guide.tex``: ``\\def\\version{...}``;
+- ``README.md``: the title, ``# HydrologicalTwinAlphaSeries v<version>``.
+
+After the sources are written, the user guide is rebuilt (``latexmk -pdf``,
+from ``docs/hydrological_twin``), so its title page shows the new version, as
+ComplexGitSync's bump does (VersionSync D3). ``latexmk`` is looked for before
+anything is written, on a ``--dry-run`` too: a missing one stops the bump with
+nothing changed. ``--no-pdf`` skips the rebuild. The PDF stays untracked
+(owner, VersionSync D3).
 
 MAJOR, MINOR or PATCH is a judgement about the public interface
 (``AdditionalSpecs.md`` §4), so the caller says which. ``--set`` exists for
@@ -25,6 +33,8 @@ from __future__ import annotations
 import argparse
 import os
 import re
+import shutil
+import subprocess
 import sys
 import tomllib
 from dataclasses import dataclass, replace
@@ -33,7 +43,10 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent.parent
 PIXI_TOML_PATH = REPO_ROOT / "pixi.toml"
 PYPROJECT_PATH = REPO_ROOT / "pyproject.toml"
-GUIDE_PATH = REPO_ROOT / "docs" / "hydrological_twin" / "HTAS_user_guide.tex"
+README_PATH = REPO_ROOT / "README.md"
+GUIDE_DIR = REPO_ROOT / "docs" / "hydrological_twin"
+GUIDE_PATH = GUIDE_DIR / "HTAS_user_guide.tex"
+PDF_SOURCES = ("HTAS_user_guide.tex",)
 BOOTSTRAP_CGS = ".config/htas-dev-beta.cgs"
 
 PRE_RELEASE_STAGES = ("alpha", "beta", "rc")
@@ -46,6 +59,17 @@ _PRERELEASE_STAGE_RE = re.compile(r"^([a-zA-Z-]+)\.(\d+)$")
 
 _TOML_VERSION_FIELD_RE = re.compile(r'(^version = ")([^"]+)(")', re.MULTILINE)
 _GUIDE_VERSION_RE = re.compile(r"(^\\def\\version\{)([^}]+)(\})", re.MULTILINE)
+_README_TITLE_VERSION_RE = re.compile(r"(^# HydrologicalTwinAlphaSeries v)([^\s]+)($)", re.MULTILINE)
+
+# Every file that holds the version, and the pattern that finds it. The tests
+# read this list (``test_version_mirrors``), so a target added here is checked
+# and a copy written anywhere else fails.
+TARGETS = (
+    (PIXI_TOML_PATH, _TOML_VERSION_FIELD_RE),
+    (PYPROJECT_PATH, _TOML_VERSION_FIELD_RE),
+    (GUIDE_PATH, _GUIDE_VERSION_RE),
+    (README_PATH, _README_TITLE_VERSION_RE),
+)
 
 
 class VersionSyncError(RuntimeError):
@@ -145,12 +169,26 @@ def _rendered(path: Path, pattern: re.Pattern[str], new_version: str) -> str:
     return new_text
 
 
+def _require_latexmk() -> None:
+    """Stop before anything is written when the guide cannot be rebuilt."""
+    if not shutil.which("latexmk"):
+        raise VersionSyncError("latexmk is not on PATH, so the user guide cannot be rebuilt; install it, or pass --no-pdf. Nothing was changed.")
+
+
+def rebuild_guide(guide_dir: Path = GUIDE_DIR) -> None:
+    """Rebuild the user guide from *guide_dir*, so its title page carries the version just written."""
+    try:
+        subprocess.run(["latexmk", "-pdf", "-interaction=nonstopmode", *PDF_SOURCES], cwd=guide_dir, check=True, stdout=subprocess.DEVNULL)
+    except subprocess.CalledProcessError as exc:
+        raise VersionSyncError(
+            f"the sources carry the new version, but latexmk failed (exit {exc.returncode}); rebuild the guide by hand in {guide_dir}."
+        ) from exc
+
+
 def apply_version(
     new_version: str,
     *,
-    pixi_toml_path: Path = PIXI_TOML_PATH,
-    pyproject_path: Path = PYPROJECT_PATH,
-    guide_path: Path = GUIDE_PATH,
+    targets: tuple[tuple[Path, re.Pattern[str]], ...] | None = None,
     dry_run: bool = False,
 ) -> None:
     """Write *new_version* to every target: all of them or none.
@@ -158,15 +196,11 @@ def apply_version(
     With *dry_run*, every target is still read and checked, so a dry run fails
     exactly where the real run would, and nothing is written.
     """
-    if not guide_path.parent.is_dir():
+    targets = TARGETS if targets is None else targets
+    if not GUIDE_PATH.parent.is_dir():
         raise VersionSyncError(
-            f"{guide_path.parent} is missing: bootstrap {BOOTSTRAP_CGS} to mount docs/hydrological_twin. Nothing was changed."
+            f"{GUIDE_PATH.parent} is missing: bootstrap {BOOTSTRAP_CGS} to mount docs/hydrological_twin. Nothing was changed."
         )
-    targets = [
-        (pixi_toml_path, _TOML_VERSION_FIELD_RE),
-        (pyproject_path, _TOML_VERSION_FIELD_RE),
-        (guide_path, _GUIDE_VERSION_RE),
-    ]
     rewritten = [(path, _rendered(path, pattern, new_version)) for path, pattern in targets]
     if dry_run:
         return
@@ -180,6 +214,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--release", action="store_true", help="finalise the current pre-release into its base version")
     parser.add_argument("--pre", choices=PRE_RELEASE_STAGES, default=None, help="pre-release stage; with a level starts a cycle at .1, alone advances it")
     parser.add_argument("--set", dest="set_to", metavar="VERSION", default=None, help="migration only: set a SemVer version when the current one is not SemVer")
+    parser.add_argument("--no-pdf", action="store_true", help="do not rebuild the user guide after writing the version")
     parser.add_argument("--dry-run", action="store_true", help="print the version change without writing any file")
     args = parser.parse_args(argv)
 
@@ -191,9 +226,13 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("Specify a level (major/minor/patch), --pre, --release or --set.")
 
     try:
+        if not args.no_pdf:
+            _require_latexmk()
         current = read_current_version()
         new = next_version(current, level=args.level, pre=args.pre, release=args.release, set_to=args.set_to)
         apply_version(new, dry_run=args.dry_run)
+        if not args.dry_run and not args.no_pdf:
+            rebuild_guide()
     except VersionSyncError as exc:
         print(f"bump-version: {exc}", file=sys.stderr)
         return 1

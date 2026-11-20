@@ -53,8 +53,9 @@ pixi run lint                        # ruff check src tests
 pixi run run                         # smoke test of the package entry point
 cgitsync version diagnose            # how the tree is versioned; reads only
 cgitsync version bump <level>        # orchestrator: runs pixi run bump-version
-pixi run bump-version <level>        # writes pixi.toml, pyproject.toml, the guide
+pixi run bump-version <level>        # writes pixi.toml, pyproject.toml, the README title, the guide; rebuilds the guide
 pixi run bump-build                  # worker: bumps __build__
+pixi run check-build-version <range> # orchestrator: no commit moves __build__ without the version
 ```
 
 **There is no CI** (owner, 2026-11-20, DocsOnTheFly D4): the agent runs
@@ -107,8 +108,11 @@ Do all of these as part of the change, not as a follow-up. The shape is
    level is the orchestrator's call ([Versioning.md](Versioning.md)). Never
    hand-edit a version field: `bump-version` writes every copy, all or
    none. Nothing automatic writes one.
-5. **Rebuild the user guide** after every bump and every change to
-   `docs/hydrological_twin` (its version is a `bump-version` target).
+5. **Rebuild the user guide** after a change to `docs/hydrological_twin`
+   (`latexmk -pdf HTAS_user_guide.tex` in that directory). A bump rebuilds
+   it itself, after writing the version: `bump-version` looks for `latexmk`
+   first (a missing one stops the bump with nothing changed) and `--no-pdf`
+   skips the rebuild. The PDF stays untracked.
 6. **Update [AdditionalSpecs.md](../.localSpec/AdditionalSpecs.md)** if a
    module's responsibility moved between layers: its layer table and
    diagram, in the same change. A deferred clean-up goes in
@@ -140,6 +144,7 @@ document on its right.
 | `domain/` | `docs/domain_model.md` |
 | A package or module added, moved or removed | `docs/developer_guide.md` §2–§3, `AdditionalSpecs.md` §2 (step 6), White Book chapter 5 (*Package layout*) |
 | `services/private/` or what reaches it | `src/HydrologicalTwinAlphaSeries/services/SECURITY.md` |
+| A version bump (step 4) | Every `bump-version` target (`pixi.toml`, `pyproject.toml`, the README title, the guide's `\version`) and the rebuilt guide: written by the script, never by hand; `test_version_mirrors` fails on any other copy of an HTAS version |
 | A new use case | A README *Use cases* row |
 | `pixi.toml` tasks, the install | README *Installation*, `docs/developer_guide.md` §1, `tests/README.md` |
 | `tests/` layout, the fixture | `tests/README.md` |

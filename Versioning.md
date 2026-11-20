@@ -76,11 +76,16 @@ version of the old scheme is tagged `HydrologicalTwinAlphaSeries-000.alpha.40`
 | `pixi.toml` | `[workspace].version` | The one `cgitsync` reads (`VersionScheme`): commit prefix, release tag, `cgitsync version` |
 | `pyproject.toml` | `[project].version` | The copy the build needs; `__version__` reads it through the editable install (`importlib.metadata`) |
 | `docs/hydrological_twin/HTAS_user_guide.tex` | `\def\version{...}` | The user guide's title page (owner, SemVerPixi D5) |
+| `README.md` | the title, `# HydrologicalTwinAlphaSeries v<version>` | The front page (owner, VersionSync D1) |
 | `src/HydrologicalTwinAlphaSeries/__init__.py` | `__build__` | The build counter, not the version (below) |
 
 `bump-version` writes every version target or none. A new file that would
-hold the version becomes a target of the script in the same change, or
-holds no literal version at all.
+hold the version becomes a target of the script (its `TARGETS` list) in the
+same change, or holds no literal version at all: `test_version_mirrors`
+reads that list and fails on a document that states an HTAS version the
+script does not write. A mention after "since" or "from" is history and
+passes; another project's number (CaWaQS's, a section number) is not an HTAS
+version and passes.
 
 ## Who bumps what — the commands
 
@@ -102,6 +107,15 @@ level (`major`/`minor`/`patch`) or a pre-release action (`--pre
 When `docs/hydrological_twin` is absent, it stops with nothing changed and
 names the `.cgs` to bootstrap.
 
+**It then rebuilds the user guide**, as ComplexGitSync's bump does
+(VersionSync D3): `latexmk -pdf HTAS_user_guide.tex` from
+`docs/hydrological_twin`, so the title page shows the new version.
+`latexmk` is looked for before anything is written, on a `--dry-run` too: a
+missing one stops the bump with nothing changed. `--no-pdf` skips the
+rebuild. If `latexmk` fails after the sources are written, the bump says so
+and names the rebuild to run by hand. The PDF is untracked, so the rebuild
+only refreshes the local copy (owner, VersionSync D3).
+
 ## `bump-build`
 
 Adopted from ComplexGitSync (owner, SemVerPixi D3). `scripts/bump_build.py`,
@@ -112,6 +126,14 @@ identity: it says which build produced a result, and the coming
 `htas --version` shows it beside the version. A worker step for any change
 to `src/`, always followed by a version bump, `patch` at least, in the
 same change.
+
+## `check-build-version`
+
+`scripts/check_build_version.py`, ported from ComplexGitSync's (VersionSync
+D4): `pixi run check-build-version <base>..<head>` fails when a commit of
+the range moves `__build__` and leaves the version in `pixi.toml` where it
+was. It reads the commits and writes nothing. The orchestrator runs it
+before it proposes the commit message and reports the result in the quote.
 
 ## `cgitsync version` — the same bump, across the tree
 
