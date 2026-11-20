@@ -292,8 +292,31 @@ milestone a user can run an operation with, and PATCH after that.
   `tests/integration/test_cli_fixture.py`, `describe` then `budget barplot`
   on the CaWaQS test case, skipped without `CWAQS_FIXTURE_ROOT`.
 
-M3 (the DEV surface) and M4 (CLI tutorials, the user guide's registry test)
-remain.
+### The owner's answers (2026-11-20, before M3)
+
+- **D3: a registry in L2.** `ht/developer/kinds.py` (`KINDS`, `REQUESTS`),
+  read by `describe` and by `htas-dev`.
+- **Kind spelling: hyphens** (`htas-dev fetch simulation-matrix`; "`_` are for
+  branch in cgitsync"). **Options: every request field**, generated from the
+  dataclass.
+
+### What M3 did (2026-11-20)
+
+- `ht/developer/kinds.py`; `describe`'s catalog reads it (audit #10 closed:
+  it gains `mask_kinds` and `assemble_kinds` and lists every kind).
+- `cli/dev.py`, the console script `htas-dev <verb> <kind>` (pixi task
+  `htas-dev`): six verbs, 31 kinds, options generated from the request
+  dataclasses; array and mapping fields from files (`--NAME-file`),
+  `--polygon FILE`, `--output DIR` to write the result's arrays, tables and
+  layers so it can feed the next command. `cli/runner.py` is the run and
+  exit-code path `htas` and `htas-dev` share. A kind that needs an in-memory
+  result of an earlier step cannot be fed from files.
+- Tests: `test_kinds_registry.py` (registry equals the `dispatch.py`
+  ladders), `test_cli_dev.py` (every kind has a command, every request field
+  an option, the options reach the request); no `htas-dev` test runs a real
+  twin, none ran on the fixture.
+
+M4 (CLI tutorials, the user guide's registry test) remains.
 
 ## 6. Acceptance
 
