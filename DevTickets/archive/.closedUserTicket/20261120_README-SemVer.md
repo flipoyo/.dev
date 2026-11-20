@@ -1,0 +1,1 @@
+Add an automatic update of README, docs by agents following a bump-version. Those docs and files must always be synced with the version of pyproject and pixi. This was already part of cgitsync agentic that should have constrain the current agentic.
