@@ -87,7 +87,13 @@ to collide with `cgitsync unlock`.
 
 ## 3. Steps
 
-0. **Test tree.** On the owner's word:
+0. **Test tree. Done, 2026-11-21, on the owner's word.** The four private
+   repositories exist, the data of `CGSenc-data` and `CGSenc-space` is
+   ciphertext on GitHub, and the USER `.cgs` bootstrapped READY with both
+   encrypted repositories `locked`. In that live tree a new file under
+   `data/` was refused by `commit`. The DEV `.cgs` is not bootstrapped yet
+   (it clones `ComplexGitSync` on `data-encrypt`, which is not pushed). What
+   was asked:
    - create `github:flipoyo/CGSenc`, `CGSenc-data`, `CGSenc-space` and
      `CGSenc-memory` (private, synthetic data, on `main`);
    - give `CGSenc-data` the key `.keys/unsafe-key-1` and `CGSenc-space` the key
@@ -133,6 +139,7 @@ to collide with `cgitsync unlock`.
    - **Decide with the owner:** either refuse `--resolve` on encrypted paths
      with a message, or document the `git-crypt` merge driver setup. Do not
      implement before the investigation is written into this ticket.
+     **The investigation is written: §6.** The implementation waits for Q5.
 4. **Docs.** Add a section to the user guide (`docs/`) and a paragraph to
    tutorial 05, *private repos*, saying what cgitsync does and does not do
    with encrypted repositories. Add a CHANGELOG entry.
@@ -179,3 +186,50 @@ to collide with `cgitsync unlock`.
   real, in a real project and outside this repository (§2: cgitsync never
   handles a key). The DEV memory is a test repository of its own,
   `CGSenc-memory`, so no test writes into `github:flipoyo/.memory`.
+
+## 6. E3 investigation, 2026-11-21
+
+Run on cgitsync with E1 and E2 in place, git-crypt 0.8.0, git 2.53.0, local
+bare remotes. Both sides of one encrypted file (`data/amounts.csv`) were
+changed on `main` and on `side`, in an unlocked clone and in a clone locked
+again with `git-crypt lock`. Plain `git merge` gave the same two results.
+
+| Case | Result |
+|---|---|
+| plain `git merge side`, unlocked | `CONFLICT (content)`. Git merges the ciphertext as a binary file: the worktree shows one side, decrypted, with **no conflict markers** |
+| plain `git merge side`, locked | the same conflict; the worktree holds ciphertext |
+| `cgitsync merge side`, either | refused before anything moves: `data: merging 'side' conflicts in data/amounts.csv`, naming `merge --resolve`. Correct |
+| `cgitsync merge --resolve side`, locked | stops at `data`, `binary_paths` lists the file, `hand_command` is `None` |
+| `cgitsync merge --resolve side`, unlocked | stops at `data`, the index holds `UU data/amounts.csv`, `binary_paths` is **empty** and `hand_command` is `None`: cgitsync does not see that the file is binary |
+
+What this says. The merge itself is safe: nothing is ever committed in clear,
+and `merge` refuses cleanly. The gap is `--resolve` in an unlocked clone. The
+file reads as a plain text file that has no markers, so a merge tool opens on
+it and has nothing to resolve, and `binary_paths` is empty because Git
+decided "binary" from the ciphertext, not from what is on disk. Nothing
+else in the tool changes whether the clone is locked.
+
+The two ways the step names:
+
+- **Refuse.** `merge --resolve` names an encrypted path that conflicts and
+  says what to do by hand (`git checkout --ours|--theirs -- <path>`, then
+  `git add`), with no merge tool opened on it. About 15 lines, in
+  `tree/operations/merge.py`, using `GitCrypt.attributed`.
+- **Merge driver.** Document `git-crypt`'s own textual merge setup (a `merge`
+  attribute and a driver that decrypts both sides). It runs on every clone, is
+  not cloned (it lives in `.git/config`), and `cgitsync` would have to check
+  it exists. Larger, and outside §2 (cgitsync runs no `git-crypt`).
+
+Recommended: refuse. It stays inside §2.
+
+## 7. Decision for the owner raised by the implementation
+
+- **Q5: E3.** Refuse `--resolve` on an encrypted conflicting path, document
+  the merge driver, or leave E3 as its own ticket and merge E1 and E2 now?
+  **Answered by the owner, 2026-11-21: leave E3 as its own ticket.** E3 is not
+  implemented here; §6 is its starting point.
+- **Q6: ceilings** (raised, owner, 2026-11-21): `json_render.py` LOC 207 to
+  209, `orchestre/reporting.py` 288 to 295, `orchestre/reports.py` 154 to 155,
+  `tree/operations/commit.py` 128 to 132, `tree/operations/push.py` 220 to
+  224, `cli/_shared.py` 616 to 617. The logic is in four new modules; the
+  raises are the hooks into them.
