@@ -1,0 +1,1 @@
+The name of the branch on which a parent repo isn't correct. It is currently branch but it should be <project-name>_branch otherwise it is impossible to combine parent within multiple projects. This defaults lives for multiple version in ComplexGitSync
