@@ -639,7 +639,8 @@ Read as one table (`yyyy` spelled with `NAME`'s letters, `xxx` with `OP`'s):
 ### 7.1 The rule, as read
 
 > **The branches such a tree takes** — derived from the level while the root waits, and the tool behind the gate on
-> `<project>_<xxx>` — are the ticket BehindGate (2026-11-04).
+> `<project>_<xxx>` — are the ticket BehindGate (2026-11-04); the tool is on it in every tree, and a nested Parent too,
+> since the ticket ProjectBranch4Parent (2026-11-23).
 
 - **A file's name is a contract.** `yyyy-xxx.cgs` is `$G.NAME-$G.OP.NAME.cgs` (G.EDGE.NAME): `yyyy` is the project's
   name, `xxx` the operation's name, one of `opx`, `dev`, `usr`, `pub` (§7.0), computed by a GX4G node for `@CGS`.
