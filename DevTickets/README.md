@@ -89,6 +89,7 @@ lands on it. A ticket filed as `main_` before that date was renamed `CGS-ALPHA_`
 | Memory — a change that **migrates a stored memory format**: the state area's layout, the ledger schema, or the distant reference ledger | `memory-dev` — **closed 2026-10-27**, see below | `memory-dev_` (no open ticket) |
 | Data — the `DataManager` layer, the DVC backend, `data_backend`/`data_paths`, and data materialisation and publication | `data-repo` | `data-repo_` |
 | Packaging awaiting the owner's review — UserInstallPath, held off `main` until the owner merges or drops it (owner, 2026-10-01) | `tmpPyPi` | `tmpPyPi_` |
+| Work done on the `HT-BETA` branch of this tree — ProjectBranch4Parent (owner, 2026-11-23) | `HT-BETA` | `HT-BETA_` |
 | gx4g's requirements on ComplexGitSync — the install protocol by PoE level and the `OP` boundary class gx4g drives (owner, 2026-10-29, short ticket `ExplDistantLocal`). **Aimed at `@CGS`, ComplexGraphSync, since 2026-10-31 (owner)** | `gx4g-main` | `gx4g-main_` |
 
 Those are the only ticket filename prefixes this project has (`main_` and `memory-dev_` are history: no ticket is open

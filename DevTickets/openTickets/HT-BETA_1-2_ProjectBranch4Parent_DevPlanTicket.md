@@ -2,7 +2,7 @@
 
 *Created: 2026-11-23*
 
-*Branch: CGS-ALPHA*
+*Branch: HT-BETA*
 
 > **From the owner's short ticket `project-brancg4parent`** (2026-11-23), as written: *"The name of the branch on which a
 > parent repo isn't correct. It is currently branch but it should be <project-name>_branch otherwise it is impossible to
