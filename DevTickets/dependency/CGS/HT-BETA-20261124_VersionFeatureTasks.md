@@ -1,0 +1,8 @@
+`cgitsync version diagnose` and `version bump` (8.11.1, HT-BETA 838ee24) look for a repository's `bump-version` (and `bump-build`) task only in the top-level `[tasks]` of its `pixi.toml` (`VersionOperation._tasks`, `tree/operations/version.py`, about line 95). A project that keeps bumping a developer-only act, as cawaqs is about to (its `bump-version` moves to `[feature.agentic.tasks]` and runs a script in the private `.agent/.local/.dev`), is then reported as `task needed`, and `version bump` refuses it, although `pixi run bump-version` finds the task by itself.
+
+Seen on cawaqs (2026-11-24): `bump-version` declared in `[feature.dev.tasks]` → `cawaqs . pixi.toml 4.1.3 semver none … task needed`, "1 other file(s) hold 4.1.3: declare a bump-version task".
+
+- Read the tasks from `[tasks]` and from every `[feature.<name>.tasks]`. When the task is defined in exactly one environment, run it as `pixi run --manifest-path <m> -e <env> bump-version <level>`, or rely on pixi's own lookup. When it is defined in several, prefer the default environment, then say which one ran.
+- `_missing_script` should still apply. On a user install the private script is absent, so `version` should say "developer task, its script is not mounted" rather than "task needed". `version` already refuses non-DEV trees, so this case only shows in a DEV tree missing its mount.
+- The same applies to the `BUILD` column (`bump-build`).
+- Related, for the record: a non-root repository with a build version (`0.75`, scheme `other`) is accepted by `version bump` when it has its own task, which is what cawaqs's libraries would need. cawaqs chose not to put a `pixi.toml` in its shared libraries and bumps them from its own private script instead, so nothing is asked here for that.
