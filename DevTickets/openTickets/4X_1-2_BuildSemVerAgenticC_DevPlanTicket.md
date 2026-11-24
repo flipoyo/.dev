@@ -85,7 +85,8 @@
 >   badge) follows the SemVer. *Kept.*
 > - The agentic content seeded from ComplexGitSync is adapted to C, as for
 >   HTAS. *Kept.*
-> - No C standard is fixed yet, and this ticket decides it (D1). *Kept.*
+> - No C standard is fixed yet, and this ticket decides it (D1). *Kept;
+>   answered: document as is, `-std=gnu99 -Wall` only if free.*
 > - AlphaSeries Digital Twin: one branch line, no level branch, no
 >   blocking gate. Checks run locally through pixi. *Kept.*
 > - cawaqs is a dependency of HTAS, never the reverse. *Kept.*
@@ -118,7 +119,7 @@
   enough;
 - §3: the work, with the frontier between `scripts`, `.dev` and
   ComplexGitSync in §3.0;
-- §4: the decisions still open;
+- §4: the owner's decisions, all answered;
 - §5: acceptance.
 
 **Why it exists.**
@@ -135,11 +136,11 @@
 - The Operating Space still carries ComplexGitSync's Python rules.
 
 **Who it is for.**
-- The owner, who answers §4 and, at the end, sends the warning to the
+- The owner, who answered §4 and, at the end, sends the warning to the
   `s-confined` author.
 - The worker and orchestrator, who implement §3.
 
-**What you need to do with it.** Pile 1, rank 2. Answer §4, then implement
+**What you need to do with it.** Pile 1, rank 2. §4 is answered: implement
 §3.1 → §3.4 (cawaqs 4.2.0), then §3.5 (cawaqs 4.3.0), and write the §3.6
 warning last.
 
@@ -352,7 +353,7 @@ is moved.** `s-confined`, which builds against its own `libprint`
 
 1. `git cherry-pick -n e659bd7`, then `git restore --staged --worktree
    README.md`. The README is not taken: `bump-version` (§3.3) moves its
-   badges, and its "3.x" wording is a separate edit (D11). The commit
+   badges, and its "3.x" wording is rewritten by hand (D11). The commit
    message cites `s-confined` `e659bd7` as the source, by hash only: no
    explicit name, in the message or in a trailer.
 2. Resolve the two conflicts:
@@ -363,7 +364,9 @@ is moved.** `s-confined`, which builds against its own `libprint`
      with the commit.
 3. Tidy-up:
    - `main_cawaqs.c:8` → `VERSION ID : see pixi.toml`;
-   - `make version` → D3;
+   - `make version` → the read-only print of D3, and a `pixi run version`
+     task;
+   - the README's "3.x" wording, by hand (D11);
    - `pixi.toml:7-9` is rewritten for one number;
    - the README row "Produces `src/cawaqs4.x`" → `src/cawaqs<SemVer>`.
 4. The first bump after it: **minor**, to `4.2.0` (D15). The log header
@@ -405,7 +408,7 @@ is moved.** `s-confined`, which builds against its own `libprint`
     - `CITATION.cff` `version` and `date-released`;
     - the README `Current_version` badge and the "SemVer in `pixi.toml`"
       sentence;
-    - the `Documentation` badge as D7 says.
+    - not the `Documentation` badge or the PDF (D7).
 
     It ends on `old -> new`, as `cgitsync version bump` expects. Its
     suggested commit subject takes the name from `pixi.toml`, not from the
@@ -456,8 +459,8 @@ replacing every Python assumption.
     `cgitsync`;
   - which headers a file may include;
   - the `.COMM` interface (`input.y`, `lexical.l`) and the output files;
-  - module shape: the file prefixes, and a size ceiling in C lines (D5);
-  - the C dialect (D1);
+  - module shape: the file prefixes; no size ceiling for now (D5);
+  - the C dialect as it is, and the `-std=gnu99 -Wall` result (D1);
   - the rule that cawaqs never depends on HTAS;
   - **the version rules**:
     - `NVERSION_CAW` is the SemVer string, printed with `%s`, never `%f`;
@@ -482,6 +485,10 @@ replacing every Python assumption.
   - a build per library, with one source, and its copy in cawaqs's
     `Makefile`;
   - `scripts`' own SemVer (D12);
+  - regular SemVer by default. An exception applies only when the owner
+    states it for a named release, and the release notes say so. The first
+    ones are 4.2.0 and 4.3.0, minor despite their breaks, because 4.x had
+    never been used (D15);
   - how a branch that predates this (`s-confined`) merges: keep 4X's
     version, and bump by what the merge brings.
 - **Python-only DevSpecs rules**: `AdditionalSpecs.md` states the C rule
@@ -507,7 +514,7 @@ cgitsync ≥ 8.11.1):
   installer. It reads `-p <project>` and `-b <branch>` as named options,
   in any position, and sets:
   - `ROOT_BRANCH=<b>`;
-  - `DEP_BRANCH=<project>_<b>`, or what D13 says when `-p` is absent;
+  - `DEP_BRANCH=<project>_<b>`, or `<b>` when `-p` is absent (D13);
   - `FALLBACK_BRANCH=main`.
 - **One checkout function**, `checkout_branch <dir> <branch> <fallback>`.
   It checks the branch exists with `git ls-remote --heads`, checks out the
@@ -525,7 +532,8 @@ cgitsync ≥ 8.11.1):
   `set_dependencies`, `build_lib`, over `list_all.dat`), with no git
   operation. This becomes the one build.
 - **`check_version.sh`**: fix the `["$1" = …]` branches.
-- **The version `1.0.0`**, kept where D12 says. Until now `scripts` had no
+- **The version `1.0.0`**, in a root `VERSION` file and `CITATION.cff`
+  (D12). Until now `scripts` had no
   SemVer: `V_SCRIPTS` was `git describe`.
 - The README describes `-p`/`-b` and the rule above.
 
@@ -537,14 +545,16 @@ cgitsync ≥ 8.11.1):
   - then calls `build_tree.sh`.
 - **`make_Cawaqs_fromCGS.sh`** shrinks to a call to `scripts/build_tree.sh`.
   It keeps its check that the workspace is assembled.
-- **`make_Cawaqs.sh`** (CI, no branch) goes as D6 says.
+- **`.gitlab-ci.yml`** runs `./make_Cawaqs_from_branches.sh -p cawaqs -b
+  <branch>` instead of `make_Cawaqs.sh` (D6). `make_Cawaqs.sh` stays for
+  minimalist developers.
 - **README:** `pixi run install` stays first ("CGSInstall (recommended)").
   The second section, "Install without ComplexGitSync", is for minimalist
   developers:
   - its `make_Cawaqs_from_branches.sh` rows move to `-p <project> -b
     <branch>`, e.g. `./make_Cawaqs_from_branches.sh -p cawaqs -b 4X`;
   - it says the result has the same branches as `pixi run install`;
-  - its `cawaqs3.x` wording follows D11.
+  - its `cawaqs3.x` wording, already rewritten in 4.2.0 (D11), stays.
 - `pixi run bump-version minor` → **4.3.0** (D15). The release says it
   needs `scripts` ≥ 1.0.0.
 
@@ -567,75 +577,73 @@ now. It tells them that:
 - 4X's version line wins at the merge: `NVERSION_CAW` takes 4X's SemVer
   (`4.3.0` or later), and their `"4.1.0"` is left behind;
 - `e659bd7`'s `src/` part is already on 4X, so it falls out of their
-  rebase. Its README part is handled as D11 says;
+  rebase. Its README wording is rewritten by hand on 4X (D11);
 - `scripts` 1.0.0 reads the branch with `-p`/`-b`, not by position, so
   any call they make with the old arguments must change;
 - `libap` needs nothing.
 
-## 4. Decisions for the owner — open
+## 4. Decisions for the owner — answered 2026-11-25
 
-- **D1. Which C.** Options:
-  - C99 with `-Wall`, checked against the 17 libraries;
-  - strict C89, which means rewriting every `//` comment;
-  - document the code as it is.
+No decision is left open.
 
-  Note: the `libprint` macro uses C11 `_Generic`, which gcc accepts in
-  every mode. With `-Wall`, adding
-  `__attribute__((format(printf, 2, 3)))` to `LP_printf`/`LP_error` would
-  make gcc check every print, and catch any future `%f`/`char *` mismatch.
-- **D2. The log header.** *Answered:* the SemVer only, `# CaWaQS x.y.z --
-  Log file`.
-- **D3. `make version`.** Options:
-  - a target that says "developer only: `pixi run bump-version`";
-  - removed.
-- **D4. Tests of `versioning.py`.** Options:
-  - pytest beside it in `.dev/scripts/tests/`;
-  - none beyond `--dry-run` in the acceptance.
-- **D5. A size ceiling for C files.** Options:
-  - a ceiling with a baseline;
-  - none for now.
-- **D6. The CI.** `.gitlab-ci.yml` builds with the destructive
-  `make_Cawaqs.sh`. Options:
-  - move it to `./make_Cawaqs_from_branches.sh -p cawaqs -b <b>` (§3.5),
-    which needs no `cgitsync`;
-  - move it to `./install.sh --https` and `pixi run build`;
-  - leave it.
-- **D7. The PDF documentation number.** `s-confined` points the README to
-  `CaWaQS_4_1_0_1_Documentation.pdf`, which does not exist on 4X. Options:
-  - name it after the SemVer, and let `bump-version` move the
-    `Documentation` badge and link;
-  - keep its own number.
-- **D8.** *Answered:* only the `src/` part of `e659bd7`.
-- **D9.** *Answered by the additive `libprint`:* the standalone programs of
-  `libhyd`, `libmesh` and `libaq` are unaffected.
-- **D10. A range check.** Options:
-  - `check-version --range <a>..<b>` fails a commit that touches `src/`
-    without moving `pixi.toml` (or a library's `src/` without moving its
-    build), run locally;
-  - dropped.
-- **D11. `e659bd7`'s README wording** ("CaWaQS 3.x" → "CaWaQS",
-  `cawaqs3.x` → `cawaqsX.Y.Z` in the old `make_Cawaqs*.sh` tables).
-  Options:
-  - take it by hand in this change;
-  - leave it to the `s-confined` merge.
-- **D12. Where `scripts` keeps 1.0.0.** Options:
-  - `CITATION.cff` only;
-  - a `VERSION` file that every script can print;
-  - a `pixi.toml` with a `version`, so that `cgitsync version` sees it.
-    That breaks the rule that no `pixi.toml` enters a shared repository.
-- **D13. `-b` without `-p`.** Options:
-  - the old behaviour, one branch everywhere;
-  - refused: `-p` becomes mandatory with `-b`.
-- **D14. The svn `branches/<b>/src` path** in `get_version.sh` and
-  `get_incl.sh`. Options:
-  - removed;
-  - kept behind an option.
-- **D15. The number for a break.** 4.2.0 and 4.3.0 are minor bumps, but in
-  SemVer a change that breaks compatibility is a major one (5.0.0).
-  Options:
-  - keep the 4.x line, and state the break in the release notes;
-  - cawaqs 5.0.0 for the first break (§3.2), and 5.1.0 or 6.0.0 for
-    §3.5.
+- **D1. Which C.** *Versioning first, not standards: document the code as
+  it is.* One exception: try `-std=gnu99 -Wall` once, as a single
+  `CFLAGS` line in each `Makefile`.
+  - Adopt it only if every library and cawaqs build unchanged, with no
+    source edit and no reformatting, and the `Makefile`s get simpler or
+    stay as simple.
+  - Otherwise leave the flags alone and write down why.
+  - The warnings `-Wall` reveals are counted and recorded in `audit.md`.
+    They are not fixed here.
+  - `_Generic` (C11) is accepted by gcc in every mode either way.
+- **D2. The log header.** The SemVer only, `# CaWaQS x.y.z -- Log file`.
+- **D3. `make version`.** *A read-only print.* `make version` in `src/` and
+  a `pixi run version` task in the default environment.
+  - Both print `cawaqs <SemVer> (branch <b>, commit <sha>[-dirty])` from
+    `pixi.toml` and git.
+  - They work in the minimalist install, and never bump.
+- **D4. Tests of `versioning.py`.** *pytest*, in
+  `.agent/.local/.dev/scripts/tests/`, run in the `agentic` environment.
+- **D5. A size ceiling for C files.** *None for now.*
+- **D6. The CI.** *The manual install:* `.gitlab-ci.yml` runs
+  `./make_Cawaqs_from_branches.sh -p cawaqs -b <branch>` (§3.5). It needs
+  no ComplexGitSync, and gets the same branches as `pixi run install`. It
+  replaces the destructive `make_Cawaqs.sh` in cawaqs 4.3.0.
+- **D7. The PDF documentation.** *Left aside.* The owner will mount the
+  documentation in the development space later. `bump-version` does not
+  touch the `Documentation` badge or the PDF, and the README keeps its
+  current link.
+- **D8.** Only the `src/` part of `e659bd7`.
+- **D9.** The additive `libprint` leaves the standalone programs of
+  `libhyd`, `libmesh` and `libaq` unaffected.
+- **D10. A range check.** *Added:* `check-version --range <a>..<b>`, in
+  `versioning.py`, run locally. It fails when:
+  - a commit in the range touches cawaqs's `src/` without moving
+    `pixi.toml`;
+  - or it touches a library's `src/` without moving that library's build.
+- **D11. `e659bd7`'s README wording.** *Taken by hand now*, in cawaqs
+  4.2.0: "CaWaQS 3.x" → "CaWaQS", and `cawaqs3.x` → `cawaqs<SemVer>` in
+  the manual-install tables. §3.5 then rewrites those tables' arguments.
+- **D12. Where `scripts` keeps 1.0.0.** *Delegated to the agent:*
+  - a `VERSION` file at the root of `scripts`, holding `1.0.0` alone,
+    which every installer prints at start, plus `version` in
+    `CITATION.cff`;
+  - no `pixi.toml`: `scripts` stays free of pixi and of ComplexGitSync,
+    as a shared repository must;
+  - `check-version` checks that the two agree.
+- **D13. `-b` without `-p`.** *The old behaviour*: one branch everywhere.
+  Only the positional reading of the branch goes, which is still the
+  break that makes `scripts` 1.0.0.
+- **D14. The svn `branches/<b>/src` path.** *Removed* from `get_version.sh`
+  and `get_incl.sh`. The source is always `lib<x>/src`.
+- **D15. The numbers.** *4.2.0, then 4.3.0.* The 4.x line is kept, and each
+  release's notes state its break.
+  - This is an explicit exception to SemVer's "a break is a major" rule,
+    stated by the owner for these two releases only. It holds because 4.x
+    has never been used yet, so their breaks are taken as minor bumps.
+  - Nothing has to lift it. **Regular SemVer applies by default.** An
+    exception exists only when the owner states it for a named release,
+    and it covers only that release.
 
 ## 5. Acceptance
 
@@ -649,6 +657,9 @@ now. It tells them that:
 - `pixi run build` gives `src/cawaqs4.2.0`. Its log opens with
   `# CaWaQS 4.2.0 -- Log file`. A second build relinks nothing.
 - `grep -rnE '%[0-9.]*f.*NVERSION_CAW' src/*.[cyl]` finds nothing.
+- `pixi run version` and `make version`
+  (in `src/`) both print `cawaqs 4.2.0 (branch 4X, commit <sha>)`. They
+  do so without the `.dev` mount, and write nothing.
 - **`pixi run bump-version minor --dry-run`** (environment `agentic`)
   lists `4.2.0 -> 4.3.0` for:
   - `pixi.toml`;
@@ -668,6 +679,13 @@ now. It tells them that:
   in its default environment, and the cawaqs repository no longer holds
   `scripts/bump_version.py`.
 - `scripts` writes no committed version.
+- `pixi run check-version --range <a>..<b>` fails on a scratch commit that
+  touches `src/` without moving `pixi.toml`, and passes once the version
+  moves. The pytest suite beside `versioning.py` passes (D4).
+- `audit.md` records the `-std=gnu99 -Wall` trial: adopted with no source
+  edit, or not adopted and why, with its warning count (D1).
+- `bump-version` leaves the `Documentation` badge and the PDF untouched
+  (D7).
 - No file under `.agent/.local/` prescribes a CaWaQS-level `bump-build`,
   ruff, pyproject or a Python naming rule for the C code.
 
@@ -686,8 +704,10 @@ now. It tells them that:
   function of its own.
 - `check_version.sh rive` prints `V_RIVE`, and `check_version.sh ap`
   prints `V_AP`.
-- `scripts` reads `1.0.0` where D12 says. cawaqs reads `4.3.0`, or what
-  D15 says.
+- `scripts`' `VERSION` and `CITATION.cff` read `1.0.0`, and every
+  installer prints it. cawaqs reads `4.3.0`.
+- The CI runs `make_Cawaqs_from_branches.sh -p cawaqs -b <branch>` and
+  passes.
 
 **Both**
 - `cgitsync status` shows `errors=0`.
