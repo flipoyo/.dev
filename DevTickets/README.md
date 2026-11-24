@@ -58,8 +58,12 @@ private and writable.
 | `archive/` | Planning tickets whose work has landed, or that were dropped (opening with `> **Dropped — YYYY-MM-DD, owner's decision.** <why>`): `YYYYMMDD_<Name>_DevPlanTicket.md` | The agent, in the commit that finishes the work |
 | `archive/.closedUserTicket/` | Short tickets acted on: `YYYYMMDD_<name>.md` | The agent, when the request is satisfied |
 | `archive/.deepArchive/` | The immutable copy of each archived ticket, as it was the day it was archived | The agent, in the same change that archives it |
+| `dependency/<TOOL>/` | Requests for a tool this project depends on, which its own tickets must carry, written for the owner to assess and transfer. `CGS/` holds ComplexGitSync's, named `<branch>-<YYYYMMDD>_<Name>.md` after the ComplexGitSync line they target (`HT-BETA-20261124_…`), since 2026-11-24 (owner) | The agent, on the owner's word; the owner moves them out |
 
-`DevTickets/` holds nothing else. The list of open tickets is the sorted
+`DevTickets/` holds nothing else. `dependency/` is this project's addition to
+TICKETLIFECYCLE §1: a dependency's tickets live in that dependency's own
+planning surface, and a mounted dependency is read-only here, so they wait in
+`dependency/` until the owner transfers them. The list of open tickets is the sorted
 `openTickets/` directory.
 
 ## 2. Branches and ticket prefixes
@@ -77,12 +81,18 @@ An open ticket is named `<branch>_<priority>-<rank>_<Name>_DevPlanTicket.md`
 and carries `*Branch: <branch>*` under its `*Created:*` line
 (TICKETLIFECYCLE.md §2.3 and §3). The prefix is always written out.
 
+**The libraries keep the project's name on the branch.** Only the cawaqs root
+is on the bare `4X`. The 17 libraries and `scripts` (`src/lib*`,
+`src/scripts`) are on `cawaqs_4X` since 2026-11-24, opened at the tip of
+their `main` (cgitsync 8.11.1, RootBareBranch), in the development
+workspace and in the user install alike.
+
 **The private configuration repositories keep their own branches.** `.dev`,
 `.localSpec`, `.claude` and `.omniscience` sit on `cawaqs_4X`, the memory
 (`.cgitsync/.memory`) and its `.self-history` on `ComplexGitSync_cawaqs_4X`,
 and the shared `DevSpec`, `.ticketing` and `DocSpec` (`.agent/.distant/`) on
 `main`. A ticket's branch line names the branch of the project's own
-repository, never theirs.
+repository, never theirs, nor the libraries'.
 
 ## 3. What does not belong here
 
