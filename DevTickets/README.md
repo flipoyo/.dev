@@ -58,7 +58,7 @@ private and writable.
 | `archive/` | Planning tickets whose work has landed, or that were dropped (opening with `> **Dropped — YYYY-MM-DD, owner's decision.** <why>`): `YYYYMMDD_<Name>_DevPlanTicket.md` | The agent, in the commit that finishes the work |
 | `archive/.closedUserTicket/` | Short tickets acted on: `YYYYMMDD_<name>.md` | The agent, when the request is satisfied |
 | `archive/.deepArchive/` | The immutable copy of each archived ticket, as it was the day it was archived | The agent, in the same change that archives it |
-| `dependency/<TOOL>/` | Requests for a tool this project depends on, which its own tickets must carry, written for the owner to assess and transfer. `CGS/` holds ComplexGitSync's, named `<branch>-<YYYYMMDD>_<Name>.md` after the ComplexGitSync line they target (`HT-BETA-20261124_…`), since 2026-11-24 (owner) | The agent, on the owner's word; the owner moves them out |
+| `dependency/<TOOL>/` | Requests for a tool this project's development depends on (ComplexGitSync is a dependency of the Operating Space only, never of CaWaQS: owner, 2026-11-25), written as generic features of that tool, which its own tickets must carry, written for the owner to assess and transfer. `CGS/` holds ComplexGitSync's, named `<branch>-<YYYYMMDD>_<Name>.md` after the ComplexGitSync line they target (`HT-BETA-20261124_…`), since 2026-11-24 (owner) | The agent, on the owner's word; the owner moves them out |
 
 `DevTickets/` holds nothing else. `dependency/` is this project's addition to
 TICKETLIFECYCLE §1: a dependency's tickets live in that dependency's own
