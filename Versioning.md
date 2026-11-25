@@ -60,7 +60,7 @@ script*).
 
 | Position | Increments when | From the CLI contract |
 |---|---|---|
-| **MAJOR** | The public interface breaks | A command or documented flag is removed or renamed; an exit code changes meaning; a `--json` field is repurposed or removed; a `.cgs`/`.gts` grammar change an older reader cannot load |
+| **MAJOR** | The public interface breaks | A command or documented flag is removed or renamed; an exit code changes meaning; a `--json` field is repurposed or removed; a `.cgs`/`.gts` grammar change an older reader cannot load; the branch a repository is derived onto changes (the branch-naming contract in the user guide: a change to it moves every clone that followed it) |
 | **MINOR** | Capability is added, compatibly | A new command, a new flag, a new `--json` field, a new provider — everything the contract calls "additive only" |
 | **PATCH** | Behaviour is fixed, nothing added | A bug fix with no interface change |
 
@@ -163,8 +163,9 @@ which is also why it is not in the shared `DevSpec`.
 bumps every repository of a DEV or OPX tree that is versioned, without an
 agent. `diagnose` reads each repository's `pixi.toml`; `init` installs a
 version with Pixi where there is none, asking first; `bump` runs each
-modified repository's own `bump-version` task (Pixi's own bump only for
-plain SemVer that nothing else copies), leaf first and the root last, checks
+modified repository's own `bump-version` task, declared in `[tasks]` or in a
+feature and run with `-e <environment>` when the default environment lacks it
+(Pixi's own bump only for plain SemVer that nothing else copies), leaf first and the root last, checks
 the root moved by exactly the level asked, and commits, pushes and tags
 nothing. This project's own task is `pixi run bump-version`, above, so
 `cgitsync version bump` from this tree's root runs it, and the PDFs with it.
