@@ -4,6 +4,8 @@
 
 *Branch: data-repo*
 
+> **Short ticket `server-ip` — 2026-11-25.** A data repository names its DVC server by an alias, `service = "<alias>"`, and its address is never written in any file cgitsync writes: [DataServerAddress](data-repo_2-16_DataServerAddress_DevPlanTicket.md) (2-16). It lands after M2 and before M4 and M5, which need a remote. It takes the place of the "§7 C2" that `git_repo/data_spec.py` cites for `service`: no version of this ticket has that section.
+
 > **Ticket review — 2026-11-11, owner's decision.** Renumbered `data-repo_2-1` → `data-repo_2-6`: ranked behind every other ticket: the data workstream comes later (owner: everything on data will come later). Its relative order within the seven is unchanged. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
 > **Ticket review — 2026-10-27, seventh pass (short ticket `gitRepo`).**
