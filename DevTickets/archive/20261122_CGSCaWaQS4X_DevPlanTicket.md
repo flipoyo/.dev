@@ -476,7 +476,7 @@ the work departed from §3, and why.
   blocking defect. Both records are in the Operating Space's
   `.cgitsync/.self-history`.
 - **Steps 4 and 6** go to
-  [BuildSemVerAgenticC](../openTickets/4X_1-2_BuildSemVerAgenticC_DevPlanTicket.md).
+  [BuildSemVerAgenticC](20261125_BuildSemVerAgenticC_DevPlanTicket.md).
 
 **§5 status.**
 - **Pass:**
