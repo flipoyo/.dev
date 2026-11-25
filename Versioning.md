@@ -1,4 +1,4 @@
-# Versioning — how ComplexGitSync numbers what it releases
+# Versioning — how CaWaQS numbers what it releases
 
 *Created: 2026-09-22*
 
@@ -6,38 +6,36 @@
 
 ## Abstract — read this first
 
-**The one-line version.** ComplexGitSync uses real SemVer, measured
-against the CLI contract in the user guide, plus a build counter. This file
-names the files, commands and choices; the rule itself is
-[Versioning.md](../../.distant/dev-sync/Versioning.md) in `DevSpec`.
+**The one-line version.** CaWaQS has one SemVer, kept in `pixi.toml` and
+copied into the C code; each library keeps its own build number
+`MAJOR.XX`. This file names the files, commands and choices; the rule itself
+is [Versioning.md](../../.distant/dev-sync/Versioning.md) in `DevSpec`.
 
 **What this document is.** The fill-in of the shared versioning rule: the
-scheme and why, what the public interface is, where each number lives, the
-two commands and what they write, what must be rebuilt after a bump, and the
-release register.
+scheme and what the public interface is, where each number lives, the
+commands and what they write, how a branch that predates this merges, and
+the exceptions stated so far.
 
 **Why it exists.** The shared rule leaves these open on purpose, and the
-commands and files are this project's. It used to be copied into
-`AdditionalSpecs.md` as well, and the two copies drifted. This is now the
-only place.
+commands and files are CaWaQS's.
 
-**What you will find.** The scheme and public interface, where the numbers
-live, `bump-version`, `bump-build`, and the release register.
+**What you will find.** The scheme, where the numbers live, `bump-version`,
+`bump-build`, `check-version`, the merge rule, and the exceptions.
 
-**Who it is for.** The worker who changes `src/`, the orchestrator who
+**Who it is for.** The worker who changes a library, the orchestrator who
 chooses the release level, and the owner.
 
-**What you need to do with it.** After any `bump-build`, run `bump-version`
-before calling the work done, then rebuild the PDFs and write the commit
-message with the new version ([cgitsync-dev.md](cgitsync-dev.md), steps 2, 4,
-5 and 8).
+**What you need to do with it.** After any change, the orchestrator runs
+`bump-version`, then `check-version`, then writes the commit message with the
+new version ([cawaqs-dev.md](cawaqs-dev.md), steps 2, 4 and 8).
 
 ```mermaid
 graph LR
-    C["change to src/<br/>or to what a script does"] --> B["pixi run bump-build"]
-    B --> V["pixi run bump-version<br/>patch at least<br/>YOU ARE HERE"]
-    V --> P["rebuild docs PDFs"]
-    P --> M["commit message<br/>cgitsync-&lt;new version&gt;"]
+    C["change to a library's src/"] --> B["pixi run bump-build &lt;lib&gt;<br/>(worker)"]
+    B --> V["pixi run bump-version<br/>(orchestrator)<br/>YOU ARE HERE"]
+    C2["change to cawaqs's src/"] --> V
+    V --> K["pixi run check-version"]
+    K --> M["commit message<br/>cawaqs-&lt;SemVer&gt;"]
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
     class V here;
@@ -47,174 +45,100 @@ graph LR
 
 ## The scheme, and the public interface
 
-**Real SemVer** (`MAJOR.MINOR.PATCH`, with an optional `-<stage>.<N>`
-pre-release suffix), authoritative in `pyproject.toml`, because this project
-publishes a package under exactly the promise SemVer exists to state. **No
-workflow writes it.** `.github/workflows/ci.yml` installs, reconstitutes the
-tree, lints and tests, and nothing more.
+**Real SemVer** (`MAJOR.MINOR.PATCH`), authoritative in `pixi.toml`
+`[workspace] version`. **No workflow writes it**: the CI builds and tests,
+nothing more.
 
-SemVer's positions are defined against a public API, and this project
-already has one written down: the user guide's *What is stable, and what is
-not* table (`docs/Text/user_guide.tex`, *What `cgitsync` promises a
-script*).
+The public interface of CaWaQS is what a user touches: the `.COMM` command
+files, the input data formats, and the output files.
 
-| Position | Increments when | From the CLI contract |
-|---|---|---|
-| **MAJOR** | The public interface breaks | A command or documented flag is removed or renamed; an exit code changes meaning; a `--json` field is repurposed or removed; a `.cgs`/`.gts` grammar change an older reader cannot load |
-| **MINOR** | Capability is added, compatibly | A new command, a new flag, a new `--json` field, a new provider — everything the contract calls "additive only" |
-| **PATCH** | Behaviour is fixed, nothing added | A bug fix with no interface change |
+| Position | Increments when |
+|---|---|
+| **MAJOR** | The public interface breaks: a `.COMM` keyword is removed or changes meaning, an input or output format changes in a way an older file cannot follow |
+| **MINOR** | Capability is added, compatibly: a new keyword, a new output, a new coupling |
+| **PATCH** | Behaviour is fixed, nothing added: a bug fix, a build or install change with no interface change |
 
-Two things this narrows a great deal: `src/ComplexGitSync/` is **not a
-public interface** (the contract says so outright — an internal refactor
-never forces a major bump and owes no deprecation), and `verify` is
-**experimental**, so its output changing is not a break either, until it
-stops being.
+The C code, the libraries' prototypes and the install scripts are not the
+public interface, though a library is shared with other programs and its
+prototypes change additively only.
 
-Pre-release identifiers (`3.1.0-alpha.1`, `3.1.0-beta.2`, `3.1.0-rc.1`, then
-`3.1.0`) are what `pixi run bump-version`'s `--pre`/`--release` flags
-produce.
+**Regular SemVer applies by default.** An exception exists only when the
+owner states it for a named release, the release notes say so, and it covers
+only that release. Stated so far: **cawaqs 4.2.0 and 4.3.0** take their
+breaking changes (the version in C, then `scripts` 1.0.0) as minor bumps,
+because 4.x had never been used (BuildSemVerAgenticC, D15).
 
-## Where the two numbers live
+## Where the numbers live
 
 | Number | Where | Says |
 |---|---|---|
-| **SemVer** | `pyproject.toml`, `pixi.toml`, `src/ComplexGitSync/__init__.py`'s `__version__` | What the project promises |
-| **Build counter** | `src/ComplexGitSync/__init__.py`'s `__build__` | Exactly which build produced a given ledger entry |
+| **CaWaQS SemVer** | `pixi.toml` `[workspace] version` (the reference), copied into `src/param_caw.h` `NVERSION_CAW` (a string, printed with `%s`), `src/Makefile` `V_CAW` (unquoted; names the binary `src/cawaqs<SemVer>`), `CITATION.cff` `version` and `date-released`, the README `Current_version` badge and the sentence "the SemVer in `pixi.toml`" | What the project promises |
+| **A library's build** `MAJOR.XX` | its own `src/Makefile` `V_xx` and the `#define VERSION_xx` of its `param_*.h`, printed with `%4.2f`; repeated in cawaqs's `src/Makefile` | Which build of a shared library is linked |
+| **`scripts`' SemVer** | from `scripts` 1.0.0, a `VERSION` file at its root and `CITATION.cff` | What the install scripts promise |
 
-Every change to `src/` bumps the build counter (`pixi run bump-build`,
-`scripts/bump_build.py`). The counter keeps the calendar scheme the whole
-package used to follow (`YYYY.XX`, `XX` rolling 01→99 into `YYYY+1`) — it is
-provenance, never identity, and like every toolchain version never enters a
-State's hash (`AdditionalSpecs.md`, *What a State's name is computed from*).
-A change outside `src/` that still changes what a command or script of this
-repository does (`scripts/`, a pixi task) is released the same way, at
-`patch` at least, though it has no build to bump.
+CaWaQS has **no build number**: only the SemVer. A library's build has one
+source (its own files); the other libraries' copies of a `V_xx` may lag, as
+the build rewrites them in the `Makefile_tmp` it compiles.
 
 ## Who bumps what — the commands
 
 | Who | Does | With |
 |---|---|---|
-| **Worker** | Bumps `__build__`, then `bump-version patch` itself when no orchestrator quotes the work — a fix the owner asks for directly, never a ticket's implementation | `pixi run bump-build` — writes one file |
-| **Orchestrator** | Decides MAJOR/MINOR/PATCH, runs `bump-version`, tags, writes the release row | `pixi run bump-version {major,minor,patch} [--pre <stage>] [--release]` |
-| **CI** | Verifies: lint, tests, tree reconstitution | Never writes a version; `permissions: contents: read` never changes for this |
+| **Worker** | Bumps the build of each library it changed | `pixi run -e agentic bump-build <lib> [--major]` |
+| **Orchestrator** | Decides MAJOR/MINOR/PATCH, bumps the SemVer, checks, writes the commit message | `pixi run -e agentic bump-version {major,minor,patch}`, then `check-version` |
+| **CI** | Builds, runs the regression cases | Never writes a version |
 
-`bump-build` also prints the next step, so it cannot be missed. An
-orchestrator quoting a change can see in the diff whether `bump-build` ran.
+All three are `scripts/versioning.py` in this mount, run only in the
+`agentic` pixi environment: a user install has no bump task, and without
+this mount the script is not there.
 
 ## `bump-version`
 
-`scripts/bump_version.py`, in this mount (`.agent/.local/.dev/scripts/`).
-Reads the current version from `pyproject.toml`, and writes the version the
-caller names — **five targets**:
+Writes the new SemVer in **five targets**, all or none:
 
 | File | Field |
 |---|---|
-| `pyproject.toml` | `[project].version` — the authoritative one |
 | `pixi.toml` | `[workspace].version` |
-| `src/ComplexGitSync/__init__.py` | `__version__` |
-| `README.md` | the version in the title heading (`v<semver>`) |
-| `docs/Setup/Shortcuts.tex`, `docs/preamble.tex` | `\newcommand{\cgsversion}{...}` |
+| `src/param_caw.h` | `#define NVERSION_CAW "<v>"` |
+| `src/Makefile` | `V_CAW=<v>` |
+| `CITATION.cff` | `version` and `date-released` (today) |
+| `README.md` | the `Current_version` badge and the "SemVer in `pixi.toml`" sentence |
 
-Exactly one of a bump level or a pre-release action is required —
-`major`/`minor`/`patch` (bumps that position, drops any pre-release suffix),
-`--pre <alpha|beta|rc>` (alone, advances an existing pre-release; combined
-with a level, starts a new pre-release cycle at `.1`), or `--release`
-(finalises a pre-release into its base version). `--dry-run` previews the
-`old -> new` transition without writing anything.
-
-**All five files or none.** `apply_version()` reads and rewrites every
-target in memory first, and only a complete set of new texts reaches the
-disk. A missing file, an unwritable one, or a version field the patterns
-cannot find stops the whole bump with nothing changed.
-
-The last two targets live in `docs/`, a separate repository
-(`DocComplexGitSync`). When they are absent — a checkout of
-`ComplexGitSync` alone — the script runs
-`cgitsync initialise examples/cgitsync-alpha.cgs` to clone them into
-place, *before* the first write rather than after three of them. Working on
-this repository from a standalone checkout is legitimate; releasing from
-one is not, which is why `tests/unit/test_bump_version.py` skips its two
-docs checks there instead of failing. Those checks assert both that each
-`\cgsversion` macro is still reachable by the script's pattern and that its
-value equals `pyproject.toml`'s — matchability alone let 2.49 ship with its
-documentation left on 2.48.
-
-**The PDFs.** The tracked PDFs in `docs/` embed the version on their title
-pages, so after the five sources are written `bump-version` rebuilds
-`MASTER.tex` and **every** `c_*.tex` itself (`latexmk -pdf MASTER.tex
-c_api_python.tex c_architecture.tex c_getting_started.tex c_user_guide.tex`,
-from `docs/`), not only the ones whose text you changed, and the result is
-committed in the same change (TreeVersion, Q9: the task is what keeps the
-documents true, so `cgitsync version bump` knows nothing about LaTeX).
-`latexmk` is looked for *before* anything is written, on a `--dry-run` too: a
-missing one stops the bump with nothing changed, and `--no-pdf` skips the
-rebuild. A docs change with no bump still needs its PDFs rebuilt by hand, with
-that same command. This paragraph is the one statement of the rule;
-[cgitsync-dev.md](cgitsync-dev.md) step 5 points here.
-
-`bump_version.py` lives in this private mount, not in the public
-`ComplexGitSync` repository, so a public-only checkout structurally cannot
-cut a release. Every target path it touches is specific to this project,
-which is also why it is not in the shared `DevSpec`.
-
-## `cgitsync version` — the same bump, across the tree
-
-`cgitsync version diagnose | init | bump [patch|minor|major]` (TreeVersion)
-bumps every repository of a DEV or OPX tree that is versioned, without an
-agent. `diagnose` reads each repository's `pixi.toml`; `init` installs a
-version with Pixi where there is none, asking first; `bump` runs each
-modified repository's own `bump-version` task (Pixi's own bump only for
-plain SemVer that nothing else copies), leaf first and the root last, checks
-the root moved by exactly the level asked, and commits, pushes and tags
-nothing. This project's own task is `pixi run bump-version`, above, so
-`cgitsync version bump` from this tree's root runs it, and the PDFs with it.
-The level is still a person's judgement (shared `Versioning.md` §2): the
-owner types it, or the orchestrator does, and under `implement` the
-orchestrator runs `cgitsync version bump` in place of `pixi run bump-version`.
-Another project's tool mounted in a tree (ComplexGitSync in atCGS's) is listed
-`other project` and never bumped there: bump it from its own tree. CI never
-calls it. The contract a `bump-version` task meets and the verdicts are the
-user guide's (`docs/Text/user_guide.tex`).
+It does not touch the `Documentation` badge or the PDF (owner, D7). A field
+found other than exactly once, or a copy that already disagrees, stops it
+with nothing written. `--dry-run` lists the files and writes nothing. It
+ends on `old -> new` and a suggested commit subject `cawaqs-<new>`.
 
 ## `bump-build`
 
-Writes exactly one file: `src/ComplexGitSync/__init__.py`'s `__build__`.
-`scripts/bump_build.py`, same `--dry-run` convention as `bump-version`. A
-worker step, run alongside a change to `src/`, always followed by
-`bump-version`, at `patch` at least. `scripts/check_build_version.py` checks
-the pairing.
+`bump-build <lib> [--major]` moves a library's `MAJOR.XX` by 0.01 (`--major`
+gives `(MAJOR+1).00`; `.99` needs `--major`) in the library's `src/Makefile`
+`V_xx`, in every `#define VERSION_xx` of its header, and in cawaqs's
+`src/Makefile`. The other libraries' copies are left alone. No `pixi.toml`
+and no agentic file ever enters a library.
 
-## The release register
+## `check-version`
 
-The release register is the Ledger: a release is one ledger entry carrying
-an additive `release` field (`tree/memory/ledger_entry.py` — see
-`AdditionalSpecs.md`, *The hash-chained ledger*, for the field's schema),
-written automatically by `ComplexGitSyncClient.freeze_release()`
-(`release freeze`): the tool's own `__version__`/`__build__` (`semver`,
-`artefact:src`), the tag it applied (`git_tag`), the `project`, and the
-project's own version (`project:version`, from the root's `pixi.toml`, when it
-declares one). Tamper-evidence is then free: the field is inside the same
-hash chain as every other field, so a release row cannot be edited
-afterwards without breaking the chain from that point on. A version never
-enters a State's hash — a release row only ever cites a State by id,
-alongside it in the ledger, never inside it.
+- every SemVer copy agrees with `pixi.toml`;
+- each library's `Makefile` and header agree, and cawaqs's copy agrees with
+  them;
+- the other libraries' lagging copies are listed as information, not as a
+  failure;
+- `--range A..B` fails a commit of the range that touches cawaqs's `src/`
+  without moving `pixi.toml`, or a library's `src/` without moving its
+  `Makefile` (D10).
 
-`freeze_release()` also reads `.agent/.distant/dev-sync/agent-contracts/current`
-(`tree/memory/agent_contract.py`) and, when it names a signed
-`AgentContractRecord`, adds `artefact:agent_contract` to the row, naming that
-record's terms version — absent, not fatal, when nothing has been signed yet.
+## A branch that predates this (`s-confined`)
 
-**The tag, and the release's portable copy** (ReleaseCommand, owner
-2026-10-09). A release is tagged `<project-name>-<version>`, the version read
-from the root's `pixi.toml` as written, or `<project-name>-<n>`, the next
-number, when it declares none; `--force-tag X` gives `<project-name>-X`. The
-`v<semver>` tags of earlier releases stay as they are. The ledger reaches
-another user only through a pushed memory, so the root repository's tag is
-annotated and carries the project name, the version and the State restricted
-to the project's own repositories: `release list` and `release load` read it
-from any workspace, and it never names a private repository.
+Keep 4X's version line at the merge, and bump by what the merge brings.
+`NVERSION_CAW` takes 4X's SemVer and `V_CAW` stays unquoted; a `libprint`
+commit that changes the log header's signature is dropped, not merged, since
+`libprint` 1.25 already accepts a string.
 
-**This project's own release** is therefore tagged `ComplexGitSync-<semver>`
-with no special case: the `.cgs` names the project `ComplexGitSync`, and
-`bump-version` keeps `pixi.toml` current. Run `release freeze` after
-`bump-version`, so the tag and the commit prefix carry the same version.
+## `cgitsync version`
+
+`cgitsync version diagnose | init | bump` is a development tool of the
+Operating Space and reads only the top-level `[tasks]` of `pixi.toml`, so it
+cannot drive CaWaQS's bump, which sits in `[feature.agentic.tasks]`. Run
+`pixi run -e agentic bump-version` directly. Nothing in CaWaQS waits for
+ComplexGitSync; its requests are in `DevTickets/dependency/CGS/`.
