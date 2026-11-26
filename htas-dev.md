@@ -146,6 +146,7 @@ document on its right.
 | `services/private/` or what reaches it | `src/HydrologicalTwinAlphaSeries/services/SECURITY.md` |
 | A version bump (step 4) | Every `bump-version` target (`pixi.toml`, `pyproject.toml`, the README title, the guide's `\version`) and the rebuilt guide: written by the script, never by hand; `test_version_mirrors` fails on any other copy of an HTAS version |
 | A new use case | A README *Use cases* row |
+| `tutorials/`: a tutorial added, renamed or removed | `tutorials/README.md` (the index; `test_tutorials.py` fails on an unindexed file or a missing entry) |
 | `pixi.toml` tasks, the install | README *Installation*, `docs/developer_guide.md` §1, `tests/README.md` |
 | `tests/` layout, the fixture | `tests/README.md` |
 | What HTAS implements of the White Book's target | White Book chapters 5 and *Current Development*, and the chapter that described it as target |
