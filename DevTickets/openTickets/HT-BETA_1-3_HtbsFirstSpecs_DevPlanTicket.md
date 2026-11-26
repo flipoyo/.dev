@@ -391,14 +391,12 @@ To do, in this order:
 1. ~~Answer D8~~ (owner, 2026-11-27): the three `.agent/.local` mounts of
    `htbs-dev-beta.cgs` fall back to `ComplexGitSync_HT-BETA`, which exists in
    `.dev`, `.localSpec` and `.claude`.
-2. **Create the repository**, from the folder:
-   - `git init -b HT-BETA`, then `git add -A`. `.pixi/` (about 500 MB) is
-     gitignored and must stay out; check with `git status` before the
-     first commit.
-   - Create `github:flipoyo/HydrologicalTwinBetaSeries`, add it as
-     `origin`, and push HT-BETA.
-   - Until HT-BETA exists on the remote, the root entry falls back to
-     `main`.
+2. ~~Create the repository~~ (2026-11-27): `github:flipoyo/HydrologicalTwinBetaSeries`,
+   public. First commit `03d5517` (`HydrologicalTwinBetaSeries-0.1.0`)
+   on `main`, which is protected against force pushes and deletion, admins
+   included, with no pull request required. `HT-BETA` was created from it,
+   and both are pushed. The remote is SSH (`git@github.com:...`), because
+   git has no HTTPS credential helper on this machine.
 3. **Install the development space** with the sequence in
    `htbs-dev-beta.cgs`'s header: `bootstrap`, then `branch create HT-BETA
    --private`, `checkout HT-BETA`, `self-history adopt` and
