@@ -4,4 +4,4 @@ The result is silent. In `gitlab:htas1/ht-synthcase-1`, cawaqs is mounted with `
 
 Asked: either let `auto` find a single `.config/*.cgs` when the root has none, or warn when an `auto` entry resolves to a leaf while its repository holds `.config/*.cgs`, naming the files and the `nested_config = "<file>.cgs"` spelling. Document which of the two is the rule, and show both cases in a tutorial on mounting another project's repository.
 
-Needed by HydrologicalTwinAlphaSeries's plan HtbsFirstSpecs (D3, steps P1 and C1).
+Needed by HydrologicalTwinBetaSeries's plan HtbsFirstSpecs (`dependency/HTBS/`) (D3, steps P1 and C1).

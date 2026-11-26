@@ -1,42 +1,48 @@
-# HtbsFirstSpecs — HTAS centred on its hypercube, and HydrologicalTwinBetaSeries as operating spaces of order 1
+# HtbsFirstSpecs — HydrologicalTwinBetaSeries as operating spaces of order 1
 
 *Created: 2026-11-26*
 
 *Branch: HT-BETA*
 
+> **Split — 2026-11-27, owner's decision.** This ticket held both the HTAS
+> work and the HTBS work. The HTAS part (the hypercube classes, steps A1 to
+> A3 and E2, decisions D2, D6, D9 to D13) is now HydrologicalTwinAlphaSeries's
+> planning ticket `HtasHypercube`. This one keeps what is HTBS's own. It is
+> filed in HTAS's `DevTickets/dependency/HTBS/`, to be moved into HTBS's own
+> `DevTickets/` once its development space is installed (§7.1, step 5).
+> Decision numbers are kept from the joint ticket, so references to them stay
+> true.
+
 ## Abstract — read this first
 
-**The one-line version.** Make HTAS own explicit state-variable and
-hypercube classes, filled by a forward-model output class rather than by
-services reading CaWaQS `.bin` files. Then build HydrologicalTwinBetaSeries
-(HTBS): a new root repository whose `.config/` holds flat operating spaces
-(OSp of order 1, as MOLONARI1D's CGS-MOLO does). They couple HTAS, CaWaQS
-4X, the invariant DATA of a twin and its output DATA. HTBS is ALIVE once one
-of those spaces resimulates `ht-synthcase-1`'s reference output bit for bit.
+**The one-line version.** Build HydrologicalTwinBetaSeries (HTBS): a root
+repository whose `.config/` holds flat operating spaces (OSp of order 1, as
+MOLONARI1D's CGS-MOLO does). They couple HTAS, CaWaQS 4X, the invariant DATA
+of a twin and its output DATA. HTBS is ALIVE once one of those spaces
+resimulates `ht-synthcase-1`'s reference output bit for bit.
 
 **What this document is.** The request (§1); what the repositories named in
 it actually hold today (§2); the GitTrees and GitRepos (§3); how pixi
 drives them (§4); how privacy and the developer spaces are kept apart (§5);
-the HTAS classes (§6); the steps, their order and what runs in parallel
-(§7); the decisions for the owner (§8); acceptance (§9).
+what HTBS needs from HTAS (§6); the steps, their order and what runs in
+parallel (§7); the decisions for the owner (§8); acceptance (§9).
 
-**Why it exists.** HTAS is built around the files CaWaQS writes, which
-depend on the forward model. The owner wants HTAS to protect a hypercube,
-and HTBS to produce the forward model's output itself, from invariant data.
-Every piece needed already exists somewhere: CaWaQS 4X has a cgitsync
-install, ht-synthcase-1 has a first run on DVC, and MOLONARI1D has an
-order-1 layout with a bit-for-bit experiment. This ticket says how they fit
-together, and in what order.
+**Why it exists.** The owner wants HTBS to produce the forward model's
+output itself, from invariant data. Every piece needed already exists
+somewhere: CaWaQS 4X has a cgitsync install, ht-synthcase-1 has a first run
+on DVC, and MOLONARI1D has an order-1 layout with a bit-for-bit experiment.
+This ticket says how they fit together, and in what order.
 
 **Who it is for.** The owner, who answers §8, and the agents that implement
-the steps of §7, in HTAS, in HTBS and in ht-synthcase-1.
+the steps of §7 in HTBS and in ht-synthcase-1.
 
-**What you need to do with it.** Answer §8, at least D1 to D5, which decide
-the layout. §7's first phase can then start on four fronts at once.
+**What you need to do with it.** D1, D3 and D8 are answered, and the
+repository exists (§7.1). Answer D4, D5 and D7, then install the
+development space (§7.1, step 3).
 
 ```mermaid
 graph TD
-    subgraph HTBS["HTBS root repository — .config/ holds the operating spaces"]
+    subgraph HTBS["HTBS root repository — .config/ holds the operating spaces<br/>YOU ARE HERE"]
         DEVOSP["htbs-dev-beta.cgs<br/>development space"]
         RUN["htbs-resim-synthcase1.cgs<br/>one computation"]
         GATE["htbs-gate.cgs<br/>later: public only"]
@@ -44,13 +50,13 @@ graph TD
     RUN --> INV["invariant DATA<br/>gtest testcase-coupled-data-*<br/>gis · parameters · forcing"]
     RUN --> CAW["CaWaQS 4X<br/>+ 17 libraries on cawaqs_4X"]
     RUN --> OUT["output DATA<br/>ht-synthcase-1, DVC → VPS"]
-    RUN --> HTAS["HTAS HT-BETA<br/>read-only"]
+    RUN --> HTAS["HTAS HT-BETA, read-only<br/>HtasHypercube"]
     CAW -->|"pre-processing, COMM, run"| OUT
-    OUT -->|"CawaqsOutput fills"| HC["HTAS hypercubes<br/>YOU ARE HERE"]
+    OUT -->|"CawaqsOutput fills"| HTAS
     OUT -.->|"same bytes as the reference?"| ALIVE["ALIVE<br/>(ALPHA until then)"]
 
     classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
-    class HC here;
+    class RUN,DEVOSP here;
 ```
 
 ---
@@ -291,27 +297,22 @@ What ComplexGitSync does, and what HTBS takes from it.
   `.dvc/config.local`, as in the twin today. cgitsync scrubs secrets from
   data results and from its run log.
 
-## 6. HTAS: the hypercube, and who fills it
+## 6. What HTBS needs from HTAS
 
-- `domain/` gains a **`StateVariable`**: its name, unit and compartment,
-  the output type it comes from, and steady or transient.
-- `domain/` gains a **`Hypercube`**: the values of state variables of one
-  compartment, over named axes (D9). It is read-only once filled (arrays
-  not writeable, operations return new objects): this is what "HTAS
-  protects the hypercube" means inside one process.
-- A **forward-model output class**, one subclass per model; `CawaqsOutput`
-  for the proof of concept. It knows where its files are, how they are
-  encoded, which state variables they hold, and the model's hash and
-  version when known. Its method fills the hypercubes. The following move
-  into it:
-  - `Temporal.readSimDataFromBin` and `decode_and_cache`;
-  - the `.bin` patterns of `automatic_detection_config.py`;
-  - `nbRecs` and `paramRecs`.
+HTAS's planning ticket `HtasHypercube` holds that work. HTBS relies on it
+at two points only:
 
-  Where the class lives is D2.
-- `Compartment` loses `out_caw_path`. No module under `services/` opens a
-  forward-model file. The public interface keeps working, unless D10 says
-  otherwise.
+- **The forward-model output contract** (HtasHypercube A2, D2): the class
+  that knows a model's output files and fills HTAS's hypercubes.
+  `CawaqsOutput` is the proof of concept. Where it lives (HTAS or HTBS) and
+  whether it reads `FORMATTED` output (D6) decide what P1 writes in the COMM
+  file and what C1's `postproc` task calls.
+- **HTAS reading the output DATA** (HtasHypercube E2): the `postproc` task of
+  C1 runs HTAS on the resimulation's output. Until E2, `postproc` runs HTAS's
+  current `.bin` readers.
+
+Neither blocks the ALIVE check (E1), which compares the forward model's
+output and never goes through HTAS.
 
 ## 7. The steps, their order, and what runs in parallel
 
@@ -320,30 +321,26 @@ graph LR
     subgraph P0["Phase 0 — the owner"]
         D["§8 answered<br/>HTBS repository created"]
     end
-    subgraph P1["Phase 1 — four fronts at once"]
+    subgraph P1["Phase 1 — three fronts at once"]
         P1T["P1 twin on 4X<br/>(ht-synthcase-1)"]
-        A1["A1 StateVariable,<br/>Hypercube (HTAS)"]
         B1["B1 HTBS root:<br/>dev space, pixi"]
         B2["B2 invariant DATA<br/>inventory"]
     end
     subgraph P2["Phase 2"]
         G["G reference restored<br/>byte for byte"]
-        A2["A2 CawaqsOutput"]
+        A2["HtasHypercube A2<br/>CawaqsOutput"]
         C1["C1 resimulation<br/>space + tasks"]
     end
     subgraph P3["Phase 3"]
         E1["E1 ALIVE check"]
-        A3["A3 services on<br/>hypercubes"]
-        E2["E2 HTAS reads<br/>the output DATA"]
+        E2["HtasHypercube E2<br/>HTAS reads the output DATA"]
     end
-    D --> P1T & A1 & B1 & B2
+    D --> P1T & B1 & B2
     P1T --> G
-    A1 --> A2
     B1 --> C1
     B2 --> C1
     G --> E1
     C1 --> E1
-    A2 --> A3
     A2 --> E2
     C1 --> E2
 ```
@@ -351,16 +348,14 @@ graph LR
 | Step | Repository and space | What | Depends on | Runs alongside |
 |---|---|---|---|---|
 | **P0** | — | Answer §8; create the HTBS repository (D1) and its HT-BETA branch | — | — |
-| **P1** | ht-synthcase-1, its maintainer | Move the twin to cawaqs 4X with the 4.x COMM, and drop `inputs_C365`. Mount cawaqs with `.config/cawaqs.cgs` (D3), HTAS with `disabled`. Fix `activated`. Set the output format (D6). One new reference run | D3, D6 | A1, B1, B2 |
-| **A1** | HTAS, HTAS dev space | `StateVariable`, `Hypercube`, read-only, with tests; no caller changed | D9 | P1, B1, B2 |
-| **B1** | HTBS, `htbs-dev-beta.cgs` | The root repository: README, `pixi.toml` (`default`, `dev`, `agentic`, front end), `.config/htbs-dev-beta.cgs` with the agentic mounts on `HydrologicalTwinBetaSeries_HT-BETA` (D8), its own memory; then `branch create --private`, `checkout`, `self-history adopt`, `push` | P0 | P1, A1, B2 |
-| **B2** | HTBS | Inventory of the invariant DATA from the three gtest repositories and the COMM: each Neumann forcing, each Dirichlet and Cauchy condition (`AQ_param_BOUND.txt` and the river cells), each parameter file, as one table. Then the class that reads them | P0 | P1, A1, A2 |
+| **P1** | ht-synthcase-1, its maintainer | Move the twin to cawaqs 4X with the 4.x COMM, and drop `inputs_C365`. Mount cawaqs with `.config/cawaqs.cgs` (D3), HTAS with `disabled`. Fix `activated`. Set the output format (D6). One new reference run | D3, D6 | B1, B2 |
+| **B1** | HTBS, `htbs-dev-beta.cgs` | The root repository: README, `pixi.toml` (`default`, `dev`, `agentic`, front end), `.config/htbs-dev-beta.cgs` with the agentic mounts on `HydrologicalTwinBetaSeries_HT-BETA` (D8), its own memory; then `branch create --private`, `checkout`, `self-history adopt`, `push` | P0 | P1, B2 |
+| **B2** | HTBS | Inventory of the invariant DATA from the three gtest repositories and the COMM: each Neumann forcing, each Dirichlet and Cauchy condition (`AQ_param_BOUND.txt` and the river cells), each parameter file, as one table. Then the class that reads them | P0 | P1, A2 |
 | **G** | ht-synthcase-1 | Report step G: restore the reference elsewhere, compare `sha256sum` per file. It proves the reference is stable before HTBS compares against it | P1 | A2, C1 |
-| **A2** | HTAS (or HTBS, D2) | The forward-model output class and `CawaqsOutput`; the reader, patterns and record counts move into it; `Compartment` loses its path | A1, D2, D6 | B2, G, C1 |
+| **A2** | HTAS: HtasHypercube | The forward-model output contract and `CawaqsOutput` (HtasHypercube D2, D6) | — | B2, G, C1 |
 | **C1** | HTBS, `htbs-resim-synthcase1.cgs` | The resimulation space (§3) and the tasks of §4, in the style of `simu_direct.sh` | B1, B2 | A2, G |
-| **E1** | HTBS | The ALIVE check: the resimulated output equals the reference (D7). Pass: HTBS ALIVE; fail: ALPHA, with the reason in the export | G, C1 | A3, E2 |
-| **A3** | HTAS | Every service on hypercubes; the `.npy` cache becomes the hypercube's persistence or goes (D11); docs per the doc-impact map | A2 | E1 |
-| **E2** | HTAS and HTBS | HTAS reads the output DATA of C1 through `CawaqsOutput`, in the `postproc` task | A2, C1 | E1 |
+| **E1** | HTBS | The ALIVE check: the resimulated output equals the reference (D7). Pass: HTBS ALIVE; fail: ALPHA, with the reason in the export | G, C1 | E2 |
+| **E2** | HTAS: HtasHypercube | HTAS reads the output DATA of C1 through `CawaqsOutput`, in the `postproc` task | A2, C1 | E1 |
 | later | HTBS, `htbs-gate.cgs` | The gate space and CaWaQS-ViZ | E1, E2 | — |
 
 ### 7.1 B1 so far: the HTBS folder, and what comes before its registration (2026-11-27)
@@ -409,8 +404,9 @@ To do, in this order:
    (`declare_targets`), and only a clone settles it. If they land on `main`,
    that is a ComplexGitSync dependency ticket, next to
    `nested-config-dotconfig`.
-5. **Move this plan** to HTBS's own `DevTickets/` once it exists, if D1's
-   follow-up says so; HTAS keeps A1 to A3 and E2.
+5. **Move this plan** to HTBS's own `DevTickets/` once the development space
+   is installed (owner, 2026-11-27: it goes there first). HTAS keeps
+   HtasHypercube.
 
 **Dependencies outside this project.** None blocks phase 1. The
 ComplexGitSync ones are filed as short tickets in `dependency/CGS/`
@@ -424,48 +420,32 @@ ComplexGitSync ones are filed as short tickets in `dependency/CGS/`
 
 ## 8. Decisions for the owner
 
-- **D1. The HTBS repository.** Its host and name (for instance
-  `github:flipoyo/HydrologicalTwinBetaSeries`), public or private, and HT-BETA
-  as its first branch.
-- **D2. Where `CawaqsOutput` lives.** (a) In HTAS: HTAS still reads CaWaQS
-  output on its own, as today. (b) In HTBS: HTAS defines only the interface
-  a forward-model output must meet.
+The HTAS decisions D2, D6 and D9 to D13 are in HtasHypercube. D6 (the output
+format) matters here too, for P1.
+
+- **D1. The HTBS repository.** **Answered (owner, 2026-11-27):**
+  `github:flipoyo/HydrologicalTwinBetaSeries`, public, HT-BETA (§7.1).
 - **D3. How a space mounts CaWaQS's libraries.** (a) `nested_config =
   ".config/cawaqs.cgs"` on the cawaqs entry: one line, CaWaQS stays the
   authority on its libraries, and the tree is of order 2 for that branch.
   (b) The 17 libraries and `scripts` listed flat in each HTBS `.cgs`: strict
   order 1, but a copy to keep in step with cawaqs.
+  **Answered (owner, 2026-11-27): (a), cawaqs private and distant.** Nesting
+  depends less on pixi than a pixi dependency would, which keeps the tree
+  portable to other tools.
 - **D4. ht-synthcase-1's line.** Keep `twin-launch` as the reference, or open
   a `4X` branch for the move to 4X.
 - **D5. Where a resimulation's exports go.** (a) A branch of ht-synthcase-1,
   one per run, as the report's step H. (b) A SIMU-style repository with one
   folder per machine, as MOLONARI's.
-- **D6. The output format.** (a) The COMM writes what HTAS reads unformatted
-  (`.bin`). (b) `CawaqsOutput` reads `FORMATTED` too.
 - **D7. "Bit for bit".** (a) The output files' bytes are equal, `sha256sum`
   per file. (b) The decoded values are equal. Either way, on the same
   compiler and platform, as cgitsync records them.
-- **D8. HTBS's agentic branch.** Seed `HydrologicalTwinBetaSeries_HT-BETA`
-  from `HydrologicalTwinAlphaSeries_HT-BETA`, which carries HTAS's adapted
-  specs, or from `ComplexGitSync_CGS-ALPHA`, as HTAS was.
-  **Answered (owner, 2026-11-27): from `ComplexGitSync_HT-BETA`.**
-- **D9. The hypercube's axes.** (a) time × cell × state variable, one
-  hypercube per compartment and output type, the layer a cell attribute.
-  (b) time × layer × cell × state variable.
-- **D10. HTAS's public interface.** (a) Unchanged: a minor bump. (b) Taking
-  hypercubes or a forward-model output: 2.0.0.
-- **D11. The `.npy` cache.** Keep it as the hypercube's persistence, or drop
-  it.
-- **D12. DocsOnTheFly's tutorials.** Wait for A3 and write them on the
-  hypercube API, or write tutorial 1 on today's API after G and rewrite it.
-- **D13. This ticket's rank.** Pile 1 after DocsOnTheFly, as filed, or ahead
-  of it.
+- **D8. HTBS's agentic branch.** **Answered (owner, 2026-11-27):** seeded
+  from `ComplexGitSync_HT-BETA`.
 
 ## 9. Acceptance
 
-- HTAS has read-only `StateVariable` and `Hypercube` classes, in
-  `AdditionalSpecs.md` §2. No module under `services/` opens a forward-model
-  file, and `Compartment` holds no output path.
 - The HTBS repository exists with `htbs-dev-beta.cgs` and
   `htbs-resim-synthcase1.cgs`. Both pass `cgitsync validate` and install
   with `errors=0`; neither nests another project's `.cgs` except as D3
@@ -476,5 +456,5 @@ ComplexGitSync ones are filed as short tickets in `dependency/CGS/`
   byte (G).
 - The resimulation's `compare` task exits 0 against that reference: HTBS is
   ALIVE. Or it exits 1, and HTBS stays ALPHA with the differing files named.
-- For each HTAS step: `pixi run lint` shows no new error, `pixi run test`
-  passes, and `cgitsync status` shows `errors=0`.
+- For each HTBS change: `pixi run lint` and `pixi run test` pass in the HTBS
+  root, and `cgitsync status` shows `errors=0`.

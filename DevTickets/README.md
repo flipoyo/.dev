@@ -57,6 +57,7 @@ private and writable.
 | `archive/` | Planning tickets whose work has landed, or that were dropped (opening with `> **Dropped — YYYY-MM-DD, owner's decision.** <why>`): `YYYYMMDD_<Name>_DevPlanTicket.md` | The agent, in the commit that finishes the work |
 | `archive/.closedUserTicket/` | Short tickets acted on: `YYYYMMDD_<name>.md` | The agent, when the request is satisfied |
 | `archive/.deepArchive/` | The immutable copy of each archived ticket, as it was the day it was archived | The agent, in the same change that archives it |
+| `dependency/<Project>/` | Tickets for another project this one depends on (`CGS`, `HTBS`): short tickets, or a planning ticket that project will own, filed here until the owner transfers them | The agent, on the owner's word |
 
 `DevTickets/` holds nothing else. The list of open tickets is the sorted
 `openTickets/` directory.

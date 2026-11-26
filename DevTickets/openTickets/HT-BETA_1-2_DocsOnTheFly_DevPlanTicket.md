@@ -280,8 +280,9 @@ M2 (the tutorial section) waits for D3's test case.
 - Held: tutorial 1, the fixture recipe in `tests/README.md`, and the README
   *Use cases* tutorial links.
 - D3's test case is `gitlab.com:htas1/ht-synthcase-1` (owner, short ticket
-  `htbs`, 2026-11-26), task P0 of HtbsFirstSpecs. Whether the tutorials wait
-  for its hypercube API is HtbsFirstSpecs D9.
+  `htbs`, 2026-11-26), steps P1 and G of HtbsFirstSpecs (HTBS's plan, in
+  `dependency/HTBS/`). Whether the tutorials wait for the hypercube API is
+  HtasHypercube D12.
 
 ## 6. Acceptance
 

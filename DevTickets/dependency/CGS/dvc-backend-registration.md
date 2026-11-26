@@ -7,4 +7,4 @@ The first HTBS twin, `gitlab:htas1/ht-synthcase-1` (branch `twin-launch`), keeps
 
 Asked: register the DvcBackend so that `cgitsync push`, `pull`, `status` and `release freeze` run the matching DVC phase on each repository that declares `data`, in that order. Refuse a push whose pointers name data missing on the remote. Report the data state in `status`.
 
-Needed by HydrologicalTwinAlphaSeries's plan HtbsFirstSpecs (steps G, C1, E1). It does not block phase 1.
+Needed by HydrologicalTwinBetaSeries's plan HtbsFirstSpecs (`dependency/HTBS/`) (steps G, C1, E1). It does not block phase 1.

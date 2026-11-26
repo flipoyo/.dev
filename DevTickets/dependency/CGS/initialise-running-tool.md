@@ -4,4 +4,4 @@ Every nested install works around it the same way, and says so in a comment: Com
 
 Asked: when a declared entry is the running installation, adopt it in place (check its remote and branch, never delete it), or refuse with a message saying so. Then a nested `.cgs` can declare ComplexGitSync like any other dependency.
 
-Needed by HydrologicalTwinAlphaSeries's plan HtbsFirstSpecs (steps P1 and C1, which pin every tool of the resimulation).
+Needed by HydrologicalTwinBetaSeries's plan HtbsFirstSpecs (`dependency/HTBS/`) (steps P1 and C1, which pin every tool of the resimulation).
