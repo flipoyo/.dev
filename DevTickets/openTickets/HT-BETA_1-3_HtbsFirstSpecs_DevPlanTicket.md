@@ -363,6 +363,59 @@ graph LR
 | **E2** | HTAS and HTBS | HTAS reads the output DATA of C1 through `CawaqsOutput`, in the `postproc` task | A2, C1 | E1 |
 | later | HTBS, `htbs-gate.cgs` | The gate space and CaWaQS-ViZ | E1, E2 | — |
 
+### 7.1 B1 so far: the HTBS folder, and what comes before its registration (2026-11-27)
+
+The owner's answers: D1 `github:flipoyo/HydrologicalTwinBetaSeries`,
+branch HT-BETA; D3 CaWaQS mounted private and distant (read-only) with
+`nested_config = ".config/cawaqs.cgs"`. The owner prefers nesting to a pixi
+dependency, because it depends less on pixi and keeps the tree portable to
+other tools.
+
+Done, not yet a Git repository: `/home/nflipo/.cgs/htbs/HydrologicalTwinBetaSeries`.
+
+- `.config/htbs.cgs`: the HTBS root, `htas` (HT-BETA, read-only,
+  `nested_config = "disabled"`), `cawaqs` (4X, read-only, its libraries from
+  `.config/cawaqs.cgs`) and `.cgitsync/.memory`.
+- `.config/htbs-dev-beta.cgs`: the same, plus ComplexGitSync (HT-BETA,
+  read-only), `.omniscience`, and the `.agent/.distant` and `.agent/.local`
+  mounts.
+- `pixi.toml` (0.1.0, a `dev` layer with cgitsync from HT-BETA, pinned by
+  `pixi.lock`), `pyproject.toml`, `README.md`, `LICENSE.md` (EPL-2.0),
+  `.gitignore`, `src/HydrologicalTwinBetaSeries/__init__.py`, and
+  `tests/unit/test_version.py`.
+- `pixi run test` and `pixi run lint` pass, and `cgitsync validate` accepts
+  both `.cgs` files with no warning.
+
+To do, in this order:
+
+1. **Answer D8**, the seed of HTBS's agentic branch. The three
+   `.agent/.local` mounts of `htbs-dev-beta.cgs` fall back to
+   `ComplexGitSync_CGS-ALPHA`, as HTAS's and CaWaQS's did. Change the three
+   `fallback_branch` values if the answer is
+   `HydrologicalTwinAlphaSeries_HT-BETA`.
+2. **Create the repository**, from the folder:
+   - `git init -b HT-BETA`, then `git add -A`. `.pixi/` (about 500 MB) is
+     gitignored and must stay out; check with `git status` before the
+     first commit.
+   - Create `github:flipoyo/HydrologicalTwinBetaSeries`, add it as
+     `origin`, and push HT-BETA.
+   - Until HT-BETA exists on the remote, the root entry falls back to
+     `main`.
+3. **Install the development space** with the sequence in
+   `htbs-dev-beta.cgs`'s header: `bootstrap`, then `branch create HT-BETA
+   --private`, `checkout HT-BETA`, `self-history adopt` and
+   `push --private`. Then adapt `CLAUDE.md`, `AGENT.md` and `DevTickets/` on
+   the new `HydrologicalTwinBetaSeries_HT-BETA` branch.
+4. **Check the CaWaQS libraries' branch** at that first install:
+   `cgitsync status` must show the 17 libraries and `scripts` under
+   `cawaqs/src/` on `cawaqs_4X`. `validate` cannot show it: ComplexGitSync
+   leaves a private read-only mount on the branch its own `.cgs` declares
+   (`declare_targets`), and only a clone settles it. If they land on `main`,
+   that is a ComplexGitSync dependency ticket, next to
+   `nested-config-dotconfig`.
+5. **Move this plan** to HTBS's own `DevTickets/` once it exists, if D1's
+   follow-up says so; HTAS keeps A1 to A3 and E2.
+
 **Dependencies outside this project.** None blocks phase 1. The
 ComplexGitSync ones are filed as short tickets in `dependency/CGS/`
 (2026-11-26), for the owner to transfer:
