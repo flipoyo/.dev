@@ -270,6 +270,19 @@ they bump no version unless D2 (b) adds a script under `src/`.
 
 M2 (the tutorial section) waits for D3's test case.
 
+### What M2 did so far (2026-11-26)
+
+- Done, with no data: `tutorials/README.md` (the index and its rules),
+  `tutorials/_template.md`, `tests/unit/test_tutorials.py` (D4 answered
+  (b): Python blocks compiled always, run when `CWAQS_FIXTURE_ROOT` is set),
+  `test_docs_sync.py` extended to `tutorials/*.md`, the README link, and the
+  `tutorials/` row of the doc-impact map.
+- Held: tutorial 1, the fixture recipe in `tests/README.md`, and the README
+  *Use cases* tutorial links.
+- D3's test case is `gitlab.com:htas1/ht-synthcase-1` (owner, short ticket
+  `htbs`, 2026-11-26), task P0 of HtbsFirstSpecs. Whether the tutorials wait
+  for its hypercube API is HtbsFirstSpecs D9.
+
 ## 6. Acceptance
 
 - `htas-dev.md` holds the doc-impact map, and step 7 points to it.
