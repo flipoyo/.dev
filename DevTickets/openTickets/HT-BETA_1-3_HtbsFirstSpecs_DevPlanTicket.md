@@ -267,7 +267,7 @@ What ComplexGitSync does, and what HTBS takes from it.
   - HTAS's tickets are on `HydrologicalTwinAlphaSeries_HT-BETA`, CaWaQS's on
     `cawaqs_4X`;
   - HTBS's will be on `HydrologicalTwinBetaSeries_HT-BETA`, seeded once
-    from HTAS's (D8);
+    from `ComplexGitSync_HT-BETA` (D8);
   - a ticket written in one space is never visible from another, unless
     someone checks out that branch.
 - **The project's own non-private repositories** also go on
@@ -365,7 +365,7 @@ graph LR
 
 ### 7.1 B1 so far: the HTBS folder, and what comes before its registration (2026-11-27)
 
-The owner's answers: D1 `github:flipoyo/HydrologicalTwinBetaSeries`,
+The owner's answers: D8 `ComplexGitSync_HT-BETA` (2026-11-27); D1 `github:flipoyo/HydrologicalTwinBetaSeries`,
 branch HT-BETA; D3 CaWaQS mounted private and distant (read-only) with
 `nested_config = ".config/cawaqs.cgs"`. The owner prefers nesting to a pixi
 dependency, because it depends less on pixi and keeps the tree portable to
@@ -388,11 +388,9 @@ Done, not yet a Git repository: `/home/nflipo/.cgs/htbs/HydrologicalTwinBetaSeri
 
 To do, in this order:
 
-1. **Answer D8**, the seed of HTBS's agentic branch. The three
-   `.agent/.local` mounts of `htbs-dev-beta.cgs` fall back to
-   `ComplexGitSync_CGS-ALPHA`, as HTAS's and CaWaQS's did. Change the three
-   `fallback_branch` values if the answer is
-   `HydrologicalTwinAlphaSeries_HT-BETA`.
+1. ~~Answer D8~~ (owner, 2026-11-27): the three `.agent/.local` mounts of
+   `htbs-dev-beta.cgs` fall back to `ComplexGitSync_HT-BETA`, which exists in
+   `.dev`, `.localSpec` and `.claude`.
 2. **Create the repository**, from the folder:
    - `git init -b HT-BETA`, then `git add -A`. `.pixi/` (about 500 MB) is
      gitignored and must stay out; check with `git status` before the
@@ -452,6 +450,7 @@ ComplexGitSync ones are filed as short tickets in `dependency/CGS/`
 - **D8. HTBS's agentic branch.** Seed `HydrologicalTwinBetaSeries_HT-BETA`
   from `HydrologicalTwinAlphaSeries_HT-BETA`, which carries HTAS's adapted
   specs, or from `ComplexGitSync_CGS-ALPHA`, as HTAS was.
+  **Answered (owner, 2026-11-27): from `ComplexGitSync_HT-BETA`.**
 - **D9. The hypercube's axes.** (a) time × cell × state variable, one
   hypercube per compartment and output type, the layer a cell attribute.
   (b) time × layer × cell × state variable.
