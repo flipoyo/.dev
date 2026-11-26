@@ -1,0 +1,1 @@
+HydrologicalTwinBetaSeries. Based on htas, cgs, and a cawaqs pipeline.  htas should be centered on its hypercube only not the .bin coming from cawaqs output. This is wrong because depends on the forward model of the pipeline.
