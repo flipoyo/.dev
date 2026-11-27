@@ -36,9 +36,18 @@ graph LR
     R --> H
     H -->|"G4"| P["HTBS pins HT-BETA vX"]
 
-    classDef here fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
-    class H here;
+    classDef done fill:#2E7D32,color:#fff,stroke:#111,stroke-width:2px;
+    classDef ready fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
+    classDef waiting fill:#E0E0E0,color:#222,stroke:#777,stroke-width:1px;
+    class C,M done;
+    class N,V1,V3 ready;
+    class R,H,P waiting;
 ```
+
+**Colors.** Green: archived. Blue: ready, every ticket it waits for is archived, so someone can start it now.
+Grey: waiting. Whoever archives a roadmap ticket recolors its node and updates the *Status* column of §3 in the same
+change (TICKETLIFECYCLE §8). *As of 2026-11-27: CheckoutBareTip and MergeDataEncrypt are archived, so
+NestedInstall (DEV2) and DvcBackend (DEV1) are ready.*
 
 ---
 
@@ -61,8 +70,7 @@ openTickets/<branch>_<priority>-<rank>_<ROLE>_<Name>_DevPlanTicket.md
 
 - `<branch>`, `<priority>` and `<rank>` are TICKETLIFECYCLE §2's: where the work lands, now or stand-by, and the
   position in the pile.
-- `<ROLE>` is `ORX`, `DEV1` or `DEV2`. It is this project's addition, only for tickets on a roadmap
-  (`DevTickets/README.md` §2). A ticket without one is on no roadmap.
+- `<ROLE>` is `ORX`, `DEV1` or `DEV2`. It is TICKETLIFECYCLE §2.4, only for tickets on a roadmap. A ticket without one is on no roadmap.
 - **Reading order:** within a role, the rank is the order of work. Between roles, the rank says nothing about
   waiting. The *Waits for* column of §3 does.
 - When a ticket is archived, the role goes with the branch and the rank:
@@ -70,14 +78,14 @@ openTickets/<branch>_<priority>-<rank>_<ROLE>_<Name>_DevPlanTicket.md
 
 ## 3. The tickets, and who waits for whom
 
-| Ticket | Role | Waits for | Unblocks | Serves HTBS step |
-|---|---|---|---|---|
-| [CheckoutBareTip](../archive/20261127_CheckoutBareTip_DevPlanTicket.md) | DEV2 | — (**archived 2026-11-27, cgitsync 8.15.1: gate G1 reached**) | MergeDataEncrypt | every space (stable derived branches) |
-| [MergeDataEncrypt](../archive/20261127_MergeDataEncrypt_DevPlanTicket.md) | DEV2 | CheckoutBareTip (**archived 2026-11-27, cgitsync 8.16.0, awaiting the owner's commit: gate G2 reached once committed**) | NestedInstall; DvcBackend S3 and S2's locked hint (G2) | the gate space (encrypted server addresses) |
-| [HT-BETA_1-3 NestedInstall](../openTickets/HT-BETA_1-3_DEV2_NestedInstall_DevPlanTicket.md) | DEV2 | MergeDataEncrypt (both edit `orchestre/installer.py`) | HtbsReady | P1, C1, D3 |
-| [HT-BETA_1-4 DvcBackend](../openTickets/HT-BETA_1-4_DEV1_DvcBackend_DevPlanTicket.md) | DEV1 | **nothing for A1, S1, A2, A3**: they start now, on 8.14.2's `DataManager`. **G2 for S3**, and for S2's locked-snippet hint | DataRoundTrip | G, C1, gate |
-| [HT-BETA_1-5 DataRoundTrip](../openTickets/HT-BETA_1-5_DEV1_DataRoundTrip_DevPlanTicket.md) | DEV1 | DvcBackend archived (G3) | HtbsReady | G, C1, E1 |
-| [HT-BETA_1-6 HtbsReady](../openTickets/HT-BETA_1-6_ORX_HtbsReady_DevPlanTicket.md) | ORX | all five above (G4) | HTBS's pin | all |
+| Ticket | Role | Status | Waits for | Unblocks | Serves HTBS step |
+|---|---|---|---|---|---|
+| [CheckoutBareTip](../archive/20261127_CheckoutBareTip_DevPlanTicket.md) | DEV2 | done | — (**archived 2026-11-27, cgitsync 8.15.1: gate G1 reached**) | MergeDataEncrypt | every space (stable derived branches) |
+| [MergeDataEncrypt](../archive/20261127_MergeDataEncrypt_DevPlanTicket.md) | DEV2 | done | CheckoutBareTip (**archived and committed 2026-11-27, cgitsync 8.16.0: gate G2 reached**) | NestedInstall; DvcBackend S3 and S2's locked hint (G2) | the gate space (encrypted server addresses) |
+| [HT-BETA_1-3 NestedInstall](../openTickets/HT-BETA_1-3_DEV2_NestedInstall_DevPlanTicket.md) | DEV2 | ready | MergeDataEncrypt (both edit `orchestre/installer.py`) | HtbsReady | P1, C1, D3 |
+| [HT-BETA_1-4 DvcBackend](../openTickets/HT-BETA_1-4_DEV1_DvcBackend_DevPlanTicket.md) | DEV1 | ready | **nothing for A1, S1, A2, A3**: they start now, on 8.14.2's `DataManager`. **G2 for S3**, and for S2's locked-snippet hint (G2 is reached: S3 may start) | DataRoundTrip | G, C1, gate |
+| [HT-BETA_1-5 DataRoundTrip](../openTickets/HT-BETA_1-5_DEV1_DataRoundTrip_DevPlanTicket.md) | DEV1 | waiting | DvcBackend archived (G3) | HtbsReady | G, C1, E1 |
+| [HT-BETA_1-6 HtbsReady](../openTickets/HT-BETA_1-6_ORX_HtbsReady_DevPlanTicket.md) | ORX | waiting | all five above (G4) | HTBS's pin | all |
 
 **After the goal (pile 2, DEV1, not needed by HTBS):** DataWorkspace, DataPublication, DataAcceptance, under
 DataArchitecture. **ORX bookkeeping:** DataSchema and DataBackendContract landed in 8.14.1 and 8.14.2. They wait
@@ -91,8 +99,8 @@ from DEV2. DEV2's three tickets touch no data file.
 | Gate | When | ORX does |
 |---|---|---|
 | **G0** | This roadmap is accepted | DEV1 gets access (§6), the §7 points are settled |
-| **G1** | CheckoutBareTip archived | Confirm a fresh `checkout` of every branch is stable. DEV1 pulls |
-| **G2** | MergeDataEncrypt archived (8.15.0 expected) | Tell DEV1 that S3 may start. `data-encrypt` is closed (its D4) |
+| **G1** (reached 2026-11-27) | CheckoutBareTip archived | Confirm a fresh `checkout` of every branch is stable. DEV1 pulls |
+| **G2** (reached 2026-11-27, 8.16.0) | MergeDataEncrypt archived | Tell DEV1 that S3 may start. `data-encrypt` is closed (its D4) |
 | **G3** | DvcBackend archived | DataRoundTrip may start |
 | **G4** | NestedInstall and DataRoundTrip archived | Start HtbsReady |
 
@@ -131,7 +139,8 @@ The last row is the one that collides every time. That is what §6's commit rule
    changes a rule in `digest.md`, a stored format (`.gts`, State, ledger), the CLI grammar or the branch-naming
    contract is asked of ORX as well.
 7. **A new need is a short ticket.** A developer who finds work the roadmap lacks writes it in `shortTickets/`.
-   ORX turns it into a plan and updates §3. Only ORX edits this file.
+   ORX turns it into a plan and updates §3. Only ORX edits this file, except that whoever archives a roadmap ticket
+   recolors its node in the graph and sets its *Status* in §3, in the same change.
 
 ## 7. Open points for ORX at G0
 

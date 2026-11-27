@@ -63,7 +63,7 @@ not a specification. The public repository holds no tickets at all.
 | `archive/` | Planning tickets whose work has landed, or that were dropped (a dropped one opens with `> **Dropped — YYYY-MM-DD, owner's decision.** <why>`, which the pair-rule gate reads, and is stamped with the date it was dropped): `YYYYMMDD_<Name>_DevPlanTicket.md`. Also a few one-off repair scripts kept beside the ticket they served. | The agent, in the commit that finishes the work |
 | `archive/.closedUserTicket/` | Short tickets that have been acted on: `YYYYMMDD_<name>.md` | The agent, when the request is satisfied |
 | `archive/.deepArchive/` | The immutable copy of each archived ticket, as it was the day it was archived | The agent, in the same change that archives it |
-| `Roadmap/` | One coordination plan per goal shared by several developers: who holds which ticket, who waits for whom, the gates, the working rules. It holds no design (owner, 2026-11-27). Today: [HTBS_Roadmap.md](Roadmap/HTBS_Roadmap.md) | ORX, the role that syncs the plans |
+| `Roadmap/` | One roadmap per goal several developers share (TICKETLIFECYCLE §8); this project's are listed in §2.1 | ORX, the role that syncs the plans |
 
 `DevTickets/` holds nothing else. A listing of the open tickets is the sorted
 `openTickets/` directory; there is no separate summary to keep true.
@@ -98,13 +98,6 @@ Those are the only ticket filename prefixes this project has (`main_`, `memory-d
 ticket is open under any of them). An open ticket is named `<branch>_<priority>-<rank>_<Name>_DevPlanTicket.md` and carries
 `*Branch: <branch>*` under its `*Created:*` line. The prefix is written out, never implied by its absence. Both conventions are defined in TICKETLIFECYCLE.md
 §2.3 and §3; this section only says which branches exist here.
-
-**A ticket on a roadmap carries its role (owner, 2026-11-27).** This project's one exception to TICKETLIFECYCLE
-§2's filename: a ticket that a `Roadmap/` plan lists is named
-`<branch>_<priority>-<rank>_<ROLE>_<Name>_DevPlanTicket.md`, where `<ROLE>` is `ORX` (the sync of the plans towards
-the goal), `DEV1` or `DEV2` (a developer's lane, which the roadmap defines). Within a role the rank is the order of
-work, and who waits for whom is the roadmap's table. The role is dropped on archiving, with the branch and the rank.
-So the archived name, which `pixi run check-tickets` reads, is unchanged. A ticket on no roadmap carries no role.
 
 **`memory-dev` is closed (owner, 2026-10-27).** It was 30 commits behind
 `main` and none ahead, so the owner moved its last ticket, WorkingAreaRename,
@@ -156,6 +149,15 @@ same group one spelling differently. See
 them: a memory ticket edited in `.dev` is still committed on the
 `ComplexGitSync` branch of `.dev`. The branch line names the branch of the
 project's own repository.
+
+## 2.1 Roadmaps
+
+The method is [TICKETLIFECYCLE.md](../../../.distant/ticket/TICKETLIFECYCLE.md) §8, and the role in a ticket's name §2.4
+(owner, 2026-11-27). This project has one roadmap:
+
+| Roadmap | Goal | ORX | DEV lanes |
+|---|---|---|---|
+| [HTBS_Roadmap.md](Roadmap/HTBS_Roadmap.md) | A ComplexGitSync `HT-BETA` that HydrologicalTwinBetaSeries can pin | the owner | `DEV1` the data class and its coupling (a collaborator), `DEV2` the other mandatory work |
 
 ## 3. What does not belong here
 
