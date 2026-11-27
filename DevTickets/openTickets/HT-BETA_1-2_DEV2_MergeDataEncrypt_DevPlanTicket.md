@@ -39,7 +39,7 @@ is done.
 graph LR
     DE["data-encrypt<br/>EncryptedRepos E1 E2<br/>AnonymousProject<br/>(8.10.0 to 8.11.0)"] --> M["MergeDataEncrypt<br/>YOU ARE HERE"]
     HB["HT-BETA 8.14.2<br/>ProjectBranch4Parent, RootBareBranch,<br/>DataSchema, DataBackendContract"] --> M
-    M --> R["HT-BETA 8.15.0<br/>one line, git-crypt aware"]
+    M --> R["HT-BETA the next free version after CheckoutBareTip's 8.15.0 (8.16.0 if committed next)<br/>one line, git-crypt aware"]
     R --> NI["NestedInstall"]
     R --> DB["DvcBackend<br/>(address kept in git-crypt)"]
 
@@ -146,7 +146,7 @@ DvcBackend's, step S3 (ticket review 2026-11-27: data tickets hold data only).
      git-crypt path is refused by `commit`, `push` and `release freeze`, with no override. cgitsync never unlocks
      and never handles a key. An anonymous project's alias replaces its name wherever a shared repository is named
      or written. An unknown `project` key is refused.
-   - **README branch table:** the `data-encrypt` row says the branch merged into `HT-BETA` in 8.15.0, and that it
+   - **README branch table:** the `data-encrypt` row says the branch merged into `HT-BETA` in the next free version after CheckoutBareTip's 8.15.0 (8.16.0 if committed next), and that it
      no longer takes tickets.
    - **User guide:** the *Encrypted repositories* and anonymous-project sections come from `DocComplexGitSync`.
      Rebuild the PDFs.
@@ -161,7 +161,7 @@ DvcBackend's, step S3 (ticket review 2026-11-27: data tickets hold data only).
    named. Its acceptance is its own §3. When this ticket is archived, EncryptedMerge's file leaves `openTickets/`:
    its text is §1–§4 of the archived copy of this ticket, appended under *Part E3* by the worker.
 7. **Release.** The orchestrator decides the level. A MINOR is expected, because the merge adds the `anonymise`
-   command, the `CRYPT` column and a refusal. The whole tree is bumped from 8.14.2 to 8.15.0 with
+   command, the `CRYPT` column and a refusal. The whole tree is bumped from 8.14.2 to the next free version after CheckoutBareTip's 8.15.0 (8.16.0 if committed next) with
    `cgitsync version bump minor`, and the PDFs are rebuilt. One commit message is used in every repository.
 
 ## 4. Acceptance
@@ -186,14 +186,14 @@ DvcBackend's, step S3 (ticket review 2026-11-27: data tickets hold data only).
 ## 6. Decisions for the owner
 
 - **D1. The version, and the CHANGELOG entries of the `data-encrypt` line.** Recommended: release the merge as
-  8.15.0, and fold the three `data-encrypt` entries (8.10.0, 8.10.1, 8.11.0) into the 8.15.0 entry. Those numbers
+  the next free version after CheckoutBareTip's 8.15.0 (8.16.0 if committed next), and fold the three `data-encrypt` entries (8.10.0, 8.10.1, 8.11.0) into the the next free version after CheckoutBareTip's 8.15.0 (8.16.0 if committed next) entry. Those numbers
   were never released on this line, and they name other work here. The alternative keeps the three headings,
-  marked *(data-encrypt line, merged in 8.15.0)*.
+  marked *(data-encrypt line, merged in the next free version after CheckoutBareTip's 8.15.0 (8.16.0 if committed next))*.
 - **D2. The unsafe keys and the encrypted test tree.** `.keys/unsafe-key-1`, `.keys/unsafe-key-2` and
   `.config/cgitsync-encrypt.cgs` sit at the root of the public repository, on a branch HTBS installs. Recommended:
   move them under `tests/fixtures/git-crypt/` with their README, so the root of a branch users install holds no key
   file, even a test one. The alternative keeps them where they are.
 - **D3. EncryptedMerge Q1: refuse, or a merge driver?** Its own recommendation is to name the path and the way out.
-- **D4. `data-encrypt` after the merge.** Recommended: `cgitsync branch close data-encrypt` once 8.15.0 is
+- **D4. `data-encrypt` after the merge.** Recommended: `cgitsync branch close data-encrypt` once the next free version after CheckoutBareTip's 8.15.0 (8.16.0 if committed next) is
   committed. Its tip stays on `ancestors`. The alternative is to leave it open for a later encryption ticket.
 - **D5. Ceiling raises.** Asked one by one, with the measured numbers, after step 3.
