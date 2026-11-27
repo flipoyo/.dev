@@ -73,7 +73,7 @@ openTickets/<branch>_<priority>-<rank>_<ROLE>_<Name>_DevPlanTicket.md
 | Ticket | Role | Waits for | Unblocks | Serves HTBS step |
 |---|---|---|---|---|
 | [CheckoutBareTip](../archive/20261127_CheckoutBareTip_DevPlanTicket.md) | DEV2 | — (**archived 2026-11-27, cgitsync 8.15.1: gate G1 reached**) | MergeDataEncrypt | every space (stable derived branches) |
-| [HT-BETA_1-2 MergeDataEncrypt](../openTickets/HT-BETA_1-2_DEV2_MergeDataEncrypt_DevPlanTicket.md) | DEV2 | CheckoutBareTip | NestedInstall; DvcBackend S3 and S2's locked hint (G2) | the gate space (encrypted server addresses) |
+| [MergeDataEncrypt](../archive/20261127_MergeDataEncrypt_DevPlanTicket.md) | DEV2 | CheckoutBareTip (**archived 2026-11-27, cgitsync 8.16.0, awaiting the owner's commit: gate G2 reached once committed**) | NestedInstall; DvcBackend S3 and S2's locked hint (G2) | the gate space (encrypted server addresses) |
 | [HT-BETA_1-3 NestedInstall](../openTickets/HT-BETA_1-3_DEV2_NestedInstall_DevPlanTicket.md) | DEV2 | MergeDataEncrypt (both edit `orchestre/installer.py`) | HtbsReady | P1, C1, D3 |
 | [HT-BETA_1-4 DvcBackend](../openTickets/HT-BETA_1-4_DEV1_DvcBackend_DevPlanTicket.md) | DEV1 | **nothing for A1, S1, A2, A3**: they start now, on 8.14.2's `DataManager`. **G2 for S3**, and for S2's locked-snippet hint | DataRoundTrip | G, C1, gate |
 | [HT-BETA_1-5 DataRoundTrip](../openTickets/HT-BETA_1-5_DEV1_DataRoundTrip_DevPlanTicket.md) | DEV1 | DvcBackend archived (G3) | HtbsReady | G, C1, E1 |
