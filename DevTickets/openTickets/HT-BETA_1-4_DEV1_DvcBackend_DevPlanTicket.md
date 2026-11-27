@@ -106,6 +106,11 @@ S1–S4 are §B3's steps 1–4; S5 is new.
 | Wave | Step | Needs |
 |---|---|---|
 | 1 | **A1** the process boundary; **S1** `DataService`, the alias in `DataSpec`; **S3** the refusal of an address in clear | MergeDataEncrypt (S3) |
+
+**S3 also takes the data check moved from MergeDataEncrypt §2** (ticket review 2026-11-27: a data ticket holds data,
+and only data). `EncryptionGuard` runs in `commit`, `push` and `release freeze`. A `.dvc` pointer file and
+`.dvc/config` under a git-crypt path must be handled like any other file: refused in clear in a locked tree, passed
+when unlocked. One test for each case, in `tests/integration/test_encrypted_repos.py`, skipped without git-crypt.
 | 2 | **A2** `DvcBackend` and its registration; **S2** `DvcBackend` binds the alias | A1; A2 for S2 |
 | 3 | **A3** the `dvc` feature and the CI job; **S4** docs and the test tree; **S5** the install reports the remote | A2, S2 |
 

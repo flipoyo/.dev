@@ -16,9 +16,9 @@
 
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-7` → `data-repo_2-9`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
-> **Milestone M6** of [DataArchitecture](HT-BETA_2-6_DataArchitecture_DevPlanTicket.md),
+> **Milestone M6** of [DataArchitecture](HT-BETA_2-6_DEV1_DataArchitecture_DevPlanTicket.md),
 > and the gate the workstream merges through. Needs
-> [DataPublication](HT-BETA_2-8_DataPublication_DevPlanTicket.md).
+> [DataPublication](HT-BETA_2-8_DEV1_DataPublication_DevPlanTicket.md).
 > Analysed from §9/P6 and §11 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
 

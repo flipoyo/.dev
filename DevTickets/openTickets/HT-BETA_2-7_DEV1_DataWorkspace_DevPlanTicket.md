@@ -56,9 +56,9 @@ graph LR
 
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-4` → `data-repo_2-6`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
-> **Milestone M3** of [DataArchitecture](HT-BETA_2-6_DataArchitecture_DevPlanTicket.md).
-> Needs [DataBackendContract](HT-BETA_2-11_DataBackendContract_DevPlanTicket.md);
-> independent of [DataMaterialisation](HT-BETA_2-7_DataWorkspace_DevPlanTicket.md).
+> **Milestone M3** of [DataArchitecture](HT-BETA_2-6_DEV1_DataArchitecture_DevPlanTicket.md).
+> Needs [DataBackendContract](HT-BETA_2-11_ORX_DataBackendContract_DevPlanTicket.md);
+> independent of [DataMaterialisation](HT-BETA_2-7_DEV1_DataWorkspace_DevPlanTicket.md).
 > Analysed from §4 and §9/P3 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
 
@@ -246,9 +246,9 @@ Decide whether a preflight warns before starting something long.
 
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-5` → `data-repo_2-7`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
-> **Milestone M4** of [DataArchitecture](HT-BETA_2-6_DataArchitecture_DevPlanTicket.md).
-> Needs [DataBackendContract](HT-BETA_2-11_DataBackendContract_DevPlanTicket.md);
-> independent of [DataAuthoring](HT-BETA_2-7_DataWorkspace_DevPlanTicket.md).
+> **Milestone M4** of [DataArchitecture](HT-BETA_2-6_DEV1_DataArchitecture_DevPlanTicket.md).
+> Needs [DataBackendContract](HT-BETA_2-11_ORX_DataBackendContract_DevPlanTicket.md);
+> independent of [DataAuthoring](HT-BETA_2-7_DEV1_DataWorkspace_DevPlanTicket.md).
 > Analysed from §5, §7 and §9/P4 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
 

@@ -63,6 +63,7 @@ not a specification. The public repository holds no tickets at all.
 | `archive/` | Planning tickets whose work has landed, or that were dropped (a dropped one opens with `> **Dropped — YYYY-MM-DD, owner's decision.** <why>`, which the pair-rule gate reads, and is stamped with the date it was dropped): `YYYYMMDD_<Name>_DevPlanTicket.md`. Also a few one-off repair scripts kept beside the ticket they served. | The agent, in the commit that finishes the work |
 | `archive/.closedUserTicket/` | Short tickets that have been acted on: `YYYYMMDD_<name>.md` | The agent, when the request is satisfied |
 | `archive/.deepArchive/` | The immutable copy of each archived ticket, as it was the day it was archived | The agent, in the same change that archives it |
+| `Roadmap/` | One coordination plan per goal shared by several developers: who holds which ticket, who waits for whom, the gates, the working rules. It holds no design (owner, 2026-11-27). Today: [HTBS_Roadmap.md](Roadmap/HTBS_Roadmap.md) | ORX, the role that syncs the plans |
 
 `DevTickets/` holds nothing else. A listing of the open tickets is the sorted
 `openTickets/` directory; there is no separate summary to keep true.
@@ -89,13 +90,20 @@ lands on it. A ticket filed as `main_` before that date was renamed `CGS-ALPHA_`
 | Memory — a change that **migrates a stored memory format**: the state area's layout, the ledger schema, or the distant reference ledger | `memory-dev` — **closed 2026-10-27**, see below | `memory-dev_` (no open ticket) |
 | Data — the `DataManager` layer, the DVC backend, the `data` declaration, and data materialisation and publication. **On `HT-BETA` since the ticket review of 2026-11-27**: no `data-repo` branch was ever pushed, and DataSchema and DataBackendContract landed on `HT-BETA` | `data-repo` — never created | `data-repo_` (no open ticket) |
 | Packaging awaiting the owner's review — UserInstallPath, held off `main` until the owner merges or drops it (owner, 2026-10-01) | `tmpPyPi` | `tmpPyPi_` |
-| Work done on the `HT-BETA` branch of this tree — ProjectBranch4Parent, RootBareBranch (owner, 2026-11-23); since 2026-11-27, making `HT-BETA` ready for HydrologicalTwinBetaSeries (CheckoutBareTip, MergeDataEncrypt, NestedInstall, DvcBackend, DataRoundTrip) and the rest of the data workstream | `HT-BETA` | `HT-BETA_` |
+| Work done on the `HT-BETA` branch of this tree — ProjectBranch4Parent, RootBareBranch (owner, 2026-11-23); since 2026-11-27, making `HT-BETA` ready for HydrologicalTwinBetaSeries (the [HTBS roadmap](Roadmap/HTBS_Roadmap.md): CheckoutBareTip, MergeDataEncrypt, NestedInstall, DvcBackend, DataRoundTrip, HtbsReady) and the rest of the data workstream | `HT-BETA` | `HT-BETA_` |
 | gx4g's requirements on ComplexGitSync — the install protocol by PoE level and the `OP` boundary class gx4g drives (owner, 2026-10-29, short ticket `ExplDistantLocal`). **Aimed at `@CGS`, ComplexGraphSync, since 2026-10-31 (owner)** | `gx4g-main` | `gx4g-main_` |
 
 Those are the only ticket filename prefixes this project has (`main_`, `memory-dev_` and `data-repo_` are history: no
 ticket is open under any of them). An open ticket is named `<branch>_<priority>-<rank>_<Name>_DevPlanTicket.md` and carries
 `*Branch: <branch>*` under its `*Created:*` line. The prefix is written out, never implied by its absence. Both conventions are defined in TICKETLIFECYCLE.md
 §2.3 and §3; this section only says which branches exist here.
+
+**A ticket on a roadmap carries its role (owner, 2026-11-27).** This project's one exception to TICKETLIFECYCLE
+§2's filename: a ticket that a `Roadmap/` plan lists is named
+`<branch>_<priority>-<rank>_<ROLE>_<Name>_DevPlanTicket.md`, where `<ROLE>` is `ORX` (the sync of the plans towards
+the goal), `DEV1` or `DEV2` (a developer's lane, which the roadmap defines). Within a role the rank is the order of
+work, and who waits for whom is the roadmap's table. The role is dropped on archiving, with the branch and the rank.
+So the archived name, which `pixi run check-tickets` reads, is unchanged. A ticket on no roadmap carries no role.
 
 **`memory-dev` is closed (owner, 2026-10-27).** It was 30 commits behind
 `main` and none ahead, so the owner moved its last ticket, WorkingAreaRename,

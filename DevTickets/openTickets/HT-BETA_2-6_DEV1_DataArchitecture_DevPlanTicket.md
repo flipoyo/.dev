@@ -12,7 +12,7 @@
 > **DataWorkspace** (M3 and M4, merged because they run in parallel), **DataPublication** (the rest of M5) and
 > **DataAcceptance** (the rest of M6). The safety argument of *The branch* (§3) now rests on each ticket's acceptance,
 > as `memory-dev`'s did when it closed: nothing lands that a Git-only tree can see.
-> **Short ticket `server-ip` — 2026-11-25.** A data repository names its DVC server by an alias, `service = "<alias>"`, and its address is never written in any file cgitsync writes: [DataServerAddress](HT-BETA_1-4_DvcBackend_DevPlanTicket.md) (2-16). It lands after M2 and before M4 and M5, which need a remote. It takes the place of the "§7 C2" that `git_repo/data_spec.py` cites for `service`: no version of this ticket has that section.
+> **Short ticket `server-ip` — 2026-11-25.** A data repository names its DVC server by an alias, `service = "<alias>"`, and its address is never written in any file cgitsync writes: [DataServerAddress](HT-BETA_1-4_DEV1_DvcBackend_DevPlanTicket.md) (2-16). It lands after M2 and before M4 and M5, which need a remote. It takes the place of the "§7 C2" that `git_repo/data_spec.py` cites for `service`: no version of this ticket has that section.
 
 > **Ticket review — 2026-11-11, owner's decision.** Renumbered `data-repo_2-1` → `data-repo_2-6`: ranked behind every other ticket: the data workstream comes later (owner: everything on data will come later). Its relative order within the seven is unchanged. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
@@ -146,7 +146,7 @@ say which version of itself it is.** The memory system records the
 toolchain of every entry it writes — cgitsync, git, pixi, and dvc or
 git-lfs where they were used — so `DataBackend` grows a `version()` that
 answers cheaply and says `none` when the tool is not installed.
-[DataBackendContract](HT-BETA_2-11_DataBackendContract_DevPlanTicket.md) D6
+[DataBackendContract](HT-BETA_2-11_ORX_DataBackendContract_DevPlanTicket.md) D6
 owns the mechanism;
 [OneRegister](../archive/20260916_OneRegister_DevPlanTicket.md) §3.1 owns what is
 recorded.
@@ -158,13 +158,13 @@ carry them are regrouped so that what can run together is in one ticket, and wha
 
 | Order | Ticket | Milestones | What lands | Needs |
 |---|---|---|---|---|
-| done | [DataSchema](HT-BETA_2-10_DataSchema_DevPlanTicket.md) | M1 | `data = { backend = "dvc" }` in `.cgs`, `DataSpec`, the `.gts` carrying it (8.14.1) | — |
-| done | [DataBackendContract](HT-BETA_2-11_DataBackendContract_DevPlanTicket.md) | M2, WP-B2/B4/B6/B7 | `DataManager`, the protocol, the results, the fake backend, the client seam (8.14.2) | M1 |
-| 1 | [DvcBackend](HT-BETA_1-4_DvcBackend_DevPlanTicket.md) | rest of M2, and DataServerAddress | the process boundary, `DvcBackend` registered, the `dvc` Pixi feature and CI job; `service = "<alias>"` and no address in clear | M2, MergeDataEncrypt |
-| 2 | [DataRoundTrip](HT-BETA_1-5_DataRoundTrip_DevPlanTicket.md) | the HTBS slice of M3–M6 | `status` column, `push` publishes first, `bootstrap`/`initialise`/`pull`/restore materialise last, `release freeze` verifies; the real-DVC scenario | DvcBackend |
-| 3 | [DataWorkspace](HT-BETA_2-7_DataWorkspace_DevPlanTicket.md) | rest of M3 and M4, in parallel | `add`/`rm`/`commit` routing, offline `checkout`, `merge`, `launch-release`, the destructive preflight | DataRoundTrip |
-| 4 | [DataPublication](HT-BETA_2-8_DataPublication_DevPlanTicket.md) | rest of M5 | `tag` verification, revalidation, the retry path, `artefact:data` | DataWorkspace |
-| 5 | [DataAcceptance](HT-BETA_2-9_DataAcceptance_DevPlanTicket.md) | rest of M6 | the private-repository scenario, the tutorial, the gate before `HT-BETA` merges into `CGS-ALPHA` | DataPublication |
+| done | [DataSchema](HT-BETA_2-10_ORX_DataSchema_DevPlanTicket.md) | M1 | `data = { backend = "dvc" }` in `.cgs`, `DataSpec`, the `.gts` carrying it (8.14.1) | — |
+| done | [DataBackendContract](HT-BETA_2-11_ORX_DataBackendContract_DevPlanTicket.md) | M2, WP-B2/B4/B6/B7 | `DataManager`, the protocol, the results, the fake backend, the client seam (8.14.2) | M1 |
+| 1 | [DvcBackend](HT-BETA_1-4_DEV1_DvcBackend_DevPlanTicket.md) | rest of M2, and DataServerAddress | the process boundary, `DvcBackend` registered, the `dvc` Pixi feature and CI job; `service = "<alias>"` and no address in clear | M2, MergeDataEncrypt |
+| 2 | [DataRoundTrip](HT-BETA_1-5_DEV1_DataRoundTrip_DevPlanTicket.md) | the HTBS slice of M3–M6 | `status` column, `push` publishes first, `bootstrap`/`initialise`/`pull`/restore materialise last, `release freeze` verifies; the real-DVC scenario | DvcBackend |
+| 3 | [DataWorkspace](HT-BETA_2-7_DEV1_DataWorkspace_DevPlanTicket.md) | rest of M3 and M4, in parallel | `add`/`rm`/`commit` routing, offline `checkout`, `merge`, `launch-release`, the destructive preflight | DataRoundTrip |
+| 4 | [DataPublication](HT-BETA_2-8_DEV1_DataPublication_DevPlanTicket.md) | rest of M5 | `tag` verification, revalidation, the retry path, `artefact:data` | DataWorkspace |
+| 5 | [DataAcceptance](HT-BETA_2-9_DEV1_DataAcceptance_DevPlanTicket.md) | rest of M6 | the private-repository scenario, the tutorial, the gate before `HT-BETA` merges into `CGS-ALPHA` | DataPublication |
 
 **The branch.** Every ticket lands on `HT-BETA`, where M1 and M2 already are. The reason the workstream had a
 branch of its own still holds: a half-built data layer must not stage a two-gigabyte NetCDF file into Git by

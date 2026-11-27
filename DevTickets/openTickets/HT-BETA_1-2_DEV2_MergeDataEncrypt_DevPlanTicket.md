@@ -84,7 +84,7 @@ different work: ProjectBranch4Parent and RootBareBranch on `HT-BETA`, EncryptedR
 
 ## 2. What met for the first time in the merge
 
-These pairs of features were never built against each other. Each needs a test, not only a clean merge.
+These pairs of features were never built against each other (five, after the data check moved to DvcBackend). Each needs a test, not only a clean merge.
 
 1. **An alias against the new branch rules.** AnonymousProject puts the alias in place of the project name in the
    registry's root entry and in `private_local_branch`. ProjectBranch4Parent, RootBareBranch and BehindGate landed
@@ -112,9 +112,8 @@ These pairs of features were never built against each other. Each needs a test, 
    validate. Those are HTBS `.config/htbs.cgs` and `htbs-dev-beta.cgs`, HTAS `.config/htas-dev-beta.cgs`, and
    CaWaQS `.config/cawaqs.cgs` and `cawaqs-dev-4X.cgs`. A key that one of them needs and the table refuses is a
    defect here, not in that project.
-6. **Encryption against data.** `EncryptionGuard` runs in `commit`, `push` and `release freeze`. DataSchema's
-   `data` declaration is new to it. **Check:** a `.dvc` pointer file and `.dvc/config` under a git-crypt path are
-   handled like any other file (refused in clear in a locked tree, passed when unlocked).
+*Encryption against data* (a `.dvc` pointer or `.dvc/config` under a git-crypt path) is a data check, so it is
+DvcBackend's, step S3 (ticket review 2026-11-27: data tickets hold data only).
 
 ## 3. Steps
 
@@ -170,7 +169,7 @@ These pairs of features were never built against each other. Each needs a test, 
 - `pixi run lint` and `pixi run test` pass on `HT-BETA` after the merge, with git-crypt installed, and with it
   absent (the encrypted tests skip).
 - `pixi run check-ceilings` passes, after any raise D5 grants. `pixi run check-spectree` passes.
-- §2's six checks are tests, and all pass.
+- §2's five checks are tests, and all pass.
 - `cgitsync status` from the root shows `errors=0`. `pixi run check-tickets` names EncryptedRepos and
   AnonymousProject `ok`.
 - `cgitsync validate` accepts every `.cgs` in §2 item 5.
