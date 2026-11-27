@@ -6,8 +6,8 @@
 
 > **Ticket review — 2026-11-27, on the owner's request:** *"shortTicket review and write DevPlanTickets in a proper
 > order of execution. Merge paralell tasks in the same tickets. The goal is a CGS-HT-BETA ready for htbs. Also
-> anticipate the merging of the CGS branch that deals with git-encrypt."* This ticket is that merge. It comes first in
-> pile 1 because DvcBackend reuses its git-crypt detection, because NestedInstall edits `orchestre/installer.py`,
+> anticipate the merging of the CGS branch that deals with git-encrypt."* This ticket is that merge. It comes right after
+> CheckoutBareTip, which makes the docs branch of the source line reliable, because DvcBackend reuses its git-crypt detection, because NestedInstall edits `orchestre/installer.py`,
 > which this merge also changes, and because every day the two lines stay apart adds conflicts.
 > **EncryptedMerge is folded in as step 6.** It arrives in `openTickets/` with the `.dev` merge (step 2). It is a
 > small, independent change to `merge --resolve`, so it runs in parallel with steps 3–5 in this ticket rather than
@@ -126,8 +126,12 @@ These pairs of features were never built against each other. Each needs a test, 
      DataBackendContract (8.14.2) have no counterpart in `DocComplexGitSync`. Find that work if it exists in another
      workspace, or rebuild the docs at 8.14.2. Either way, commit it as an 8.14.2 fix before the merge, so the merge
      starts from a green suite.
-   - In `DocComplexGitSync`, create `ComplexGitSync_data-encrypt` at the tip of `origin/data-encrypt`, so that the
-     one resolver finds the source on the name it derives. The bare `data-encrypt` is not renamed or deleted.
+   - `DocComplexGitSync` already has `ComplexGitSync_data-encrypt` at the tip of `origin/data-encrypt`, pushed on
+     2026-11-27 (CheckoutBareTip §1.3), so the one resolver finds the source on the name it derives. The bare
+     `data-encrypt` is not renamed or deleted.
+   - **Run every command with the `HT-BETA` tool.** With the root on `data-encrypt`, `pixi run cgitsync` is 8.11.0,
+     which predates RootBareBranch and expects bare names (CheckoutBareTip §1). Look at the `data-encrypt` line
+     with `git` only.
    - Run `cgitsync status` from the root. It must show `errors=0`, with every repository clean and level.
 2. **Merge the tree.** Run `cgitsync merge data-encrypt`. Where it stops, run `merge --resolve data-encrypt`
    repository by repository.
