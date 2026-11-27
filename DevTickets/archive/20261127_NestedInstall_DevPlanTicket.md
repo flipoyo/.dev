@@ -4,6 +4,18 @@
 
 *Branch: HT-BETA*
 
+> **Implemented — 2026-11-27 (`cgitsync-8.16.2`), by a worker and a launched orchestrator, its five decisions asked first
+> and answered as recommended.** N1, N2 and N3 as written, with these differences from the plan. *(1)* The predicate that
+> says a declared entry is the running installation is `RunningInstall` in `orchestre/running_install.py`, not a Ring-0
+> function beside `git_branch.foreign_tool`: it must read the package's own path, and `git_branch.py` is at its
+> public-symbol ceiling. *(2)* A declared repository that holds the running tool in a folder inside it, not being the tool,
+> is refused by name before anything is deleted; before, it would have been re-cloned, deleting the tool. *(3)* The
+> `.config/` hint in `status` is read from `discovery_state`, since a State does not record `nested_config`; it can be
+> noisy for an explicit `.config` spec that declares no repository. *(4)* The owner moved the developer specs
+> `cgitsync-alpha.cgs` and `cgitsync-ht-beta.cgs` from `examples/` to `.config/` during the work, and every live reference
+> was updated. A tool declared without `private = true` is reported off-target on the bare branch; the user guide says to
+> declare it `private = true` on a fixed branch, as HTBS does.
+
 > **Ticket review — 2026-11-27, on the owner's request** *"shortTicket review and write DevPlanTickets in a proper
 > order of execution. Merge paralell tasks in the same tickets. The goal is a CGS-HT-BETA ready for htbs."* This
 > ticket carries three short tickets filed for HTBS (HtbsFirstSpecs, in HTAS's `DevTickets/dependency/HTBS/`) and
@@ -112,8 +124,9 @@ graph TD
 - **`environment_root` (D4).** Recommended: say it is a label only, recorded in the Environment record and checked
   against the configured repositories. Giving it an effect (reading manifests from another repository's subtree)
   changes what a State's environment digest covers, which needs a ticket of its own.
-- **Examples (D5).** Drop the `manifests` entries that repeat a built-in pattern from
-  `examples/cgitsync-alpha.cgs`, `examples/cgitsync-ht-beta.cgs` and `examples/gx4g-alpha.cgs`, and keep `tools`.
+- **Examples (D5).** *(On 2026-11-27 the owner moved `cgitsync-alpha.cgs` and `cgitsync-ht-beta.cgs`, the developer specs, from
+  `examples/` to `.config/` at the root, as the other projects keep theirs; every reference was updated.)* Drop the `manifests` entries that repeat a built-in pattern from
+  `.config/cgitsync-alpha.cgs`, `.config/cgitsync-ht-beta.cgs` and `examples/gx4g-alpha.cgs`, and keep `tools`.
   Check whether a State's environment digest changes: it must not, since the effective list is the same.
 - The README is not touched (digest: no option list in the README).
 

@@ -4,7 +4,7 @@
 `.agent/.local/release`), not in the public `ComplexGitSync`
 repository.** A checkout of the public repository alone has no release
 tooling and cannot cut a release by accident — only a bootstrapped
-developer checkout (`examples/cgitsync-alpha.cgs`), which mounts
+developer checkout (`.config/cgitsync-alpha.cgs`), which mounts
 `release`, can. See `AgentSkillsSplit` and this skill's own
 `Versioning.md`. It is not in a shared, project-agnostic skill either:
 every path target below (`pyproject.toml`,
@@ -54,7 +54,7 @@ true, so ``cgitsync version bump`` needs to know nothing about LaTeX).
 
 ``docs/`` itself now lives in a separate repo (``DocComplexGitSync``); if
 either ``.tex`` file above is missing when this runs, :func:`apply_version`
-dogfoods ``cgitsync initialise`` against ``examples/cgitsync-alpha.cgs``
+dogfoods ``cgitsync initialise`` against ``.config/cgitsync-alpha.cgs``
 --- the developer spec, the one that declares ``docs/`` --- to clone it into
 place first (see :func:`_reconstitute_docs`).
 
@@ -89,7 +89,7 @@ DOCS_TEX_PATHS = (DOCS_SHORTCUTS_PATH, DOCS_PREAMBLE_PATH)
 DOCS_DIR = REPO_ROOT / "docs"
 #: The documents whose PDFs are tracked and embed the version on their title pages.
 PDF_SOURCES = ("MASTER.tex", "c_api_python.tex", "c_architecture.tex", "c_getting_started.tex", "c_user_guide.tex")
-BOOTSTRAP_CGS_PATH = REPO_ROOT / "examples" / "cgitsync-alpha.cgs"
+BOOTSTRAP_CGS_PATH = REPO_ROOT / ".config" / "cgitsync-alpha.cgs"
 
 PRE_RELEASE_STAGES = ("alpha", "beta", "rc")
 

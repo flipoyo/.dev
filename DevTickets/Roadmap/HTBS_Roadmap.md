@@ -39,15 +39,15 @@ graph LR
     classDef done fill:#2E7D32,color:#fff,stroke:#111,stroke-width:2px;
     classDef ready fill:#1565C0,color:#fff,stroke:#111,stroke-width:2px;
     classDef waiting fill:#E0E0E0,color:#222,stroke:#777,stroke-width:1px;
-    class C,M done;
-    class N,V1,V3 ready;
+    class C,M,N done;
+    class V1,V3 ready;
     class R,H,P waiting;
 ```
 
 **Colors.** Green: archived. Blue: ready, every ticket it waits for is archived, so someone can start it now.
 Grey: waiting. Whoever archives a roadmap ticket recolors its node and updates the *Status* column of §3 in the same
-change (TICKETLIFECYCLE §8). *As of 2026-11-27: CheckoutBareTip and MergeDataEncrypt are archived, so
-NestedInstall (DEV2) and DvcBackend (DEV1) are ready.*
+change (TICKETLIFECYCLE §8). *As of 2026-11-27: CheckoutBareTip, MergeDataEncrypt and NestedInstall (the whole DEV2 lane) are archived, so
+DvcBackend (DEV1) is the one ticket ready; DataRoundTrip waits for it.*
 
 ---
 
@@ -82,7 +82,7 @@ openTickets/<branch>_<priority>-<rank>_<ROLE>_<Name>_DevPlanTicket.md
 |---|---|---|---|---|---|
 | [CheckoutBareTip](../archive/20261127_CheckoutBareTip_DevPlanTicket.md) | DEV2 | done | — (**archived 2026-11-27, cgitsync 8.15.1: gate G1 reached**) | MergeDataEncrypt | every space (stable derived branches) |
 | [MergeDataEncrypt](../archive/20261127_MergeDataEncrypt_DevPlanTicket.md) | DEV2 | done | CheckoutBareTip (**archived and committed 2026-11-27, cgitsync 8.16.0: gate G2 reached**) | NestedInstall; DvcBackend S3 and S2's locked hint (G2) | the gate space (encrypted server addresses) |
-| [HT-BETA_1-3 NestedInstall](../openTickets/HT-BETA_1-3_DEV2_NestedInstall_DevPlanTicket.md) | DEV2 | ready | MergeDataEncrypt (both edit `orchestre/installer.py`) | HtbsReady | P1, C1, D3 |
+| [NestedInstall](../archive/20261127_NestedInstall_DevPlanTicket.md) | DEV2 | done | MergeDataEncrypt (both edit `orchestre/installer.py`) | HtbsReady | P1, C1, D3 |
 | [HT-BETA_1-4 DvcBackend](../openTickets/HT-BETA_1-4_DEV1_DvcBackend_DevPlanTicket.md) | DEV1 | ready | **nothing for A1, S1, A2, A3**: they start now, on 8.14.2's `DataManager`. **G2 for S3**, and for S2's locked-snippet hint (G2 is reached: S3 may start) | DataRoundTrip | G, C1, gate |
 | [HT-BETA_1-5 DataRoundTrip](../openTickets/HT-BETA_1-5_DEV1_DataRoundTrip_DevPlanTicket.md) | DEV1 | waiting | DvcBackend archived (G3) | HtbsReady | G, C1, E1 |
 | [HT-BETA_1-6 HtbsReady](../openTickets/HT-BETA_1-6_ORX_HtbsReady_DevPlanTicket.md) | ORX | waiting | all five above (G4) | HTBS's pin | all |
