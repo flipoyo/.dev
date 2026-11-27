@@ -2,17 +2,22 @@
 
 *Created: 2026-09-16*
 
-*Branch: data-repo*
+*Branch: HT-BETA*
 
+> **Ticket review — 2026-11-27, on the owner's request** *"shortTicket review and write DevPlanTickets in a proper order of execution. Merge paralell tasks in the same tickets. The goal is a CGS-HT-BETA ready for htbs."* Renumbered `data-repo_2-11` → `HT-BETA_2-8`, on `HT-BETA` with the rest of the workstream.
+> **Moved to DataRoundTrip:** WP-P1 (`push` publishes, then the refs), the `release freeze` half of WP-P2, and WP-P3,
+> with D1 and D3. What stays here is `tag` and `freeze` verification (WP-P2), revalidation inside a publication
+> sequence (WP-P4), the retry path (WP-P5, with D4), D2 (how much history a freeze covers), and `artefact:data`
+> (WP-P8). Its *Needs* line now reads: DataRoundTrip and DataWorkspace.
 > **Ticket review — 2026-11-11, owner's decision.** Renumbered `data-repo_2-6` → `data-repo_2-11`: ranked behind every other ticket: the data workstream comes later (owner: everything on data will come later). Its relative order within the seven is unchanged. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
 > **Ticket review — 2026-10-20, owner's decision.** Renumbered `data-repo_2-8` → `data-repo_2-6`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
 
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-6` → `data-repo_2-8`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
-> **Milestone M5** of [DataArchitecture](data-repo_2-6_DataArchitecture_DevPlanTicket.md).
-> Needs [DataAuthoring](data-repo_2-9_DataAuthoring_DevPlanTicket.md) and
-> [DataMaterialisation](data-repo_2-10_DataMaterialisation_DevPlanTicket.md).
+> **Milestone M5** of [DataArchitecture](HT-BETA_2-6_DataArchitecture_DevPlanTicket.md).
+> Needs [DataAuthoring](HT-BETA_2-7_DataWorkspace_DevPlanTicket.md) and
+> [DataMaterialisation](HT-BETA_2-7_DataWorkspace_DevPlanTicket.md).
 > Analysed from §6 and §9/P5 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
 
@@ -154,9 +159,9 @@ half-finished release, and that state is a new thing to get wrong.
 
 | WP | Depends on | Touches | Deliverable |
 |---|---|---|---|
-| **WP-P1** | D1 | `operations.py` | `push_tree`: publish objects for the final state, then refs; a failed upload blocks that repository's push |
-| **WP-P2** | — | `operations.py` | `tag_tree` and `freeze`: verify availability for the refs being advertised; refuse otherwise |
-| **WP-P3** | D2, D3 | `operations.py`, `orchestre.py` | `freeze_release_tree`: whole-tree preflight, ordered phases, no successful `.gts` on partial failure |
+| **WP-P1** | D1 | `operations.py` | **Moved to DataRoundTrip R2 (2026-11-27).** `push_tree`: publish objects for the final state, then refs; a failed upload blocks that repository's push |
+| **WP-P2** | — | `operations.py` | (`release freeze` half moved to DataRoundTrip R4, 2026-11-27) `tag_tree` and `freeze`: verify availability for the refs being advertised; refuse otherwise |
+| **WP-P3** | D2, D3 | `operations.py`, `orchestre.py` | **Moved to DataRoundTrip R4 (2026-11-27), except D2.** `freeze_release_tree`: whole-tree preflight, ordered phases, no successful `.gts` on partial failure |
 | **WP-P4** | WP-P1 | `operations.py` | Revalidation after any pull or merge inside a publication sequence |
 | **WP-P5** | D3, D4 | `orchestre.py`, `cli/expert.py` | The partial-failure report and the idempotent retry path |
 | **WP-P6** | all | `tests/` | §6, against the fake backend and against DVC with a temporary filesystem remote |

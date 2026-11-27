@@ -2,15 +2,19 @@
 
 *Created: 2026-09-16*
 
-*Branch: data-repo*
+*Branch: HT-BETA*
 
+> **Ticket review — 2026-11-27, on the owner's request** *"shortTicket review and write DevPlanTickets in a proper order of execution. Merge paralell tasks in the same tickets. The goal is a CGS-HT-BETA ready for htbs."* Renumbered `data-repo_2-7` → `HT-BETA_2-10`. **Landed in cgitsync 8.14.1 on `HT-BETA`**
+> (`defb042`), with `data = { backend = "dvc" }` as the spelling (the flat `data_backend` is refused by name) and
+> integrity schema 2 for a State that holds data. It waits only to be archived. Archiving needs its orchestrator's
+> self-history record (`pixi run check-tickets`), which is not on this machine. Ranked last until it is archived.
 > **Ticket review — 2026-11-11, owner's decision.** Renumbered `data-repo_2-2` → `data-repo_2-7`: ranked behind every other ticket: the data workstream comes later (owner: everything on data will come later). Its relative order within the seven is unchanged. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
 > **Ticket review — 2026-10-20, owner's decision.** Renumbered `data-repo_2-4` → `data-repo_2-2`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
 
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-2` → `data-repo_2-4`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
-> **Milestone M1** of [DataArchitecture](data-repo_2-6_DataArchitecture_DevPlanTicket.md).
+> **Milestone M1** of [DataArchitecture](HT-BETA_2-6_DataArchitecture_DevPlanTicket.md).
 > Analysed from §2 and §9/P1 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
 
@@ -39,7 +43,7 @@ refuse. §3 the `.gts` half, which is the one that must not be got wrong.
 
 **What you need to do with it.** Answer §4's D1 with the owner before
 writing the key name into anything. Read
-[DataArchitecture](data-repo_2-6_DataArchitecture_DevPlanTicket.md) §4 D5
+[DataArchitecture](HT-BETA_2-6_DataArchitecture_DevPlanTicket.md) §4 D5
 first — the memory workstream is changing `.gts` too.
 
 ```mermaid

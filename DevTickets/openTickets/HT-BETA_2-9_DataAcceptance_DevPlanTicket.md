@@ -2,17 +2,23 @@
 
 *Created: 2026-09-16*
 
-*Branch: data-repo*
+*Branch: HT-BETA*
 
+> **Ticket review — 2026-11-27, on the owner's request** *"shortTicket review and write DevPlanTickets in a proper order of execution. Merge paralell tasks in the same tickets. The goal is a CGS-HT-BETA ready for htbs."* Renumbered `data-repo_2-12` → `HT-BETA_2-9`, on `HT-BETA` with the rest of the workstream.
+> **Moved to DataRoundTrip:** WP-E1 to WP-E3 (the scenario and its two negative tests) and WP-E5 (the `dvc` CI job),
+> with D1. What stays here: WP-E4 (a private, writable DVC repository in the scenario), WP-E6 (the tutorial and the
+> completeness check of the command docs), WP-E7 (specs, and archiving the milestones), D2, and D3, now read as the
+> gate before `HT-BETA` merges into `CGS-ALPHA`. Step 4 of the scenario switches from `dvc add` by hand to
+> `cgitsync add` once DataWorkspace has landed.
 > **Ticket review — 2026-11-11, owner's decision.** Renumbered `data-repo_2-7` → `data-repo_2-12`: ranked behind every other ticket: the data workstream comes later (owner: everything on data will come later). Its relative order within the seven is unchanged. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
 > **Ticket review — 2026-10-20, owner's decision.** Renumbered `data-repo_2-9` → `data-repo_2-7`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
 
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-7` → `data-repo_2-9`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
-> **Milestone M6** of [DataArchitecture](data-repo_2-6_DataArchitecture_DevPlanTicket.md),
+> **Milestone M6** of [DataArchitecture](HT-BETA_2-6_DataArchitecture_DevPlanTicket.md),
 > and the gate the workstream merges through. Needs
-> [DataPublication](data-repo_2-11_DataPublication_DevPlanTicket.md).
+> [DataPublication](HT-BETA_2-8_DataPublication_DevPlanTicket.md).
 > Analysed from §9/P6 and §11 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
 
@@ -144,11 +150,11 @@ documentation written. Say so explicitly, so the branch does not merge on
 
 | WP | Depends on | Touches | Deliverable |
 |---|---|---|---|
-| **WP-E1** | M5 | `tests/integration/` | The fixture: two local repositories, a temporary filesystem remote, a small stand-in dataset, and a `.cgs` that declares them |
-| **WP-E2** | WP-E1 | `tests/integration/` | §1's steps 1–8, asserting SHAs and bytes |
-| **WP-E3** | WP-E1 | `tests/integration/` | §2's two negative tests |
+| **WP-E1** | M5 | **Moved to DataRoundTrip R5 (2026-11-27).** `tests/integration/` | The fixture: two local repositories, a temporary filesystem remote, a small stand-in dataset, and a `.cgs` that declares them |
+| **WP-E2** | WP-E1 | **Moved to DataRoundTrip R5.** `tests/integration/` | §1's steps 1–8, asserting SHAs and bytes |
+| **WP-E3** | WP-E1 | **Moved to DataRoundTrip R5.** `tests/integration/` | §2's two negative tests |
 | **WP-E4** | D2 | `tests/integration/` | A private, writable, DVC-backed repository inside the same scenario, with its permissions asserted |
-| **WP-E5** | D1 | `.github/workflows/ci.yml` | The `dvc` environment job |
+| **WP-E5** | D1 | **Moved to DataRoundTrip R5 and DvcBackend A3.** `.github/workflows/ci.yml` | The `dvc` environment job |
 | **WP-E6** | — | `docs/tutorials/`, `README.md`, `docs/Text/user_guide.tex` | §4's guide, one row in README's *What you can do with it* table pointing at it, and a check that the command documentation from M3–M5 is complete. The guide's commands work over HTTPS, as every tutorial's do (TutorialsOverHttps) |
 | **WP-E7** | all | `.localSpec/AdditionalSpecs.md`, this ticket and its five siblings | Architecture sections updated; the six milestone tickets archived as they land |
 

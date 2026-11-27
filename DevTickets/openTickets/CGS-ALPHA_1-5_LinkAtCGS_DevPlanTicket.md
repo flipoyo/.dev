@@ -4,6 +4,8 @@
 
 *Branch: CGS-ALPHA*
 
+> **Ticket review — 2026-11-27, on the owner's request** *"shortTicket review and write DevPlanTickets in a proper order of execution. Merge paralell tasks in the same tickets. The goal is a CGS-HT-BETA ready for htbs."* Renumbered `CGS-ALPHA_1-1` → `CGS-ALPHA_1-5`. It stays in pile 1 (the CI must run green on three
+> systems), behind the four `HT-BETA` tickets that make `HT-BETA` ready for HTBS. Its remaining work is unchanged.
 > **Re-evaluated with @CGS, 2026-10-31 (owner):** *"Reevaluate BeforeBeta DevPlanTicket commonly with atCGS, both on
 > branch CGS-ALPHA. gx4g-main now aims at atCGS. cgs-alpha is first for both gitrepo."* The ticket moves from `main_1-1`
 > to `CGS-ALPHA_1-1`: its remaining work lands on `CGS-ALPHA`. `@CGS` (ComplexGraphSync, `archive/20260707_@CGS.md`) is

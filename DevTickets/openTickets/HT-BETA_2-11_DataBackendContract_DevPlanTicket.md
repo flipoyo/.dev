@@ -2,15 +2,19 @@
 
 *Created: 2026-09-16*
 
-*Branch: data-repo*
+*Branch: HT-BETA*
 
+> **Ticket review — 2026-11-27, on the owner's request** *"shortTicket review and write DevPlanTickets in a proper order of execution. Merge paralell tasks in the same tickets. The goal is a CGS-HT-BETA ready for htbs."* Renumbered `data-repo_2-8` → `HT-BETA_2-11`. **WP-B2, WP-B4, WP-B6 and WP-B7 landed in cgitsync
+> 8.14.2 on `HT-BETA`** (`99d6272`), with D3 (no backend import in `DataManager`, owner 2026-11-25), D4 (an enum) and
+> D6 answered. **WP-B1, WP-B3 and WP-B5, with D1 and D5, moved to DvcBackend.** Nothing is left to build here. It
+> waits only to be archived, with its orchestrator's record, which is not on this machine. Ranked last until then.
 > **Ticket review — 2026-11-11, owner's decision.** Renumbered `data-repo_2-3` → `data-repo_2-8`: ranked behind every other ticket: the data workstream comes later (owner: everything on data will come later). Its relative order within the seven is unchanged. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
 > **Ticket review — 2026-10-20, owner's decision.** Renumbered `data-repo_2-5` → `data-repo_2-3`: Omniscience moved to priority 1, and pile 2 was compacted to run 1..N (TICKETLIFECYCLE §2.1). Pile 1 is the Omniscience workstream, split into Omniscience and its six milestone tickets PushAnchor, OperatingSpaceId, InclusionProofs, OmniscienceRegister, OmniscienceAppend, OmniscienceQuery (owner's short ticket `update-omniscience`). Pile 2 order: the seven data-repo tickets, WorkingAreaRename, StateLocking, BranchProtection; order unchanged within each workstream.
 
 > **Ticket review — 2026-10-08, owner's decision.** Renumbered `data-repo_2-3` → `data-repo_2-5`: each priority is one pile counted across branches (TICKETLIFECYCLE §2), which this backlog had numbered per branch. Pile 2 order: AutofixBlindSpot, PackageHygiene, the seven data-repo tickets, Omniscience, WorkingAreaRename, StateLocking; order unchanged within its workstream.
 
-> **Milestone M2** of [DataArchitecture](data-repo_2-6_DataArchitecture_DevPlanTicket.md),
+> **Milestone M2** of [DataArchitecture](HT-BETA_2-6_DataArchitecture_DevPlanTicket.md),
 > and the milestone every later one depends on. Analysed from §3, §3.1, §8
 > and §9/P2 of the owner's short ticket,
 > `.dev/DevTickets/archive/.closedUserTicket/20260916_DevPlanTicket_DataManager_DVC.md`.
@@ -207,11 +211,11 @@ to record that it has no DVC.
 
 | WP | Depends on | Touches | Deliverable |
 |---|---|---|---|
-| **WP-B1** | D1 | `data_runner.py` (new) or `git_runner.py` | The process boundary and its policies, with unit tests that never run DVC |
+| **WP-B1** | D1 | **Moved to DvcBackend A1 (2026-11-27).** `data_runner.py` (new) or `git_runner.py` | The process boundary and its policies, with unit tests that never run DVC |
 | **WP-B2** | D2, D3, D4 | `data_manager.py` (new), `git_repo.py` | `DataManager`, the `DataBackend` protocol, `DataStatus`/`DataPlan`/`DataResult`, and the backend registry |
-| **WP-B3** | WP-B1, WP-B2 | `dvc_backend.py` (new) | `DvcBackend`: the nine phases against the DVC CLI, each failure named |
+| **WP-B3** | WP-B1, WP-B2 | **Moved to DvcBackend A2 (2026-11-27).** `dvc_backend.py` (new) | `DvcBackend`: the nine phases against the DVC CLI, each failure named |
 | **WP-B4** | WP-B2 | `tests/unit/` | The fake backend, and the orchestration tests that prove neutrality |
-| **WP-B5** | D5 | `pixi.toml`, `.github/workflows/ci.yml` | The optional `dvc` feature and environment; CI runs the default environment and, separately, the `dvc` one |
+| **WP-B5** | D5 | **Moved to DvcBackend A3 (2026-11-27).** `pixi.toml`, `.github/workflows/ci.yml` | The optional `dvc` feature and environment; CI runs the default environment and, separately, the `dvc` one |
 | **WP-B6** | WP-B2, WP-B3 | `orchestre.py` | The client-side seam the later milestones call. No command behaviour changes here |
 | **WP-B7** | all | `.localSpec/AdditionalSpecs.md`, `CLAUDE.md`, `scripts/ceiling_baseline.json` | New modules in both responsibility tables, the ring table and the dependency diagram; baselines recorded |
 

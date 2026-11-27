@@ -2,9 +2,17 @@
 
 *Created: 2026-09-16*
 
-*Branch: data-repo*
+*Branch: HT-BETA*
 
-> **Short ticket `server-ip` — 2026-11-25.** A data repository names its DVC server by an alias, `service = "<alias>"`, and its address is never written in any file cgitsync writes: [DataServerAddress](data-repo_2-16_DataServerAddress_DevPlanTicket.md) (2-16). It lands after M2 and before M4 and M5, which need a remote. It takes the place of the "§7 C2" that `git_repo/data_spec.py` cites for `service`: no version of this ticket has that section.
+> **Ticket review — 2026-11-27, on the owner's request** *"shortTicket review and write DevPlanTickets in a proper order of execution. Merge paralell tasks in the same tickets. The goal is a CGS-HT-BETA ready for htbs."* Renumbered `data-repo_2-6` → `HT-BETA_2-6`, and the workstream moves to `HT-BETA`: no `data-repo`
+> branch was ever pushed, and M1 (DataSchema, 8.14.1) and most of M2 (DataBackendContract, 8.14.2) landed on
+> `HT-BETA`. The milestones are regrouped by what can run together and by what HTBS needs first (§3, rewritten):
+> **DvcBackend** (the rest of M2, and DataServerAddress), then **DataRoundTrip** (the HTBS slice of M3 to M6:
+> `status`, `push`, `pull`, `release freeze`, and the real-DVC test), both in pile 1. Then, in pile 2,
+> **DataWorkspace** (M3 and M4, merged because they run in parallel), **DataPublication** (the rest of M5) and
+> **DataAcceptance** (the rest of M6). The safety argument of *The branch* (§3) now rests on each ticket's acceptance,
+> as `memory-dev`'s did when it closed: nothing lands that a Git-only tree can see.
+> **Short ticket `server-ip` — 2026-11-25.** A data repository names its DVC server by an alias, `service = "<alias>"`, and its address is never written in any file cgitsync writes: [DataServerAddress](HT-BETA_1-3_DvcBackend_DevPlanTicket.md) (2-16). It lands after M2 and before M4 and M5, which need a remote. It takes the place of the "§7 C2" that `git_repo/data_spec.py` cites for `service`: no version of this ticket has that section.
 
 > **Ticket review — 2026-11-11, owner's decision.** Renumbered `data-repo_2-1` → `data-repo_2-6`: ranked behind every other ticket: the data workstream comes later (owner: everything on data will come later). Its relative order within the seven is unchanged. The owner's priorities for the week: the MOLONARI achievement (Friday 2026-11-13) and atCGS running (`LinkAtCGS`).
 
@@ -138,33 +146,34 @@ say which version of itself it is.** The memory system records the
 toolchain of every entry it writes — cgitsync, git, pixi, and dvc or
 git-lfs where they were used — so `DataBackend` grows a `version()` that
 answers cheaply and says `none` when the tool is not installed.
-[DataBackendContract](data-repo_2-8_DataBackendContract_DevPlanTicket.md) D6
+[DataBackendContract](HT-BETA_2-11_DataBackendContract_DevPlanTicket.md) D6
 owns the mechanism;
 [OneRegister](../archive/20260916_OneRegister_DevPlanTicket.md) §3.1 owns what is
 recorded.
 
-## 3. The six milestones
+## 3. The milestones, and the tickets that carry them
 
-They land in this order. Each is a ticket of its own on `data-repo`.
+*Rewritten at the ticket review of 2026-11-27.* The six milestones M1–M6 stay the architecture. The tickets that
+carry them are regrouped so that what can run together is in one ticket, and what HTBS needs comes first.
 
-| # | Ticket | What lands | Needs |
-|---|---|---|---|
-| **M1** | [DataSchema](data-repo_2-7_DataSchema_DevPlanTicket.md) | `data_backend` and `data_paths` in `.cgs`, the normalised `DataSpec`, and `.gts` carrying the capability so a snapshot restores without a `.cgs` | — |
-| **M2** | [DataBackendContract](data-repo_2-8_DataBackendContract_DevPlanTicket.md) | `DataManager`, the `DataBackend` protocol, `DvcBackend`, the fake backend the tests use, and the optional `dvc` Pixi feature | M1 |
-| **M3** | [DataAuthoring](data-repo_2-9_DataAuthoring_DevPlanTicket.md) | Backend-aware `add`, `rm`, `commit`, `status`, `view-tree` | M2 |
-| **M4** | [DataMaterialisation](data-repo_2-10_DataMaterialisation_DevPlanTicket.md) | `clone`/`bootstrap`/`initialise`, `pull`, offline `checkout`, `merge`, `launch-release`, and the destructive-command preflight | M2 |
-| **M5** | [DataPublication](data-repo_2-11_DataPublication_DevPlanTicket.md) | `push`, `tag`, `freeze`, `release freeze`: data published before the Git refs that advertise it | M3, M4 |
-| **M6** | [DataAcceptance](data-repo_2-12_DataAcceptance_DevPlanTicket.md) | One real local-only DVC integration test over the whole round trip, plus the user documentation | M5 |
+| Order | Ticket | Milestones | What lands | Needs |
+|---|---|---|---|---|
+| done | [DataSchema](HT-BETA_2-10_DataSchema_DevPlanTicket.md) | M1 | `data = { backend = "dvc" }` in `.cgs`, `DataSpec`, the `.gts` carrying it (8.14.1) | — |
+| done | [DataBackendContract](HT-BETA_2-11_DataBackendContract_DevPlanTicket.md) | M2, WP-B2/B4/B6/B7 | `DataManager`, the protocol, the results, the fake backend, the client seam (8.14.2) | M1 |
+| 1 | [DvcBackend](HT-BETA_1-3_DvcBackend_DevPlanTicket.md) | rest of M2, and DataServerAddress | the process boundary, `DvcBackend` registered, the `dvc` Pixi feature and CI job; `service = "<alias>"` and no address in clear | M2, MergeDataEncrypt |
+| 2 | [DataRoundTrip](HT-BETA_1-4_DataRoundTrip_DevPlanTicket.md) | the HTBS slice of M3–M6 | `status` column, `push` publishes first, `bootstrap`/`initialise`/`pull`/restore materialise last, `release freeze` verifies; the real-DVC scenario | DvcBackend |
+| 3 | [DataWorkspace](HT-BETA_2-7_DataWorkspace_DevPlanTicket.md) | rest of M3 and M4, in parallel | `add`/`rm`/`commit` routing, offline `checkout`, `merge`, `launch-release`, the destructive preflight | DataRoundTrip |
+| 4 | [DataPublication](HT-BETA_2-8_DataPublication_DevPlanTicket.md) | rest of M5 | `tag` verification, revalidation, the retry path, `artefact:data` | DataWorkspace |
+| 5 | [DataAcceptance](HT-BETA_2-9_DataAcceptance_DevPlanTicket.md) | rest of M6 | the private-repository scenario, the tutorial, the gate before `HT-BETA` merges into `CGS-ALPHA` | DataPublication |
 
-M3 and M4 both depend on M2 and not on each other, so they can be taken in
-either order or in parallel. Nothing else in this list can move.
+**The branch.** Every ticket lands on `HT-BETA`, where M1 and M2 already are. The reason the workstream had a
+branch of its own still holds: a half-built data layer must not stage a two-gigabyte NetCDF file into Git by
+accident. Each ticket now carries that guarantee in its acceptance (a Git-only tree is unchanged byte for byte),
+as `memory-dev`'s tickets did after that branch closed. `HT-BETA` is a working branch, not the mirror: nothing
+reaches `main` before DataAcceptance's gate.
 
-**The branch.** Every milestone lands on `data-repo`, not `main`. Six
-milestones that each change path routing, staging, or release ordering
-would otherwise interleave on `main` with unrelated releases, and a
-half-built data layer that stages a two-gigabyte NetCDF file into Git is
-not something to ship by accident. `data-repo` merges back when a milestone
-is finished and `pixi run lint` and `pixi run test` both pass.
+*The table before 2026-11-27, for history:* M1 DataSchema, M2 DataBackendContract, M3 DataAuthoring and M4
+DataMaterialisation (parallel), M5 DataPublication, M6 DataAcceptance, each on `data-repo`.
 
 ## 4. Decisions — your call
 
